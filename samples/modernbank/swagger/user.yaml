@@ -1,0 +1,127 @@
+swagger: "2.0"
+info:
+  description: "This is the User Microservice, responsible for managing Users in Modern Bank"
+  version: "1.0.0"
+  title: "User"
+host: "users"
+basePath: "/v1"
+tags:
+- name: "user"
+  description: "Operations about users"
+schemes:
+- "http"
+paths:
+  /user:
+    post:
+      tags:
+      - "user"
+      summary: "Create a new user identity for a customer"
+      description: "Creates "
+      operationId: "createUser"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        201:
+          description: "Created"
+        409:
+          description: "User alreadys exists"
+        500:
+          description: "Internal server error"
+  /user/{username}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by user name"
+      description: ""
+      operationId: "getUserByUserName"
+      produces:
+      - "application/json"
+      - "text/plain"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "The name that needs to be fetched."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Success!"
+          schema:
+            $ref: "#/definitions/User"
+        404:
+          description: "User not found"
+        500:
+          description: "Internal server error"
+    put:
+      tags:
+      - "user"
+      summary: "Updated user"
+      description: "Update user by username."
+      operationId: "updateUser"
+      produces:
+      - "application/json"
+      consumes:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "name that need to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "Success!"
+          schema:
+            $ref: "#/definitions/User"         
+        404:
+          description: "User not found"
+        500:
+          description: "Internal server error"
+    delete:
+      tags:
+      - "user"
+      summary: "Delete user"
+      description: "Delete user by username."
+      operationId: "deleteUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "The name that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Success!"
+        404:
+          description: "User not found"
+        500:
+          description: "Internal server error"
+definitions:
+  User:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
