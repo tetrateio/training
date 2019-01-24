@@ -54,7 +54,7 @@ func NewUserAPI(spec *loads.Document) *UserAPI {
 	}
 }
 
-/*UserAPI This is the User Microservice, responsible for managing Users in Modern Bank */
+/*UserAPI This is the User Microservice, responsible for managing Users in Modern Bank. */
 type UserAPI struct {
 	spec            *loads.Document
 	context         *middleware.Context

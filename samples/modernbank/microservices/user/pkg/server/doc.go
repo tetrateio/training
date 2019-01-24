@@ -2,7 +2,7 @@
 
 /*
 Package server User
-This is the User Microservice, responsible for managing Users in Modern Bank
+This is the User Microservice, responsible for managing Users in Modern Bank.
 
 
     Schemes:

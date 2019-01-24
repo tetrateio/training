@@ -28,7 +28,7 @@ func main() {
 
 	parser := flags.NewParser(server, flags.Default)
 	parser.ShortDescription = "Account"
-	parser.LongDescription = "This is the Account Microservice, responsible for managing accounts and their balances in Modern Bank"
+	parser.LongDescription = "This is the Account Microservice, responsible for managing accounts and their balances in Modern Bank."
 
 	server.ConfigureFlags()
 	for _, optsGroup := range api.CommandLineOptionsGroups {

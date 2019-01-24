@@ -48,10 +48,13 @@ func NewAccountAPI(spec *loads.Document) *AccountAPI {
 		AccountsGetAccountByNumberHandler: accounts.GetAccountByNumberHandlerFunc(func(params accounts.GetAccountByNumberParams) middleware.Responder {
 			return middleware.NotImplemented("operation AccountsGetAccountByNumber has not yet been implemented")
 		}),
+		AccountsListAccountsHandler: accounts.ListAccountsHandlerFunc(func(params accounts.ListAccountsParams) middleware.Responder {
+			return middleware.NotImplemented("operation AccountsListAccounts has not yet been implemented")
+		}),
 	}
 }
 
-/*AccountAPI This is the Account Microservice, responsible for managing accounts and their balances in Modern Bank */
+/*AccountAPI This is the Account Microservice, responsible for managing accounts and their balances in Modern Bank. */
 type AccountAPI struct {
 	spec            *loads.Document
 	context         *middleware.Context
@@ -85,6 +88,8 @@ type AccountAPI struct {
 	AccountsDeleteAccountHandler accounts.DeleteAccountHandler
 	// AccountsGetAccountByNumberHandler sets the operation handler for the get account by number operation
 	AccountsGetAccountByNumberHandler accounts.GetAccountByNumberHandler
+	// AccountsListAccountsHandler sets the operation handler for the list accounts operation
+	AccountsListAccountsHandler accounts.ListAccountsHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -158,6 +163,10 @@ func (o *AccountAPI) Validate() error {
 
 	if o.AccountsGetAccountByNumberHandler == nil {
 		unregistered = append(unregistered, "accounts.GetAccountByNumberHandler")
+	}
+
+	if o.AccountsListAccountsHandler == nil {
+		unregistered = append(unregistered, "accounts.ListAccountsHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -261,17 +270,22 @@ func (o *AccountAPI) initHandlerCache() {
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
-	o.handlers["POST"]["/accounts"] = accounts.NewCreateAccount(o.context, o.AccountsCreateAccountHandler)
+	o.handlers["POST"]["/users/{owner}/accounts"] = accounts.NewCreateAccount(o.context, o.AccountsCreateAccountHandler)
 
 	if o.handlers["DELETE"] == nil {
 		o.handlers["DELETE"] = make(map[string]http.Handler)
 	}
-	o.handlers["DELETE"]["/accounts/{number}"] = accounts.NewDeleteAccount(o.context, o.AccountsDeleteAccountHandler)
+	o.handlers["DELETE"]["/users/{owner}/accounts/{number}"] = accounts.NewDeleteAccount(o.context, o.AccountsDeleteAccountHandler)
 
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/accounts/{number}/details"] = accounts.NewGetAccountByNumber(o.context, o.AccountsGetAccountByNumberHandler)
+	o.handlers["GET"]["/users/{owner}/accounts/{number}/details"] = accounts.NewGetAccountByNumber(o.context, o.AccountsGetAccountByNumberHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/users/{owner}/accounts"] = accounts.NewListAccounts(o.context, o.AccountsListAccountsHandler)
 
 }
 

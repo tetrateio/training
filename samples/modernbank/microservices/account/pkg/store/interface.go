@@ -7,10 +7,10 @@ import (
 )
 
 type Interface interface {
-	Get(number int64) (*model.Account, error)
+	List(owner string) ([]*model.Account, error)
+	Get(owner string, number int64) (*model.Account, error)
 	Create(owner string) (*model.Account, error)
-	Update(number int64, account *model.Account) (*model.Account, error)
-	Delete(number int64) error
+	Delete(owner string, number int64) error
 }
 
 type Conflict struct{}

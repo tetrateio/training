@@ -23,7 +23,7 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "This is the User Microservice, responsible for managing Users in Modern Bank",
+    "description": "This is the User Microservice, responsible for managing Users in Modern Bank.",
     "title": "User",
     "version": "1.0.0"
   },
@@ -218,7 +218,7 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "This is the User Microservice, responsible for managing Users in Modern Bank",
+    "description": "This is the User Microservice, responsible for managing Users in Modern Bank.",
     "title": "User",
     "version": "1.0.0"
   },

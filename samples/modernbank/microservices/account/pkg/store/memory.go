@@ -6,51 +6,64 @@ import (
 	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
 )
 
+var _ Interface = NewInMemory()
+
 func NewInMemory() *InMemory {
-	return &InMemory{store: map[int64]*model.Account{}}
+	return &InMemory{
+		ownerAccounts: map[string]map[int64]*model.Account{},
+		accounts:      map[int64]*model.Account{},
+	}
 }
 
 type InMemory struct {
-	store map[int64]*model.Account
+	ownerAccounts map[string]map[int64]*model.Account
+	accounts      map[int64]*model.Account
 }
 
-func (m *InMemory) Get(number int64) (*model.Account, error) {
-	if _, ok := m.store[number]; !ok {
+func (m *InMemory) List(owner string) ([]*model.Account, error) {
+	if m.ownerAccounts[owner] == nil {
 		return nil, &NotFound{}
 	}
-	return m.store[number], nil
+	res := make([]*model.Account, len(m.ownerAccounts[owner]))
+	for _, val := range m.ownerAccounts[owner] {
+		res = append(res, val)
+	}
+	return res, nil
+}
+
+func (m *InMemory) Get(owner string, number int64) (*model.Account, error) {
+	if _, ok := m.ownerAccounts[owner][number]; !ok {
+		return nil, &NotFound{}
+	}
+	return m.ownerAccounts[owner][number], nil
 }
 
 func (m *InMemory) Create(owner string) (*model.Account, error) {
+	if m.ownerAccounts[owner] == nil {
+		m.ownerAccounts[owner] = map[int64]*model.Account{}
+	}
 	accountNumber := m.unAssignedAccountNumber()
-	m.store[accountNumber] = &model.Account{
+	m.ownerAccounts[owner][accountNumber] = &model.Account{
 		Balance: 0,
 		Owner:   owner,
 		Number:  accountNumber,
 	}
-	return m.store[accountNumber], nil
+	m.accounts[accountNumber] = m.ownerAccounts[owner][accountNumber]
+	return m.ownerAccounts[owner][accountNumber], nil
 }
 
-func (m *InMemory) Update(number int64, account *model.Account) (*model.Account, error) {
-	if _, ok := m.store[number]; !ok {
-		return nil, &NotFound{}
-	}
-	delete(m.store, number)
-	m.store[account.Number] = account
-	return m.store[account.Number], nil
-}
-
-func (m *InMemory) Delete(number int64) error {
-	if _, ok := m.store[number]; !ok {
+func (m *InMemory) Delete(owner string, number int64) error {
+	if _, ok := m.ownerAccounts[owner][number]; !ok {
 		return &NotFound{}
 	}
-	delete(m.store, number)
+	delete(m.accounts, number)
+	delete(m.ownerAccounts[owner], number)
 	return nil
 }
 
 func (m *InMemory) unAssignedAccountNumber() int64 {
 	for i := int64(0); i < int64(math.MaxInt64); i++ {
-		if _, ok := m.store[i]; !ok {
+		if _, ok := m.accounts[i]; !ok {
 			return i
 		}
 	}

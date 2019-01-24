@@ -29,9 +29,9 @@ func NewGetAccountByNumber(ctx *middleware.Context, handler GetAccountByNumberHa
 	return &GetAccountByNumber{Context: ctx, Handler: handler}
 }
 
-/*GetAccountByNumber swagger:route GET /accounts/{number}/details accounts getAccountByNumber
+/*GetAccountByNumber swagger:route GET /users/{owner}/accounts/{number}/details accounts getAccountByNumber
 
-Get account details by account number
+Get account details
 
 */
 type GetAccountByNumber struct {

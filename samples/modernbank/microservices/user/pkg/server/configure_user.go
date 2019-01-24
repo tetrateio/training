@@ -39,14 +39,14 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 	userStore = store.NewInMemory()
 
 	api.UsersCreateUserHandler = users.CreateUserHandlerFunc(func(params users.CreateUserParams) middleware.Responder {
-		user, err := userStore.Create(params.Body)
+		res, err := userStore.Create(params.Body)
 		if err != nil {
 			if _, ok := err.(*store.Conflict); ok {
 				return users.NewCreateUserConflict()
 			}
 			return users.NewCreateUserInternalServerError()
 		}
-		return users.NewCreateUserCreated().WithPayload(user)
+		return users.NewCreateUserCreated().WithPayload(res)
 	})
 	api.UsersDeleteUserHandler = users.DeleteUserHandlerFunc(func(params users.DeleteUserParams) middleware.Responder {
 		if err := userStore.Delete(params.Username); err != nil {
@@ -58,24 +58,24 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 		return users.NewDeleteUserOK()
 	})
 	api.UsersGetUserByUserNameHandler = users.GetUserByUserNameHandlerFunc(func(params users.GetUserByUserNameParams) middleware.Responder {
-		user, err := userStore.Get(params.Username)
+		res, err := userStore.Get(params.Username)
 		if err != nil {
 			if _, ok := err.(*store.NotFound); ok {
 				return users.NewGetUserByUserNameNotFound()
 			}
 			return users.NewGetUserByUserNameInternalServerError()
 		}
-		return users.NewGetUserByUserNameOK().WithPayload(user)
+		return users.NewGetUserByUserNameOK().WithPayload(res)
 	})
 	api.UsersUpdateUserHandler = users.UpdateUserHandlerFunc(func(params users.UpdateUserParams) middleware.Responder {
-		user, err := userStore.Update(params.Username, params.Body)
+		res, err := userStore.Update(params.Username, params.Body)
 		if err != nil {
 			if _, ok := err.(*store.NotFound); ok {
 				return users.NewUpdateUserNotFound()
 			}
 			return users.NewUpdateUserInternalServerError()
 		}
-		return users.NewUpdateUserOK().WithPayload(user)
+		return users.NewUpdateUserOK().WithPayload(res)
 	})
 
 	api.ServerShutdown = func() {}

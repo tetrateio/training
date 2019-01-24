@@ -9,8 +9,6 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
-	strfmt "github.com/go-openapi/strfmt"
-	swag "github.com/go-openapi/swag"
 )
 
 // CreateAccountHandlerFunc turns a function with the right signature into a create account handler
@@ -31,7 +29,7 @@ func NewCreateAccount(ctx *middleware.Context, handler CreateAccountHandler) *Cr
 	return &CreateAccount{Context: ctx, Handler: handler}
 }
 
-/*CreateAccount swagger:route POST /accounts accounts createAccount
+/*CreateAccount swagger:route POST /users/{owner}/accounts accounts createAccount
 
 Create a new account for a customer
 
@@ -59,35 +57,4 @@ func (o *CreateAccount) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
-}
-
-// CreateAccountBody create account body
-// swagger:model CreateAccountBody
-type CreateAccountBody struct {
-
-	// owner
-	Owner string `json:"owner,omitempty"`
-}
-
-// Validate validates this create account body
-func (o *CreateAccountBody) Validate(formats strfmt.Registry) error {
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *CreateAccountBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *CreateAccountBody) UnmarshalBinary(b []byte) error {
-	var res CreateAccountBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
-	return nil
 }

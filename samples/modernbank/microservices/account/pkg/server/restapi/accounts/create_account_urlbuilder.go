@@ -9,11 +9,16 @@ import (
 	"errors"
 	"net/url"
 	golangswaggerpaths "path"
+	"strings"
 )
 
 // CreateAccountURL generates an URL for the create account operation
 type CreateAccountURL struct {
+	Owner string
+
 	_basePath string
+	// avoid unkeyed usage
+	_ struct{}
 }
 
 // WithBasePath sets the base path for this url builder, only required when it's different from the
@@ -35,7 +40,14 @@ func (o *CreateAccountURL) SetBasePath(bp string) {
 func (o *CreateAccountURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/accounts"
+	var _path = "/users/{owner}/accounts"
+
+	owner := o.Owner
+	if owner != "" {
+		_path = strings.Replace(_path, "{owner}", owner, -1)
+	} else {
+		return nil, errors.New("Owner is required on CreateAccountURL")
+	}
 
 	_basePath := o._basePath
 	if _basePath == "" {

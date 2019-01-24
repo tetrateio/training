@@ -39,14 +39,14 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 	accountStore = store.NewInMemory()
 
 	api.AccountsCreateAccountHandler = accounts.CreateAccountHandlerFunc(func(params accounts.CreateAccountParams) middleware.Responder {
-		account, err := accountStore.Create(params.Body.Owner)
+		res, err := accountStore.Create(params.Owner)
 		if err != nil {
 			return accounts.NewCreateAccountInternalServerError()
 		}
-		return accounts.NewCreateAccountCreated().WithPayload(account)
+		return accounts.NewCreateAccountCreated().WithPayload(res)
 	})
 	api.AccountsDeleteAccountHandler = accounts.DeleteAccountHandlerFunc(func(params accounts.DeleteAccountParams) middleware.Responder {
-		if err := accountStore.Delete(params.Number); err != nil {
+		if err := accountStore.Delete(params.Owner, params.Number); err != nil {
 			if _, ok := err.(*store.NotFound); ok {
 				return accounts.NewDeleteAccountNotFound()
 			}
@@ -55,14 +55,24 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 		return accounts.NewDeleteAccountOK()
 	})
 	api.AccountsGetAccountByNumberHandler = accounts.GetAccountByNumberHandlerFunc(func(params accounts.GetAccountByNumberParams) middleware.Responder {
-		account, err := accountStore.Get(params.Number)
+		res, err := accountStore.Get(params.Owner, params.Number)
 		if err != nil {
 			if _, ok := err.(*store.NotFound); ok {
 				return accounts.NewGetAccountByNumberNotFound()
 			}
 			return accounts.NewGetAccountByNumberInternalServerError()
 		}
-		return accounts.NewGetAccountByNumberOK().WithPayload(account)
+		return accounts.NewGetAccountByNumberOK().WithPayload(res)
+	})
+	api.AccountsListAccountsHandler = accounts.ListAccountsHandlerFunc(func(params accounts.ListAccountsParams) middleware.Responder {
+		res, err := accountStore.List(params.Owner)
+		if err != nil {
+			if _, ok := err.(*store.NotFound); ok {
+				return accounts.NewListAccountsNotFound()
+			}
+			return accounts.NewListAccountsInternalServerError()
+		}
+		return accounts.NewListAccountsOK().WithPayload(res)
 	})
 
 	api.ServerShutdown = func() {}

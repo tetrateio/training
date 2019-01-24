@@ -17,6 +17,7 @@ import (
 // DeleteAccountURL generates an URL for the delete account operation
 type DeleteAccountURL struct {
 	Number int64
+	Owner  string
 
 	_basePath string
 	// avoid unkeyed usage
@@ -42,13 +43,20 @@ func (o *DeleteAccountURL) SetBasePath(bp string) {
 func (o *DeleteAccountURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/accounts/{number}"
+	var _path = "/users/{owner}/accounts/{number}"
 
 	number := swag.FormatInt64(o.Number)
 	if number != "" {
 		_path = strings.Replace(_path, "{number}", number, -1)
 	} else {
 		return nil, errors.New("Number is required on DeleteAccountURL")
+	}
+
+	owner := o.Owner
+	if owner != "" {
+		_path = strings.Replace(_path, "{owner}", owner, -1)
+	} else {
+		return nil, errors.New("Owner is required on DeleteAccountURL")
 	}
 
 	_basePath := o._basePath

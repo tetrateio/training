@@ -2,7 +2,7 @@
 
 /*
 Package server Account
-This is the Account Microservice, responsible for managing accounts and their balances in Modern Bank
+This is the Account Microservice, responsible for managing accounts and their balances in Modern Bank.
 
 
     Schemes:

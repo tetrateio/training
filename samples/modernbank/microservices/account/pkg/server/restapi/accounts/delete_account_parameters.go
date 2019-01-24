@@ -36,6 +36,11 @@ type DeleteAccountParams struct {
 	  In: path
 	*/
 	Number int64
+	/*Owner of the account
+	  Required: true
+	  In: path
+	*/
+	Owner string
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -49,6 +54,11 @@ func (o *DeleteAccountParams) BindRequest(r *http.Request, route *middleware.Mat
 
 	rNumber, rhkNumber, _ := route.Params.GetOK("number")
 	if err := o.bindNumber(rNumber, rhkNumber, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	rOwner, rhkOwner, _ := route.Params.GetOK("owner")
+	if err := o.bindOwner(rOwner, rhkOwner, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -73,6 +83,21 @@ func (o *DeleteAccountParams) bindNumber(rawData []string, hasKey bool, formats 
 		return errors.InvalidType("number", "path", "int64", raw)
 	}
 	o.Number = value
+
+	return nil
+}
+
+// bindOwner binds and validates parameter Owner from path.
+func (o *DeleteAccountParams) bindOwner(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: true
+	// Parameter is provided by construction from the route
+
+	o.Owner = raw
 
 	return nil
 }

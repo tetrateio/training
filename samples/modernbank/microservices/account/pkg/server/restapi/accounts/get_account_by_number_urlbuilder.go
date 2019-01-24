@@ -17,6 +17,7 @@ import (
 // GetAccountByNumberURL generates an URL for the get account by number operation
 type GetAccountByNumberURL struct {
 	Number int64
+	Owner  string
 
 	_basePath string
 	// avoid unkeyed usage
@@ -42,13 +43,20 @@ func (o *GetAccountByNumberURL) SetBasePath(bp string) {
 func (o *GetAccountByNumberURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/accounts/{number}/details"
+	var _path = "/users/{owner}/accounts/{number}/details"
 
 	number := swag.FormatInt64(o.Number)
 	if number != "" {
 		_path = strings.Replace(_path, "{number}", number, -1)
 	} else {
 		return nil, errors.New("Number is required on GetAccountByNumberURL")
+	}
+
+	owner := o.Owner
+	if owner != "" {
+		_path = strings.Replace(_path, "{owner}", owner, -1)
+	} else {
+		return nil, errors.New("Owner is required on GetAccountByNumberURL")
 	}
 
 	_basePath := o._basePath

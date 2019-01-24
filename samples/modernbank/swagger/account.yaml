@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: "This is the Account Microservice, responsible for managing accounts and their balances in Modern Bank"
+  description: "This is the Account Microservice, responsible for managing accounts and their balances in Modern Bank."
   version: "1.0.0"
   title: "Account"
 host: "accounts"
@@ -23,27 +23,21 @@ definitions:
       owner:
         type: "string"
 paths:
-  /accounts:
+  /users/{owner}/accounts:
     post:
       tags:
       - "accounts"
       summary: "Create a new account for a customer"
       description: "Creates a new account for a given customer"
       operationId: "createAccount"
-      consumes:
-      - "application/json"
       produces:
       - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
+      - in: "path"
+        name: "owner"
         description: "Owner of the account"
         required: true
-        schema:
-          type: object
-          properties:
-            owner:
-              type: "string"
+        type: string
       responses:
         201:
           description: "Created"
@@ -51,16 +45,46 @@ paths:
             $ref: "#/definitions/Account"
         500:
           description: "Internal server error"
-  /accounts/{number}/details:
     get:
       tags:
       - "accounts"
-      summary: "Get account details by account number"
+      summary: "Lists all accounts for a given customer"
+      description: "Lists all accounts for a given customer"
+      operationId: "listAccounts"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "owner"
+        description: "Owner of the accounts"
+        required: true
+        type: string
+      responses:
+        200:
+          description: "Success!"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Account"
+        404:
+          description: "Owner not found"
+        500:
+          description: "Internal server error"
+  /users/{owner}/accounts/{number}/details:
+    get:
+      tags:
+      - "accounts"
+      summary: "Get account details"
       description: ""
       operationId: "getAccountByNumber"
       produces:
       - "application/json"
       parameters:
+      - in: "path"
+        name: "owner"
+        description: "Owner of the account"
+        required: true
+        type: string
       - name: "number"
         in: "path"
         description: "The number of the account that is to be fetched."
@@ -76,7 +100,7 @@ paths:
           description: "Account not found"
         500:
           description: "Internal server error"
-  /accounts/{number}:
+  /users/{owner}/accounts/{number}:
     delete:
       tags:
       - "accounts"
@@ -86,6 +110,11 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - in: "path"
+        name: "owner"
+        description: "Owner of the account"
+        required: true
+        type: string
       - name: "number"
         in: "path"
         description: "The number of the account that is to be deleted."

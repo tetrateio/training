@@ -23,19 +23,53 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "This is the Account Microservice, responsible for managing accounts and their balances in Modern Bank",
+    "description": "This is the Account Microservice, responsible for managing accounts and their balances in Modern Bank.",
     "title": "Account",
     "version": "1.0.0"
   },
   "host": "accounts",
   "basePath": "/v1",
   "paths": {
-    "/accounts": {
-      "post": {
-        "description": "Creates a new account for a given customer",
-        "consumes": [
+    "/users/{owner}/accounts": {
+      "get": {
+        "description": "Lists all accounts for a given customer",
+        "produces": [
           "application/json"
         ],
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Lists all accounts for a given customer",
+        "operationId": "listAccounts",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Owner of the accounts",
+            "name": "owner",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Account"
+              }
+            }
+          },
+          "404": {
+            "description": "Owner not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "description": "Creates a new account for a given customer",
         "produces": [
           "application/json"
         ],
@@ -46,18 +80,11 @@ func init() {
         "operationId": "createAccount",
         "parameters": [
           {
+            "type": "string",
             "description": "Owner of the account",
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "owner": {
-                  "type": "string"
-                }
-              }
-            }
+            "name": "owner",
+            "in": "path",
+            "required": true
           }
         ],
         "responses": {
@@ -73,7 +100,7 @@ func init() {
         }
       }
     },
-    "/accounts/{number}": {
+    "/users/{owner}/accounts/{number}": {
       "delete": {
         "description": "Delete account by account number.",
         "produces": [
@@ -85,6 +112,13 @@ func init() {
         "summary": "Delete account by account number",
         "operationId": "deleteAccount",
         "parameters": [
+          {
+            "type": "string",
+            "description": "Owner of the account",
+            "name": "owner",
+            "in": "path",
+            "required": true
+          },
           {
             "type": "integer",
             "format": "int64",
@@ -107,7 +141,7 @@ func init() {
         }
       }
     },
-    "/accounts/{number}/details": {
+    "/users/{owner}/accounts/{number}/details": {
       "get": {
         "produces": [
           "application/json"
@@ -115,9 +149,16 @@ func init() {
         "tags": [
           "accounts"
         ],
-        "summary": "Get account details by account number",
+        "summary": "Get account details",
         "operationId": "getAccountByNumber",
         "parameters": [
+          {
+            "type": "string",
+            "description": "Owner of the account",
+            "name": "owner",
+            "in": "path",
+            "required": true
+          },
           {
             "type": "integer",
             "format": "int64",
@@ -175,19 +216,53 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "This is the Account Microservice, responsible for managing accounts and their balances in Modern Bank",
+    "description": "This is the Account Microservice, responsible for managing accounts and their balances in Modern Bank.",
     "title": "Account",
     "version": "1.0.0"
   },
   "host": "accounts",
   "basePath": "/v1",
   "paths": {
-    "/accounts": {
-      "post": {
-        "description": "Creates a new account for a given customer",
-        "consumes": [
+    "/users/{owner}/accounts": {
+      "get": {
+        "description": "Lists all accounts for a given customer",
+        "produces": [
           "application/json"
         ],
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Lists all accounts for a given customer",
+        "operationId": "listAccounts",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Owner of the accounts",
+            "name": "owner",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Account"
+              }
+            }
+          },
+          "404": {
+            "description": "Owner not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "description": "Creates a new account for a given customer",
         "produces": [
           "application/json"
         ],
@@ -198,18 +273,11 @@ func init() {
         "operationId": "createAccount",
         "parameters": [
           {
+            "type": "string",
             "description": "Owner of the account",
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "owner": {
-                  "type": "string"
-                }
-              }
-            }
+            "name": "owner",
+            "in": "path",
+            "required": true
           }
         ],
         "responses": {
@@ -225,7 +293,7 @@ func init() {
         }
       }
     },
-    "/accounts/{number}": {
+    "/users/{owner}/accounts/{number}": {
       "delete": {
         "description": "Delete account by account number.",
         "produces": [
@@ -237,6 +305,13 @@ func init() {
         "summary": "Delete account by account number",
         "operationId": "deleteAccount",
         "parameters": [
+          {
+            "type": "string",
+            "description": "Owner of the account",
+            "name": "owner",
+            "in": "path",
+            "required": true
+          },
           {
             "type": "integer",
             "format": "int64",
@@ -259,7 +334,7 @@ func init() {
         }
       }
     },
-    "/accounts/{number}/details": {
+    "/users/{owner}/accounts/{number}/details": {
       "get": {
         "produces": [
           "application/json"
@@ -267,9 +342,16 @@ func init() {
         "tags": [
           "accounts"
         ],
-        "summary": "Get account details by account number",
+        "summary": "Get account details",
         "operationId": "getAccountByNumber",
         "parameters": [
+          {
+            "type": "string",
+            "description": "Owner of the account",
+            "name": "owner",
+            "in": "path",
+            "required": true
+          },
           {
             "type": "integer",
             "format": "int64",
