@@ -43,7 +43,7 @@ func (o *GetAccountByNumberURL) SetBasePath(bp string) {
 func (o *GetAccountByNumberURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/users/{owner}/accounts/{number}/details"
+	var _path = "/users/{owner}/accounts/{number}"
 
 	number := swag.FormatInt64(o.Number)
 	if number != "" {

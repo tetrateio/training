@@ -52,7 +52,7 @@ paths:
           description: "User alreadys exists"
         500:
           description: "Internal server error"
-  /users/{username}/details:
+  /users/{username}:
     get:
       tags:
       - "users"
@@ -107,7 +107,6 @@ paths:
           description: "User not found"
         500:
           description: "Internal server error"
-  /users/{username}:
     delete:
       tags:
       - "users"

@@ -70,7 +70,7 @@ paths:
           description: "Owner not found"
         500:
           description: "Internal server error"
-  /users/{owner}/accounts/{number}/details:
+  /users/{owner}/accounts/{number}:
     get:
       tags:
       - "accounts"
@@ -100,7 +100,6 @@ paths:
           description: "Account not found"
         500:
           description: "Internal server error"
-  /users/{owner}/accounts/{number}:
     delete:
       tags:
       - "accounts"

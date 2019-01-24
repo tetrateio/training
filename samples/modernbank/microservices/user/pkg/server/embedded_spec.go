@@ -72,36 +72,6 @@ func init() {
       }
     },
     "/users/{username}": {
-      "delete": {
-        "description": "Delete user by username.",
-        "tags": [
-          "users"
-        ],
-        "summary": "Delete user",
-        "operationId": "deleteUser",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "The name that needs to be deleted",
-            "name": "username",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!"
-          },
-          "404": {
-            "description": "User not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/users/{username}/details": {
       "get": {
         "produces": [
           "application/json"
@@ -172,6 +142,34 @@ func init() {
             "schema": {
               "$ref": "#/definitions/User"
             }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete user by username.",
+        "tags": [
+          "users"
+        ],
+        "summary": "Delete user",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The name that needs to be deleted",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!"
           },
           "404": {
             "description": "User not found"
@@ -267,36 +265,6 @@ func init() {
       }
     },
     "/users/{username}": {
-      "delete": {
-        "description": "Delete user by username.",
-        "tags": [
-          "users"
-        ],
-        "summary": "Delete user",
-        "operationId": "deleteUser",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "The name that needs to be deleted",
-            "name": "username",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!"
-          },
-          "404": {
-            "description": "User not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/users/{username}/details": {
       "get": {
         "produces": [
           "application/json"
@@ -367,6 +335,34 @@ func init() {
             "schema": {
               "$ref": "#/definitions/User"
             }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete user by username.",
+        "tags": [
+          "users"
+        ],
+        "summary": "Delete user",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The name that needs to be deleted",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!"
           },
           "404": {
             "description": "User not found"

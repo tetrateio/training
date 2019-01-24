@@ -1,7 +1,8 @@
 package store
 
 import (
-	"math"
+	"sync"
+	"sync/atomic"
 
 	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
 )
@@ -9,64 +10,100 @@ import (
 var _ Interface = NewInMemory()
 
 func NewInMemory() *InMemory {
-	return &InMemory{
-		ownerAccounts: map[string]map[int64]*model.Account{},
-		accounts:      map[int64]*model.Account{},
-	}
+	return &InMemory{currentAccountNumber: 0}
 }
 
 type InMemory struct {
-	ownerAccounts map[string]map[int64]*model.Account
-	accounts      map[int64]*model.Account
+	ownerAccounts        sync.Map
+	currentAccountNumber int64
 }
 
-func (m *InMemory) List(owner string) ([]*model.Account, error) {
-	if m.ownerAccounts[owner] == nil {
-		return nil, &NotFound{}
-	}
-	res := make([]*model.Account, len(m.ownerAccounts[owner]))
-	for _, val := range m.ownerAccounts[owner] {
-		res = append(res, val)
-	}
-	return res, nil
+type accounts struct {
+	m        *sync.RWMutex
+	accounts map[int64]model.Account
 }
 
-func (m *InMemory) Get(owner string, number int64) (*model.Account, error) {
-	if _, ok := m.ownerAccounts[owner][number]; !ok {
-		return nil, &NotFound{}
-	}
-	return m.ownerAccounts[owner][number], nil
+func (a *accounts) add(number int64, account *model.Account) {
+	a.m.Lock()
+	defer a.m.Unlock()
+	a.accounts[number] = *account
 }
 
-func (m *InMemory) Create(owner string) (*model.Account, error) {
-	if m.ownerAccounts[owner] == nil {
-		m.ownerAccounts[owner] = map[int64]*model.Account{}
-	}
-	accountNumber := m.unAssignedAccountNumber()
-	m.ownerAccounts[owner][accountNumber] = &model.Account{
-		Balance: 0,
-		Owner:   owner,
-		Number:  accountNumber,
-	}
-	m.accounts[accountNumber] = m.ownerAccounts[owner][accountNumber]
-	return m.ownerAccounts[owner][accountNumber], nil
-}
-
-func (m *InMemory) Delete(owner string, number int64) error {
-	if _, ok := m.ownerAccounts[owner][number]; !ok {
+func (a *accounts) delete(number int64) error {
+	a.m.Lock()
+	defer a.m.Unlock()
+	if _, found := a.accounts[number]; !found {
 		return &NotFound{}
 	}
-	delete(m.accounts, number)
-	delete(m.ownerAccounts[owner], number)
+	delete(a.accounts, number)
 	return nil
 }
 
-func (m *InMemory) unAssignedAccountNumber() int64 {
-	for i := int64(0); i < int64(math.MaxInt64); i++ {
-		if _, ok := m.accounts[i]; !ok {
-			return i
-		}
+func (a *accounts) get(number int64) (*model.Account, bool) {
+	a.m.RLock()
+	defer a.m.RUnlock()
+	tmp, found := a.accounts[number]
+	return &tmp, found
+}
+
+func (a *accounts) list() []*model.Account {
+	a.m.RLock()
+	defer a.m.RUnlock()
+	res := make([]*model.Account, len(a.accounts))
+	for _, val := range a.accounts {
+		tmp := val
+		res = append(res, &tmp)
 	}
-	// Obviously don't actually panic in a real life scenario...
-	panic("we have run out of account numbers")
+	return res
+}
+
+func (m *InMemory) List(owner string) ([]*model.Account, error) {
+	res, ok := m.ownerAccounts.Load(owner)
+	if !ok {
+		return nil, &NotFound{}
+	}
+	return res.(*accounts).list(), nil
+}
+
+func (m *InMemory) Get(owner string, number int64) (*model.Account, error) {
+	accountRes, ok := m.ownerAccounts.Load(owner)
+	if !ok {
+		return nil, &NotFound{}
+	}
+	account, ok := accountRes.(*accounts).get(number)
+	if !ok {
+		return nil, &NotFound{}
+	}
+	return account, nil
+}
+
+func (m *InMemory) Create(owner string) (*model.Account, error) {
+	newAccountNumber := m.unAssignedAccountNumber()
+	newAccount := &model.Account{
+		Balance: 0,
+		Owner:   owner,
+		Number:  newAccountNumber,
+	}
+	accountRes, ok := m.ownerAccounts.Load(owner)
+	var newAccounts accounts
+	if !ok {
+		newAccounts = accounts{m: &sync.RWMutex{}, accounts: map[int64]model.Account{}}
+	} else {
+		newAccounts = accountRes.(accounts)
+	}
+	newAccounts.add(newAccountNumber, newAccount)
+	m.ownerAccounts.Store(owner, newAccounts)
+	return newAccount, nil
+}
+
+func (m *InMemory) Delete(owner string, number int64) error {
+	accountRes, ok := m.ownerAccounts.Load(owner)
+	if !ok {
+		return &NotFound{}
+	}
+	return accountRes.(*accounts).delete(number)
+}
+
+func (m *InMemory) unAssignedAccountNumber() int64 {
+	return atomic.AddInt64(&m.currentAccountNumber, 1)
 }

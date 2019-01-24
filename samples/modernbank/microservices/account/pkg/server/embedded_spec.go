@@ -101,47 +101,6 @@ func init() {
       }
     },
     "/users/{owner}/accounts/{number}": {
-      "delete": {
-        "description": "Delete account by account number.",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "accounts"
-        ],
-        "summary": "Delete account by account number",
-        "operationId": "deleteAccount",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "Owner of the account",
-            "name": "owner",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "The number of the account that is to be deleted.",
-            "name": "number",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Aaaaand it's gone!"
-          },
-          "404": {
-            "description": "Account not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/users/{owner}/accounts/{number}/details": {
       "get": {
         "produces": [
           "application/json"
@@ -174,6 +133,45 @@ func init() {
             "schema": {
               "$ref": "#/definitions/Account"
             }
+          },
+          "404": {
+            "description": "Account not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete account by account number.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Delete account by account number",
+        "operationId": "deleteAccount",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Owner of the account",
+            "name": "owner",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "The number of the account that is to be deleted.",
+            "name": "number",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Aaaaand it's gone!"
           },
           "404": {
             "description": "Account not found"
@@ -294,47 +292,6 @@ func init() {
       }
     },
     "/users/{owner}/accounts/{number}": {
-      "delete": {
-        "description": "Delete account by account number.",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "accounts"
-        ],
-        "summary": "Delete account by account number",
-        "operationId": "deleteAccount",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "Owner of the account",
-            "name": "owner",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "The number of the account that is to be deleted.",
-            "name": "number",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Aaaaand it's gone!"
-          },
-          "404": {
-            "description": "Account not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/users/{owner}/accounts/{number}/details": {
       "get": {
         "produces": [
           "application/json"
@@ -367,6 +324,45 @@ func init() {
             "schema": {
               "$ref": "#/definitions/Account"
             }
+          },
+          "404": {
+            "description": "Account not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete account by account number.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Delete account by account number",
+        "operationId": "deleteAccount",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Owner of the account",
+            "name": "owner",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "The number of the account that is to be deleted.",
+            "name": "number",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Aaaaand it's gone!"
           },
           "404": {
             "description": "Account not found"

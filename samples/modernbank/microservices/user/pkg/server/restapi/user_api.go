@@ -280,12 +280,12 @@ func (o *UserAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/users/{username}/details"] = users.NewGetUserByUserName(o.context, o.UsersGetUserByUserNameHandler)
+	o.handlers["GET"]["/users/{username}"] = users.NewGetUserByUserName(o.context, o.UsersGetUserByUserNameHandler)
 
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
-	o.handlers["PUT"]["/users/{username}/details"] = users.NewUpdateUser(o.context, o.UsersUpdateUserHandler)
+	o.handlers["PUT"]["/users/{username}"] = users.NewUpdateUser(o.context, o.UsersUpdateUserHandler)
 
 }
 

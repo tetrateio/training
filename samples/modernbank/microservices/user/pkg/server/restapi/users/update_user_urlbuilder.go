@@ -40,7 +40,7 @@ func (o *UpdateUserURL) SetBasePath(bp string) {
 func (o *UpdateUserURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/users/{username}/details"
+	var _path = "/users/{username}"
 
 	username := o.Username
 	if username != "" {

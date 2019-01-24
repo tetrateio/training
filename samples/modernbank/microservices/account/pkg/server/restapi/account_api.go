@@ -280,7 +280,7 @@ func (o *AccountAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/users/{owner}/accounts/{number}/details"] = accounts.NewGetAccountByNumber(o.context, o.AccountsGetAccountByNumberHandler)
+	o.handlers["GET"]["/users/{owner}/accounts/{number}"] = accounts.NewGetAccountByNumber(o.context, o.AccountsGetAccountByNumberHandler)
 
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
