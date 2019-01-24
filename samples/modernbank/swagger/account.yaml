@@ -1,0 +1,101 @@
+swagger: "2.0"
+info:
+  description: "This is the Account Microservice, responsible for managing accounts and their balances in Modern Bank"
+  version: "1.0.0"
+  title: "Account"
+host: "accounts"
+basePath: "/v1"
+tags:
+- name: "account"
+  description: "Operations about Accounts"
+schemes:
+- "http"
+definitions:
+  Account:
+    type: "object"
+    properties:
+      number:
+        type: "integer"
+        format: "int64"
+      balance:
+        type: "number"
+        format: "currency"
+      owner:
+        type: "string"
+paths:
+  /accounts:
+    post:
+      tags:
+      - "accounts"
+      summary: "Create a new account for a customer"
+      description: "Creates a new account for a given customer"
+      operationId: "createAccount"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Owner of the account"
+        required: true
+        schema:
+          type: object
+          properties:
+            owner:
+              type: "string"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: "#/definitions/Account"
+        500:
+          description: "Internal server error"
+  /accounts/{number}/details:
+    get:
+      tags:
+      - "accounts"
+      summary: "Get account details by account number"
+      description: ""
+      operationId: "getAccountByNumber"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "number"
+        in: "path"
+        description: "The number of the account that is to be fetched."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Success!"
+          schema:
+            $ref: "#/definitions/Account"
+        404:
+          description: "Account not found"
+        500:
+          description: "Internal server error"
+  /accounts/{number}:
+    delete:
+      tags:
+      - "accounts"
+      summary: "Delete account by account number"
+      description: "Delete account by account number."
+      operationId: "deleteAccount"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "number"
+        in: "path"
+        description: "The number of the account that is to be deleted."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Aaaaand it's gone!"
+        404:
+          description: "Account not found"
+        500:
+          description: "Internal server error"

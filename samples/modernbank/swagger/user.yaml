@@ -10,15 +10,31 @@ tags:
   description: "Operations about users"
 schemes:
 - "http"
+definitions:
+  User:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
 paths:
-  /user:
+  /users:
     post:
       tags:
-      - "user"
+      - "users"
       summary: "Create a new user identity for a customer"
       description: "Creates "
       operationId: "createUser"
       consumes:
+      - "application/json"
+      produces:
       - "application/json"
       parameters:
       - in: "body"
@@ -30,20 +46,21 @@ paths:
       responses:
         201:
           description: "Created"
+          schema:
+            $ref: "#/definitions/User"
         409:
           description: "User alreadys exists"
         500:
           description: "Internal server error"
-  /user/{username}:
+  /users/{username}/details:
     get:
       tags:
-      - "user"
+      - "users"
       summary: "Get user by user name"
       description: ""
       operationId: "getUserByUserName"
       produces:
       - "application/json"
-      - "text/plain"
       parameters:
       - name: "username"
         in: "path"
@@ -61,8 +78,8 @@ paths:
           description: "Internal server error"
     put:
       tags:
-      - "user"
-      summary: "Updated user"
+      - "users"
+      summary: "Update user"
       description: "Update user by username."
       operationId: "updateUser"
       produces:
@@ -90,14 +107,13 @@ paths:
           description: "User not found"
         500:
           description: "Internal server error"
+  /users/{username}:
     delete:
       tags:
-      - "user"
+      - "users"
       summary: "Delete user"
       description: "Delete user by username."
       operationId: "deleteUser"
-      produces:
-      - "application/json"
       parameters:
       - name: "username"
         in: "path"
@@ -111,17 +127,3 @@ paths:
           description: "User not found"
         500:
           description: "Internal server error"
-definitions:
-  User:
-    type: "object"
-    properties:
-      username:
-        type: "string"
-      firstName:
-        type: "string"
-      lastName:
-        type: "string"
-      email:
-        type: "string"
-      password:
-        type: "string"

@@ -6,5 +6,5 @@ for SERVICE_YAML in  $(find $DIR -name '*.yaml')
 do 
     FILENAME=${SERVICE_YAML##*/}
     SERVICE_NAME=${FILENAME%.*}
-    swagger generate server -f $SERVICE_YAML --target $DIR/../$SERVICE_NAME --model-package "pkg/model" --server-package "pkg/rest" --api-package "api"
+    swagger generate server -f $SERVICE_YAML --target $DIR/../microservices/$SERVICE_NAME --model-package "pkg/model" --server-package "pkg/server" --api-package "restapi"
 done
