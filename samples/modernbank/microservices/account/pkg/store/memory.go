@@ -10,11 +10,12 @@ import (
 var _ Interface = NewInMemory()
 
 func NewInMemory() *InMemory {
-	return &InMemory{currentAccountNumber: 0}
+	return &InMemory{m: &sync.RWMutex{}, currentAccountNumber: 0}
 }
 
 type InMemory struct {
-	ownerAccounts        sync.Map
+	m                    *sync.RWMutex
+	ownerAccounts        map[string]*accounts
 	currentAccountNumber int64
 }
 
@@ -58,19 +59,23 @@ func (a *accounts) list() []*model.Account {
 }
 
 func (m *InMemory) List(owner string) ([]*model.Account, error) {
-	res, ok := m.ownerAccounts.Load(owner)
+	m.m.RLock()
+	defer m.m.RUnlock()
+	_, ok := m.ownerAccounts[owner]
 	if !ok {
 		return nil, &NotFound{}
 	}
-	return res.(*accounts).list(), nil
+	return m.ownerAccounts[owner].list(), nil
 }
 
 func (m *InMemory) Get(owner string, number int64) (*model.Account, error) {
-	accountRes, ok := m.ownerAccounts.Load(owner)
+	m.m.RLock()
+	defer m.m.RUnlock()
+	res, ok := m.ownerAccounts[owner]
 	if !ok {
 		return nil, &NotFound{}
 	}
-	account, ok := accountRes.(*accounts).get(number)
+	account, ok := res.get(number)
 	if !ok {
 		return nil, &NotFound{}
 	}
@@ -78,30 +83,30 @@ func (m *InMemory) Get(owner string, number int64) (*model.Account, error) {
 }
 
 func (m *InMemory) Create(owner string) (*model.Account, error) {
+	m.m.Lock()
+	defer m.m.Unlock()
+	_, ok := m.ownerAccounts[owner]
+	if !ok {
+		m.ownerAccounts[owner] = &accounts{m: &sync.RWMutex{}, accounts: map[int64]model.Account{}}
+	}
 	newAccountNumber := m.unAssignedAccountNumber()
 	newAccount := &model.Account{
 		Balance: 0,
 		Owner:   owner,
 		Number:  newAccountNumber,
 	}
-	accountRes, ok := m.ownerAccounts.Load(owner)
-	var newAccounts accounts
-	if !ok {
-		newAccounts = accounts{m: &sync.RWMutex{}, accounts: map[int64]model.Account{}}
-	} else {
-		newAccounts = accountRes.(accounts)
-	}
-	newAccounts.add(newAccountNumber, newAccount)
-	m.ownerAccounts.Store(owner, newAccounts)
+	m.ownerAccounts[owner].add(newAccountNumber, newAccount)
 	return newAccount, nil
 }
 
 func (m *InMemory) Delete(owner string, number int64) error {
-	accountRes, ok := m.ownerAccounts.Load(owner)
+	m.m.Lock()
+	defer m.m.Unlock()
+	_, ok := m.ownerAccounts[owner]
 	if !ok {
 		return &NotFound{}
 	}
-	return accountRes.(*accounts).delete(number)
+	return m.ownerAccounts[owner].delete(number)
 }
 
 func (m *InMemory) unAssignedAccountNumber() int64 {
