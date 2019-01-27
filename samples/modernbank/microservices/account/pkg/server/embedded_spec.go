@@ -186,6 +186,11 @@ func init() {
   "definitions": {
     "Account": {
       "type": "object",
+      "required": [
+        "number",
+        "balance",
+        "owner"
+      ],
       "properties": {
         "balance": {
           "type": "number",
@@ -377,6 +382,11 @@ func init() {
   "definitions": {
     "Account": {
       "type": "object",
+      "required": [
+        "number",
+        "balance",
+        "owner"
+      ],
       "properties": {
         "balance": {
           "type": "number",

@@ -13,6 +13,12 @@ schemes:
 definitions:
   User:
     type: "object"
+    required:
+    - username
+    - firstName
+    - lastName
+    - email
+    - password
     properties:
       username:
         type: "string"

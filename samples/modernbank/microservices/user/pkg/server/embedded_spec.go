@@ -184,6 +184,13 @@ func init() {
   "definitions": {
     "User": {
       "type": "object",
+      "required": [
+        "username",
+        "firstName",
+        "lastName",
+        "email",
+        "password"
+      ],
       "properties": {
         "email": {
           "type": "string"
@@ -377,6 +384,13 @@ func init() {
   "definitions": {
     "User": {
       "type": "object",
+      "required": [
+        "username",
+        "firstName",
+        "lastName",
+        "email",
+        "password"
+      ],
       "properties": {
         "email": {
           "type": "string"

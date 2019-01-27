@@ -8,7 +8,9 @@ package model
 import (
 	strfmt "github.com/go-openapi/strfmt"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // Account account
@@ -16,17 +18,64 @@ import (
 type Account struct {
 
 	// balance
-	Balance float64 `json:"balance,omitempty"`
+	// Required: true
+	Balance *float64 `json:"balance"`
 
 	// number
-	Number int64 `json:"number,omitempty"`
+	// Required: true
+	Number *int64 `json:"number"`
 
 	// owner
-	Owner string `json:"owner,omitempty"`
+	// Required: true
+	Owner *string `json:"owner"`
 }
 
 // Validate validates this account
 func (m *Account) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateBalance(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateNumber(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateOwner(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Account) validateBalance(formats strfmt.Registry) error {
+
+	if err := validate.Required("balance", "body", m.Balance); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Account) validateNumber(formats strfmt.Registry) error {
+
+	if err := validate.Required("number", "body", m.Number); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Account) validateOwner(formats strfmt.Registry) error {
+
+	if err := validate.Required("owner", "body", m.Owner); err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -13,6 +13,10 @@ schemes:
 definitions:
   Account:
     type: "object"
+    required:
+      - number
+      - balance
+      - owner
     properties:
       number:
         type: "integer"
