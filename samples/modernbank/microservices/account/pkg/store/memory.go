@@ -4,18 +4,20 @@ import (
 	"sync"
 	"sync/atomic"
 
+	"github.com/go-openapi/swag"
+
 	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
 )
 
 var _ Interface = NewInMemory()
 
 func NewInMemory() *InMemory {
-	return &InMemory{m: &sync.RWMutex{}, currentAccountNumber: 0}
+	return &InMemory{m: &sync.RWMutex{}, currentAccountNumber: 0, ownerAccounts: map[string]accounts{}}
 }
 
 type InMemory struct {
 	m                    *sync.RWMutex
-	ownerAccounts        map[string]*accounts
+	ownerAccounts        map[string]accounts
 	currentAccountNumber int64
 }
 
@@ -24,13 +26,13 @@ type accounts struct {
 	accounts map[int64]model.Account
 }
 
-func (a *accounts) add(number int64, account *model.Account) {
+func (a accounts) add(number int64, account *model.Account) {
 	a.m.Lock()
 	defer a.m.Unlock()
 	a.accounts[number] = *account
 }
 
-func (a *accounts) delete(number int64) error {
+func (a accounts) delete(number int64) error {
 	a.m.Lock()
 	defer a.m.Unlock()
 	if _, found := a.accounts[number]; !found {
@@ -40,14 +42,14 @@ func (a *accounts) delete(number int64) error {
 	return nil
 }
 
-func (a *accounts) get(number int64) (*model.Account, bool) {
+func (a accounts) get(number int64) (*model.Account, bool) {
 	a.m.RLock()
 	defer a.m.RUnlock()
 	tmp, found := a.accounts[number]
 	return &tmp, found
 }
 
-func (a *accounts) list() []*model.Account {
+func (a accounts) list() []*model.Account {
 	a.m.RLock()
 	defer a.m.RUnlock()
 	res := make([]*model.Account, len(a.accounts))
@@ -87,13 +89,13 @@ func (m *InMemory) Create(owner string) (*model.Account, error) {
 	defer m.m.Unlock()
 	_, ok := m.ownerAccounts[owner]
 	if !ok {
-		m.ownerAccounts[owner] = &accounts{m: &sync.RWMutex{}, accounts: map[int64]model.Account{}}
+		m.ownerAccounts[owner] = accounts{m: &sync.RWMutex{}, accounts: map[int64]model.Account{}}
 	}
 	newAccountNumber := m.unAssignedAccountNumber()
 	newAccount := &model.Account{
-		Balance: 0,
-		Owner:   owner,
-		Number:  newAccountNumber,
+		Balance: swag.Float64(0),
+		Owner:   swag.String(owner),
+		Number:  swag.Int64(newAccountNumber),
 	}
 	m.ownerAccounts[owner].add(newAccountNumber, newAccount)
 	return newAccount, nil
