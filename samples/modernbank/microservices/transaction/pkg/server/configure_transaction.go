@@ -12,9 +12,12 @@ import (
 
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/server/restapi"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/server/restapi/transactions"
+	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/store"
 )
 
 //go:generate swagger generate server --target ../../../transaction --name Transaction --spec ../../../../swagger/transaction.yaml --api-package restapi --model-package pkg/model --server-package pkg/server
+
+var transactionStore store.Interface
 
 func configureFlags(api *restapi.TransactionAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
@@ -31,23 +34,56 @@ func configureAPI(api *restapi.TransactionAPI) http.Handler {
 	// api.Logger = log.Printf
 
 	api.JSONConsumer = runtime.JSONConsumer()
-
 	api.JSONProducer = runtime.JSONProducer()
 
+	transactionStore = store.NewInMemory()
+
 	api.TransactionsCreateTransactionHandler = transactions.CreateTransactionHandlerFunc(func(params transactions.CreateTransactionParams) middleware.Responder {
-		return middleware.NotImplemented("operation transactions.CreateTransaction has not yet been implemented")
+		res, err := transactionStore.Create(params.Body)
+		if err != nil {
+			return transactions.NewCreateTransactionInternalServerError()
+		}
+		return transactions.NewCreateTransactionCreated().WithPayload(res)
 	})
 	api.TransactionsGetTransactionReceivedHandler = transactions.GetTransactionReceivedHandlerFunc(func(params transactions.GetTransactionReceivedParams) middleware.Responder {
-		return middleware.NotImplemented("operation transactions.GetTransactionReceived has not yet been implemented")
+		res, err := transactionStore.GetReceived(params.Receiver, params.Transaction)
+		if err != nil {
+			if _, ok := err.(*store.NotFound); ok {
+				return transactions.NewGetTransactionReceivedNotFound()
+			}
+			return transactions.NewGetTransactionReceivedInternalServerError()
+		}
+		return transactions.NewGetTransactionReceivedOK().WithPayload(res)
 	})
 	api.TransactionsGetTransactionSentHandler = transactions.GetTransactionSentHandlerFunc(func(params transactions.GetTransactionSentParams) middleware.Responder {
-		return middleware.NotImplemented("operation transactions.GetTransactionSent has not yet been implemented")
+		res, err := transactionStore.GetSent(params.Sender, params.Transaction)
+		if err != nil {
+			if _, ok := err.(*store.NotFound); ok {
+				return transactions.NewGetTransactionSentNotFound()
+			}
+			return transactions.NewGetTransactionSentInternalServerError()
+		}
+		return transactions.NewGetTransactionSentOK().WithPayload(res)
 	})
 	api.TransactionsListTransactionsReceivedHandler = transactions.ListTransactionsReceivedHandlerFunc(func(params transactions.ListTransactionsReceivedParams) middleware.Responder {
-		return middleware.NotImplemented("operation transactions.ListTransactionsReceived has not yet been implemented")
+		res, err := transactionStore.ListReceived(params.Receiver)
+		if err != nil {
+			if _, ok := err.(*store.NotFound); ok {
+				return transactions.NewListTransactionsReceivedNotFound()
+			}
+			return transactions.NewListTransactionsReceivedInternalServerError()
+		}
+		return transactions.NewListTransactionsReceivedOK().WithPayload(res)
 	})
 	api.TransactionsListTransactionsSentHandler = transactions.ListTransactionsSentHandlerFunc(func(params transactions.ListTransactionsSentParams) middleware.Responder {
-		return middleware.NotImplemented("operation transactions.ListTransactionsSent has not yet been implemented")
+		res, err := transactionStore.ListSent(params.Sender)
+		if err != nil {
+			if _, ok := err.(*store.NotFound); ok {
+				return transactions.NewListTransactionsSentNotFound()
+			}
+			return transactions.NewListTransactionsSentInternalServerError()
+		}
+		return transactions.NewListTransactionsSentOK().WithPayload(res)
 	})
 
 	api.ServerShutdown = func() {}

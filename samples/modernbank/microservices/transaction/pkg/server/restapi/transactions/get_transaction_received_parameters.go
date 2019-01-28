@@ -40,7 +40,7 @@ type GetTransactionReceivedParams struct {
 	  Required: true
 	  In: path
 	*/
-	Transaction string
+	Transaction int64
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -97,7 +97,11 @@ func (o *GetTransactionReceivedParams) bindTransaction(rawData []string, hasKey 
 	// Required: true
 	// Parameter is provided by construction from the route
 
-	o.Transaction = raw
+	value, err := swag.ConvertInt64(raw)
+	if err != nil {
+		return errors.InvalidType("transaction", "path", "int64", raw)
+	}
+	o.Transaction = value
 
 	return nil
 }

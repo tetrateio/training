@@ -91,7 +91,8 @@ func init() {
             "required": true
           },
           {
-            "type": "string",
+            "type": "integer",
+            "format": "int64",
             "description": "Transaction ID",
             "name": "transaction",
             "in": "path",
@@ -175,7 +176,8 @@ func init() {
             "required": true
           },
           {
-            "type": "string",
+            "type": "integer",
+            "format": "int64",
             "description": "Transaction ID",
             "name": "transaction",
             "in": "path",
@@ -272,7 +274,8 @@ func init() {
           ],
           "properties": {
             "id": {
-              "type": "string"
+              "type": "integer",
+              "format": "int64"
             }
           }
         }
@@ -360,7 +363,8 @@ func init() {
             "required": true
           },
           {
-            "type": "string",
+            "type": "integer",
+            "format": "int64",
             "description": "Transaction ID",
             "name": "transaction",
             "in": "path",
@@ -444,7 +448,8 @@ func init() {
             "required": true
           },
           {
-            "type": "string",
+            "type": "integer",
+            "format": "int64",
             "description": "Transaction ID",
             "name": "transaction",
             "in": "path",
@@ -541,7 +546,8 @@ func init() {
           ],
           "properties": {
             "id": {
-              "type": "string"
+              "type": "integer",
+              "format": "int64"
             }
           }
         }

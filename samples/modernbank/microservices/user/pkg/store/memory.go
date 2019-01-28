@@ -7,6 +7,7 @@ import (
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/model"
 )
 
+// Enforce that InMemory matches the Store Interface
 func NewInMemory() *InMemory {
 	return &InMemory{m: &sync.RWMutex{}, store: map[string]model.User{}}
 }

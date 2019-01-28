@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: "This is the Transaction Microservice, responsible for managing Transactions in Modern Bank."
+  description: "This is the Transaction Microservice, an immutable append-only Transaction Log in Modern Bank."
   version: "1.0.0"
   title: "Transaction"
 host: "transactions"
@@ -19,7 +19,8 @@ definitions:
           - id
         properties:
           id:
-            type: "string"
+            type: "integer"
+            format: "int64"
   NewTransaction:
     required:
       - sender
@@ -136,7 +137,8 @@ paths:
         name: "transaction"
         description: "Transaction ID"
         required: true
-        type: "string"
+        type: "integer"
+        format: "int64"
       responses:
         200:
           description: "Success!"
@@ -166,7 +168,8 @@ paths:
         name: "transaction"
         description: "Transaction ID"
         required: true
-        type: "string"
+        type: "integer"
+        format: "int64"
       responses:
         200:
           description: "Success!"

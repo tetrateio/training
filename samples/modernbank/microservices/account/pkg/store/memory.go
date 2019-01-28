@@ -9,6 +9,7 @@ import (
 	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
 )
 
+// Enforce that InMemory matches the Store Interface
 var _ Interface = NewInMemory()
 
 func NewInMemory() *InMemory {
