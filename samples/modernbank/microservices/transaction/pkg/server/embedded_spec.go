@@ -23,7 +23,7 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "This is the Transaction Microservice, responsible for managing Transactions in Modern Bank.",
+    "description": "This is the Transaction Microservice, an immutable append-only Transaction Log in Modern Bank.",
     "title": "Transaction",
     "version": "1.0.0"
   },
@@ -295,7 +295,7 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "This is the Transaction Microservice, responsible for managing Transactions in Modern Bank.",
+    "description": "This is the Transaction Microservice, an immutable append-only Transaction Log in Modern Bank.",
     "title": "Transaction",
     "version": "1.0.0"
   },

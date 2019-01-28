@@ -19,12 +19,12 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/server/restapi/transactions"
+	"github.com/tetrateio/training/samples/modernbank/microservices/payment-processing/pkg/server/restapi/payment_processing"
 )
 
-// NewTransactionAPI creates a new Transaction instance
-func NewTransactionAPI(spec *loads.Document) *TransactionAPI {
-	return &TransactionAPI{
+// NewPaymentProcessingAPI creates a new PaymentProcessing instance
+func NewPaymentProcessingAPI(spec *loads.Document) *PaymentProcessingAPI {
+	return &PaymentProcessingAPI{
 		handlers:            make(map[string]map[string]http.Handler),
 		formats:             strfmt.Default,
 		defaultConsumes:     "application/json",
@@ -39,26 +39,14 @@ func NewTransactionAPI(spec *loads.Document) *TransactionAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
-		TransactionsCreateTransactionHandler: transactions.CreateTransactionHandlerFunc(func(params transactions.CreateTransactionParams) middleware.Responder {
-			return middleware.NotImplemented("operation TransactionsCreateTransaction has not yet been implemented")
-		}),
-		TransactionsGetTransactionReceivedHandler: transactions.GetTransactionReceivedHandlerFunc(func(params transactions.GetTransactionReceivedParams) middleware.Responder {
-			return middleware.NotImplemented("operation TransactionsGetTransactionReceived has not yet been implemented")
-		}),
-		TransactionsGetTransactionSentHandler: transactions.GetTransactionSentHandlerFunc(func(params transactions.GetTransactionSentParams) middleware.Responder {
-			return middleware.NotImplemented("operation TransactionsGetTransactionSent has not yet been implemented")
-		}),
-		TransactionsListTransactionsReceivedHandler: transactions.ListTransactionsReceivedHandlerFunc(func(params transactions.ListTransactionsReceivedParams) middleware.Responder {
-			return middleware.NotImplemented("operation TransactionsListTransactionsReceived has not yet been implemented")
-		}),
-		TransactionsListTransactionsSentHandler: transactions.ListTransactionsSentHandlerFunc(func(params transactions.ListTransactionsSentParams) middleware.Responder {
-			return middleware.NotImplemented("operation TransactionsListTransactionsSent has not yet been implemented")
+		PaymentProcessingMakePaymentHandler: payment_processing.MakePaymentHandlerFunc(func(params payment_processing.MakePaymentParams) middleware.Responder {
+			return middleware.NotImplemented("operation PaymentProcessingMakePayment has not yet been implemented")
 		}),
 	}
 }
 
-/*TransactionAPI This is the Transaction Microservice, an immutable append-only Transaction Log in Modern Bank. */
-type TransactionAPI struct {
+/*PaymentProcessingAPI This is the Payment Processing Microservice, ensuring transactions are processed in Modern Bank. */
+type PaymentProcessingAPI struct {
 	spec            *loads.Document
 	context         *middleware.Context
 	handlers        map[string]map[string]http.Handler
@@ -85,16 +73,8 @@ type TransactionAPI struct {
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
 
-	// TransactionsCreateTransactionHandler sets the operation handler for the create transaction operation
-	TransactionsCreateTransactionHandler transactions.CreateTransactionHandler
-	// TransactionsGetTransactionReceivedHandler sets the operation handler for the get transaction received operation
-	TransactionsGetTransactionReceivedHandler transactions.GetTransactionReceivedHandler
-	// TransactionsGetTransactionSentHandler sets the operation handler for the get transaction sent operation
-	TransactionsGetTransactionSentHandler transactions.GetTransactionSentHandler
-	// TransactionsListTransactionsReceivedHandler sets the operation handler for the list transactions received operation
-	TransactionsListTransactionsReceivedHandler transactions.ListTransactionsReceivedHandler
-	// TransactionsListTransactionsSentHandler sets the operation handler for the list transactions sent operation
-	TransactionsListTransactionsSentHandler transactions.ListTransactionsSentHandler
+	// PaymentProcessingMakePaymentHandler sets the operation handler for the make payment operation
+	PaymentProcessingMakePaymentHandler payment_processing.MakePaymentHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -112,42 +92,42 @@ type TransactionAPI struct {
 }
 
 // SetDefaultProduces sets the default produces media type
-func (o *TransactionAPI) SetDefaultProduces(mediaType string) {
+func (o *PaymentProcessingAPI) SetDefaultProduces(mediaType string) {
 	o.defaultProduces = mediaType
 }
 
 // SetDefaultConsumes returns the default consumes media type
-func (o *TransactionAPI) SetDefaultConsumes(mediaType string) {
+func (o *PaymentProcessingAPI) SetDefaultConsumes(mediaType string) {
 	o.defaultConsumes = mediaType
 }
 
 // SetSpec sets a spec that will be served for the clients.
-func (o *TransactionAPI) SetSpec(spec *loads.Document) {
+func (o *PaymentProcessingAPI) SetSpec(spec *loads.Document) {
 	o.spec = spec
 }
 
 // DefaultProduces returns the default produces media type
-func (o *TransactionAPI) DefaultProduces() string {
+func (o *PaymentProcessingAPI) DefaultProduces() string {
 	return o.defaultProduces
 }
 
 // DefaultConsumes returns the default consumes media type
-func (o *TransactionAPI) DefaultConsumes() string {
+func (o *PaymentProcessingAPI) DefaultConsumes() string {
 	return o.defaultConsumes
 }
 
 // Formats returns the registered string formats
-func (o *TransactionAPI) Formats() strfmt.Registry {
+func (o *PaymentProcessingAPI) Formats() strfmt.Registry {
 	return o.formats
 }
 
 // RegisterFormat registers a custom format validator
-func (o *TransactionAPI) RegisterFormat(name string, format strfmt.Format, validator strfmt.Validator) {
+func (o *PaymentProcessingAPI) RegisterFormat(name string, format strfmt.Format, validator strfmt.Validator) {
 	o.formats.Add(name, format, validator)
 }
 
-// Validate validates the registrations in the TransactionAPI
-func (o *TransactionAPI) Validate() error {
+// Validate validates the registrations in the PaymentProcessingAPI
+func (o *PaymentProcessingAPI) Validate() error {
 	var unregistered []string
 
 	if o.JSONConsumer == nil {
@@ -158,24 +138,8 @@ func (o *TransactionAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
-	if o.TransactionsCreateTransactionHandler == nil {
-		unregistered = append(unregistered, "transactions.CreateTransactionHandler")
-	}
-
-	if o.TransactionsGetTransactionReceivedHandler == nil {
-		unregistered = append(unregistered, "transactions.GetTransactionReceivedHandler")
-	}
-
-	if o.TransactionsGetTransactionSentHandler == nil {
-		unregistered = append(unregistered, "transactions.GetTransactionSentHandler")
-	}
-
-	if o.TransactionsListTransactionsReceivedHandler == nil {
-		unregistered = append(unregistered, "transactions.ListTransactionsReceivedHandler")
-	}
-
-	if o.TransactionsListTransactionsSentHandler == nil {
-		unregistered = append(unregistered, "transactions.ListTransactionsSentHandler")
+	if o.PaymentProcessingMakePaymentHandler == nil {
+		unregistered = append(unregistered, "payment_processing.MakePaymentHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -186,26 +150,26 @@ func (o *TransactionAPI) Validate() error {
 }
 
 // ServeErrorFor gets a error handler for a given operation id
-func (o *TransactionAPI) ServeErrorFor(operationID string) func(http.ResponseWriter, *http.Request, error) {
+func (o *PaymentProcessingAPI) ServeErrorFor(operationID string) func(http.ResponseWriter, *http.Request, error) {
 	return o.ServeError
 }
 
 // AuthenticatorsFor gets the authenticators for the specified security schemes
-func (o *TransactionAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]runtime.Authenticator {
+func (o *PaymentProcessingAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]runtime.Authenticator {
 
 	return nil
 
 }
 
 // Authorizer returns the registered authorizer
-func (o *TransactionAPI) Authorizer() runtime.Authorizer {
+func (o *PaymentProcessingAPI) Authorizer() runtime.Authorizer {
 
 	return nil
 
 }
 
 // ConsumersFor gets the consumers for the specified media types
-func (o *TransactionAPI) ConsumersFor(mediaTypes []string) map[string]runtime.Consumer {
+func (o *PaymentProcessingAPI) ConsumersFor(mediaTypes []string) map[string]runtime.Consumer {
 
 	result := make(map[string]runtime.Consumer)
 	for _, mt := range mediaTypes {
@@ -225,7 +189,7 @@ func (o *TransactionAPI) ConsumersFor(mediaTypes []string) map[string]runtime.Co
 }
 
 // ProducersFor gets the producers for the specified media types
-func (o *TransactionAPI) ProducersFor(mediaTypes []string) map[string]runtime.Producer {
+func (o *PaymentProcessingAPI) ProducersFor(mediaTypes []string) map[string]runtime.Producer {
 
 	result := make(map[string]runtime.Producer)
 	for _, mt := range mediaTypes {
@@ -245,7 +209,7 @@ func (o *TransactionAPI) ProducersFor(mediaTypes []string) map[string]runtime.Pr
 }
 
 // HandlerFor gets a http.Handler for the provided operation method and path
-func (o *TransactionAPI) HandlerFor(method, path string) (http.Handler, bool) {
+func (o *PaymentProcessingAPI) HandlerFor(method, path string) (http.Handler, bool) {
 	if o.handlers == nil {
 		return nil, false
 	}
@@ -260,8 +224,8 @@ func (o *TransactionAPI) HandlerFor(method, path string) (http.Handler, bool) {
 	return h, ok
 }
 
-// Context returns the middleware context for the transaction API
-func (o *TransactionAPI) Context() *middleware.Context {
+// Context returns the middleware context for the payment processing API
+func (o *PaymentProcessingAPI) Context() *middleware.Context {
 	if o.context == nil {
 		o.context = middleware.NewRoutableContext(o.spec, o, nil)
 	}
@@ -269,7 +233,7 @@ func (o *TransactionAPI) Context() *middleware.Context {
 	return o.context
 }
 
-func (o *TransactionAPI) initHandlerCache() {
+func (o *PaymentProcessingAPI) initHandlerCache() {
 	o.Context() // don't care about the result, just that the initialization happened
 
 	if o.handlers == nil {
@@ -279,33 +243,13 @@ func (o *TransactionAPI) initHandlerCache() {
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
-	o.handlers["POST"]["/transactions"] = transactions.NewCreateTransaction(o.context, o.TransactionsCreateTransactionHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/account/{receiver}/received/{transaction}"] = transactions.NewGetTransactionReceived(o.context, o.TransactionsGetTransactionReceivedHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/account/{sender}/sent/{transaction}"] = transactions.NewGetTransactionSent(o.context, o.TransactionsGetTransactionSentHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/account/{receiver}/received"] = transactions.NewListTransactionsReceived(o.context, o.TransactionsListTransactionsReceivedHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/account/{sender}/sent"] = transactions.NewListTransactionsSent(o.context, o.TransactionsListTransactionsSentHandler)
+	o.handlers["POST"]["/payment"] = payment_processing.NewMakePayment(o.context, o.PaymentProcessingMakePaymentHandler)
 
 }
 
 // Serve creates a http handler to serve the API over HTTP
 // can be used directly in http.ListenAndServe(":8000", api.Serve(nil))
-func (o *TransactionAPI) Serve(builder middleware.Builder) http.Handler {
+func (o *PaymentProcessingAPI) Serve(builder middleware.Builder) http.Handler {
 	o.Init()
 
 	if o.Middleware != nil {
@@ -315,18 +259,18 @@ func (o *TransactionAPI) Serve(builder middleware.Builder) http.Handler {
 }
 
 // Init allows you to just initialize the handler cache, you can then recompose the middleware as you see fit
-func (o *TransactionAPI) Init() {
+func (o *PaymentProcessingAPI) Init() {
 	if len(o.handlers) == 0 {
 		o.initHandlerCache()
 	}
 }
 
 // RegisterConsumer allows you to add (or override) a consumer for a media type.
-func (o *TransactionAPI) RegisterConsumer(mediaType string, consumer runtime.Consumer) {
+func (o *PaymentProcessingAPI) RegisterConsumer(mediaType string, consumer runtime.Consumer) {
 	o.customConsumers[mediaType] = consumer
 }
 
 // RegisterProducer allows you to add (or override) a producer for a media type.
-func (o *TransactionAPI) RegisterProducer(mediaType string, producer runtime.Producer) {
+func (o *PaymentProcessingAPI) RegisterProducer(mediaType string, producer runtime.Producer) {
 	o.customProducers[mediaType] = producer
 }
