@@ -7,4 +7,5 @@ for SERVICE_DIR in  $(find $DIR/../microservices -type d -maxdepth 1 -mindepth 1
 do
     cd ${SERVICE_DIR} 
     go get -u
+    go mod tidy
 done
