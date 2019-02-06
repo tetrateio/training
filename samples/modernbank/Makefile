@@ -14,3 +14,8 @@ build:
 docker-build: build
 	./scripts/buildImages.sh ${CONTAINER_REGISTRY} ${TAG}
 
+docker-push: build docker-build
+	./scripts/pushImages.sh ${CONTAINER_REGISTRY} ${TAG}
+
+deploy-kube:
+	./scripts/deployKube.sh bankingservices default

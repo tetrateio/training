@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.microservice.name }}
+  namespace: 
+  labels:
+    app.kubernetes.io/name: {{ .Values.microservice.name }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.microservice.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ .Values.microservice.name }}
