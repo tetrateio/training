@@ -9,6 +9,6 @@ for SERVICE_DIR in  $(find $DIR/../microservices -type d -maxdepth 1 -mindepth 1
 do
     SERVICE_NAME=${SERVICE_DIR##*/}
     IMAGE_NAME=${CONTAINER_REGISTRY}/${SERVICE_NAME}:${TAG}
-    prettyPrint "Building ${IMAGE_NAME}"
-    docker build -t ${IMAGE_NAME} ${SERVICE_DIR}
+    prettyPrint "Pushing ${IMAGE_NAME}"
+    docker push ${IMAGE_NAME}
 done

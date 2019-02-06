@@ -1,0 +1,8 @@
+microservice:
+    name: user
+    port: 8080
+    replicaCount: 2
+image:
+    repository: gcr.io/tetratelabs/modernbank/user
+    tag: v1.0.0
+    pullPolicy: Always

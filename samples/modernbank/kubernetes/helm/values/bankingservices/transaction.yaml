@@ -1,0 +1,8 @@
+microservice:
+    name: transaction
+    port: 8080
+    replicaCount: 2
+image:
+    repository: gcr.io/tetratelabs/modernbank/transaction
+    tag: v1.0.0
+    pullPolicy: Always

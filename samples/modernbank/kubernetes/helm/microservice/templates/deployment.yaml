@@ -1,0 +1,20 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ .Values.microservice.name }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.microservice.name }}
+spec:
+  replicas: {{ .Values.microservice.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.microservice.name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Values.microservice.name }}
+    spec:
+      containers:
+        - name: {{ .Values.microservice.name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
