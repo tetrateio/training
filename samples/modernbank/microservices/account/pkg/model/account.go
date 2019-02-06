@@ -14,7 +14,7 @@ import (
 )
 
 // Account account
-// swagger:model Account
+// swagger:model account
 type Account struct {
 
 	// balance

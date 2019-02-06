@@ -23,186 +23,16 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "This is the Transaction Microservice, an immutable append-only Transaction Log in Modern Bank.",
+    "description": "This is the Transaction Processing Microservice, ensuring transactions are processed in Modern Bank.",
     "title": "Transaction",
     "version": "1.0.0"
   },
-  "host": "transactions",
+  "host": "transaction",
   "basePath": "/v1",
   "paths": {
-    "/account/{receiver}/received": {
-      "get": {
-        "description": "Lists all transactions sent to a given account",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "transactions"
-        ],
-        "summary": "Lists all transactions sent to a given account",
-        "operationId": "listTransactionsReceived",
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Account number that received the transactions",
-            "name": "receiver",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Transaction"
-              }
-            }
-          },
-          "404": {
-            "description": "Account not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/account/{receiver}/received/{transaction}": {
-      "get": {
-        "description": "Get a specific transaction received by a given account",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "transactions"
-        ],
-        "summary": "Get a specific transaction received by a given account",
-        "operationId": "getTransactionReceived",
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Account number that received the transactions",
-            "name": "receiver",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Transaction ID",
-            "name": "transaction",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!",
-            "schema": {
-              "$ref": "#/definitions/Transaction"
-            }
-          },
-          "404": {
-            "description": "Transaction not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/account/{sender}/sent": {
-      "get": {
-        "description": "Lists all transactions sent from a given account",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "transactions"
-        ],
-        "summary": "Lists all transactions sent from a given account",
-        "operationId": "listTransactionsSent",
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Account number that made the transactions",
-            "name": "sender",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Transaction"
-              }
-            }
-          },
-          "404": {
-            "description": "Account not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/account/{sender}/sent/{transaction}": {
-      "get": {
-        "description": "Get a specific transaction sent from a given account",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "transactions"
-        ],
-        "summary": "Get a specific transaction sent from a given account",
-        "operationId": "getTransactionSent",
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Account number that made the transactions",
-            "name": "sender",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Transaction ID",
-            "name": "transaction",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!",
-            "schema": {
-              "$ref": "#/definitions/Transaction"
-            }
-          },
-          "404": {
-            "description": "Transaction not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
     "/transactions": {
       "post": {
-        "description": "Creates a new transaction in the log",
+        "description": "Sends money from one account to another",
         "consumes": [
           "application/json"
         ],
@@ -212,16 +42,16 @@ func init() {
         "tags": [
           "transactions"
         ],
-        "summary": "Create a new transaction to an account",
-        "operationId": "createTransaction",
+        "summary": "Sends money from one account to another",
+        "operationId": "CreateTransaction",
         "parameters": [
           {
-            "description": "Created transaction",
+            "description": "Transaction to create",
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/NewTransaction"
+              "$ref": "#/definitions/newtransaction"
             }
           }
         ],
@@ -229,7 +59,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/Transaction"
+              "$ref": "#/definitions/transaction"
             }
           },
           "500": {
@@ -240,7 +70,7 @@ func init() {
     }
   },
   "definitions": {
-    "NewTransaction": {
+    "newtransaction": {
       "type": "object",
       "required": [
         "sender",
@@ -262,10 +92,29 @@ func init() {
         }
       }
     },
-    "Transaction": {
+    "transaction": {
       "allOf": [
         {
-          "$ref": "#/definitions/NewTransaction"
+          "type": "object",
+          "required": [
+            "sender",
+            "receiver",
+            "amount"
+          ],
+          "properties": {
+            "amount": {
+              "type": "number",
+              "format": "currency"
+            },
+            "receiver": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "sender": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
         },
         {
           "type": "object",
@@ -284,7 +133,7 @@ func init() {
   },
   "tags": [
     {
-      "description": "Operations about transactions",
+      "description": "Operations about handling transactions",
       "name": "transaction"
     }
   ]
@@ -295,186 +144,16 @@ func init() {
   ],
   "swagger": "2.0",
   "info": {
-    "description": "This is the Transaction Microservice, an immutable append-only Transaction Log in Modern Bank.",
+    "description": "This is the Transaction Processing Microservice, ensuring transactions are processed in Modern Bank.",
     "title": "Transaction",
     "version": "1.0.0"
   },
-  "host": "transactions",
+  "host": "transaction",
   "basePath": "/v1",
   "paths": {
-    "/account/{receiver}/received": {
-      "get": {
-        "description": "Lists all transactions sent to a given account",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "transactions"
-        ],
-        "summary": "Lists all transactions sent to a given account",
-        "operationId": "listTransactionsReceived",
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Account number that received the transactions",
-            "name": "receiver",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Transaction"
-              }
-            }
-          },
-          "404": {
-            "description": "Account not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/account/{receiver}/received/{transaction}": {
-      "get": {
-        "description": "Get a specific transaction received by a given account",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "transactions"
-        ],
-        "summary": "Get a specific transaction received by a given account",
-        "operationId": "getTransactionReceived",
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Account number that received the transactions",
-            "name": "receiver",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Transaction ID",
-            "name": "transaction",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!",
-            "schema": {
-              "$ref": "#/definitions/Transaction"
-            }
-          },
-          "404": {
-            "description": "Transaction not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/account/{sender}/sent": {
-      "get": {
-        "description": "Lists all transactions sent from a given account",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "transactions"
-        ],
-        "summary": "Lists all transactions sent from a given account",
-        "operationId": "listTransactionsSent",
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Account number that made the transactions",
-            "name": "sender",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Transaction"
-              }
-            }
-          },
-          "404": {
-            "description": "Account not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
-    "/account/{sender}/sent/{transaction}": {
-      "get": {
-        "description": "Get a specific transaction sent from a given account",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "transactions"
-        ],
-        "summary": "Get a specific transaction sent from a given account",
-        "operationId": "getTransactionSent",
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Account number that made the transactions",
-            "name": "sender",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Transaction ID",
-            "name": "transaction",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!",
-            "schema": {
-              "$ref": "#/definitions/Transaction"
-            }
-          },
-          "404": {
-            "description": "Transaction not found"
-          },
-          "500": {
-            "description": "Internal server error"
-          }
-        }
-      }
-    },
     "/transactions": {
       "post": {
-        "description": "Creates a new transaction in the log",
+        "description": "Sends money from one account to another",
         "consumes": [
           "application/json"
         ],
@@ -484,16 +163,16 @@ func init() {
         "tags": [
           "transactions"
         ],
-        "summary": "Create a new transaction to an account",
-        "operationId": "createTransaction",
+        "summary": "Sends money from one account to another",
+        "operationId": "CreateTransaction",
         "parameters": [
           {
-            "description": "Created transaction",
+            "description": "Transaction to create",
             "name": "body",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/NewTransaction"
+              "$ref": "#/definitions/newtransaction"
             }
           }
         ],
@@ -501,7 +180,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/Transaction"
+              "$ref": "#/definitions/transaction"
             }
           },
           "500": {
@@ -512,7 +191,7 @@ func init() {
     }
   },
   "definitions": {
-    "NewTransaction": {
+    "newtransaction": {
       "type": "object",
       "required": [
         "sender",
@@ -534,10 +213,29 @@ func init() {
         }
       }
     },
-    "Transaction": {
+    "transaction": {
       "allOf": [
         {
-          "$ref": "#/definitions/NewTransaction"
+          "type": "object",
+          "required": [
+            "sender",
+            "receiver",
+            "amount"
+          ],
+          "properties": {
+            "amount": {
+              "type": "number",
+              "format": "currency"
+            },
+            "receiver": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "sender": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
         },
         {
           "type": "object",
@@ -556,7 +254,7 @@ func init() {
   },
   "tags": [
     {
-      "description": "Operations about transactions",
+      "description": "Operations about handling transactions",
       "name": "transaction"
     }
   ]

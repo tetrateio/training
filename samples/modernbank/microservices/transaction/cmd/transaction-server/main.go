@@ -28,7 +28,7 @@ func main() {
 
 	parser := flags.NewParser(server, flags.Default)
 	parser.ShortDescription = "Transaction"
-	parser.LongDescription = "This is the Transaction Microservice, an immutable append-only Transaction Log in Modern Bank."
+	parser.LongDescription = "This is the Transaction Processing Microservice, ensuring transactions are processed in Modern Bank."
 
 	server.ConfigureFlags()
 	for _, optsGroup := range api.CommandLineOptionsGroups {

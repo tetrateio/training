@@ -64,10 +64,10 @@ for the create transaction operation typically these are written to a http.Reque
 type CreateTransactionParams struct {
 
 	/*Body
-	  Created transaction
+	  Transaction to create
 
 	*/
-	Body *model.NewTransaction
+	Body *model.Newtransaction
 
 	timeout    time.Duration
 	Context    context.Context
@@ -108,13 +108,13 @@ func (o *CreateTransactionParams) SetHTTPClient(client *http.Client) {
 }
 
 // WithBody adds the body to the create transaction params
-func (o *CreateTransactionParams) WithBody(body *model.NewTransaction) *CreateTransactionParams {
+func (o *CreateTransactionParams) WithBody(body *model.Newtransaction) *CreateTransactionParams {
 	o.SetBody(body)
 	return o
 }
 
 // SetBody adds the body to the create transaction params
-func (o *CreateTransactionParams) SetBody(body *model.NewTransaction) {
+func (o *CreateTransactionParams) SetBody(body *model.Newtransaction) {
 	o.Body = body
 }
 

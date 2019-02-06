@@ -1,0 +1,24 @@
+post:
+  tags:
+  - "transactions"
+  summary: "Sends money from one account to another"
+  description: "Sends money from one account to another"
+  operationId: "CreateTransaction"
+  consumes:
+  - "application/json"
+  produces:
+  - "application/json"
+  parameters:
+  - in: "body"
+    name: "body"
+    description: "Transaction to create"
+    required: true
+    schema:
+      $ref: "./definitions/newtransaction.yaml"
+  responses:
+    201:
+      description: "Created"
+      schema:
+        $ref: "./definitions/transaction.yaml"
+    500:
+      description: "Internal server error"

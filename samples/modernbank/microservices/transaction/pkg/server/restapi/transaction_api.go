@@ -42,22 +42,10 @@ func NewTransactionAPI(spec *loads.Document) *TransactionAPI {
 		TransactionsCreateTransactionHandler: transactions.CreateTransactionHandlerFunc(func(params transactions.CreateTransactionParams) middleware.Responder {
 			return middleware.NotImplemented("operation TransactionsCreateTransaction has not yet been implemented")
 		}),
-		TransactionsGetTransactionReceivedHandler: transactions.GetTransactionReceivedHandlerFunc(func(params transactions.GetTransactionReceivedParams) middleware.Responder {
-			return middleware.NotImplemented("operation TransactionsGetTransactionReceived has not yet been implemented")
-		}),
-		TransactionsGetTransactionSentHandler: transactions.GetTransactionSentHandlerFunc(func(params transactions.GetTransactionSentParams) middleware.Responder {
-			return middleware.NotImplemented("operation TransactionsGetTransactionSent has not yet been implemented")
-		}),
-		TransactionsListTransactionsReceivedHandler: transactions.ListTransactionsReceivedHandlerFunc(func(params transactions.ListTransactionsReceivedParams) middleware.Responder {
-			return middleware.NotImplemented("operation TransactionsListTransactionsReceived has not yet been implemented")
-		}),
-		TransactionsListTransactionsSentHandler: transactions.ListTransactionsSentHandlerFunc(func(params transactions.ListTransactionsSentParams) middleware.Responder {
-			return middleware.NotImplemented("operation TransactionsListTransactionsSent has not yet been implemented")
-		}),
 	}
 }
 
-/*TransactionAPI This is the Transaction Microservice, an immutable append-only Transaction Log in Modern Bank. */
+/*TransactionAPI This is the Transaction Processing Microservice, ensuring transactions are processed in Modern Bank. */
 type TransactionAPI struct {
 	spec            *loads.Document
 	context         *middleware.Context
@@ -87,14 +75,6 @@ type TransactionAPI struct {
 
 	// TransactionsCreateTransactionHandler sets the operation handler for the create transaction operation
 	TransactionsCreateTransactionHandler transactions.CreateTransactionHandler
-	// TransactionsGetTransactionReceivedHandler sets the operation handler for the get transaction received operation
-	TransactionsGetTransactionReceivedHandler transactions.GetTransactionReceivedHandler
-	// TransactionsGetTransactionSentHandler sets the operation handler for the get transaction sent operation
-	TransactionsGetTransactionSentHandler transactions.GetTransactionSentHandler
-	// TransactionsListTransactionsReceivedHandler sets the operation handler for the list transactions received operation
-	TransactionsListTransactionsReceivedHandler transactions.ListTransactionsReceivedHandler
-	// TransactionsListTransactionsSentHandler sets the operation handler for the list transactions sent operation
-	TransactionsListTransactionsSentHandler transactions.ListTransactionsSentHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -160,22 +140,6 @@ func (o *TransactionAPI) Validate() error {
 
 	if o.TransactionsCreateTransactionHandler == nil {
 		unregistered = append(unregistered, "transactions.CreateTransactionHandler")
-	}
-
-	if o.TransactionsGetTransactionReceivedHandler == nil {
-		unregistered = append(unregistered, "transactions.GetTransactionReceivedHandler")
-	}
-
-	if o.TransactionsGetTransactionSentHandler == nil {
-		unregistered = append(unregistered, "transactions.GetTransactionSentHandler")
-	}
-
-	if o.TransactionsListTransactionsReceivedHandler == nil {
-		unregistered = append(unregistered, "transactions.ListTransactionsReceivedHandler")
-	}
-
-	if o.TransactionsListTransactionsSentHandler == nil {
-		unregistered = append(unregistered, "transactions.ListTransactionsSentHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -280,26 +244,6 @@ func (o *TransactionAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/transactions"] = transactions.NewCreateTransaction(o.context, o.TransactionsCreateTransactionHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/account/{receiver}/received/{transaction}"] = transactions.NewGetTransactionReceived(o.context, o.TransactionsGetTransactionReceivedHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/account/{sender}/sent/{transaction}"] = transactions.NewGetTransactionSent(o.context, o.TransactionsGetTransactionSentHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/account/{receiver}/received"] = transactions.NewListTransactionsReceived(o.context, o.TransactionsListTransactionsReceivedHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/account/{sender}/sent"] = transactions.NewListTransactionsSent(o.context, o.TransactionsListTransactionsSentHandler)
 
 }
 

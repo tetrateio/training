@@ -51,7 +51,7 @@ func init() {
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/user"
             }
           }
         ],
@@ -59,14 +59,8 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/user"
             }
-          },
-          "409": {
-            "description": "User alreadys exists"
-          },
-          "500": {
-            "description": "Internal server error"
           }
         }
       }
@@ -94,7 +88,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/user"
             }
           },
           "404": {
@@ -132,7 +126,7 @@ func init() {
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/user"
             }
           }
         ],
@@ -140,7 +134,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/user"
             }
           },
           "404": {
@@ -182,7 +176,7 @@ func init() {
     }
   },
   "definitions": {
-    "User": {
+    "user": {
       "type": "object",
       "required": [
         "username",
@@ -251,7 +245,7 @@ func init() {
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/user"
             }
           }
         ],
@@ -259,14 +253,8 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/user"
             }
-          },
-          "409": {
-            "description": "User alreadys exists"
-          },
-          "500": {
-            "description": "Internal server error"
           }
         }
       }
@@ -294,7 +282,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/user"
             }
           },
           "404": {
@@ -332,7 +320,7 @@ func init() {
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/user"
             }
           }
         ],
@@ -340,7 +328,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/user"
             }
           },
           "404": {
@@ -382,7 +370,7 @@ func init() {
     }
   },
   "definitions": {
-    "User": {
+    "user": {
       "type": "object",
       "required": [
         "username",

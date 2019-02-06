@@ -1,0 +1,9 @@
+allOf:
+  - $ref: "./newtransaction.yaml" # is relative to yaml that is being flattened
+  - type: "object"
+    required:
+      - id
+    properties:
+      id:
+        type: "integer"
+        format: "int64"

@@ -1,0 +1,26 @@
+get:
+  tags:
+  - "transactions"
+  summary: "Lists all transactions sent to a given account"
+  description: "Lists all transactions sent to a given account"
+  operationId: "listTransactionsReceived"
+  produces:
+  - "application/json"
+  parameters:
+  - in: "path"
+    name: "receiver"
+    description: "Account number that received the transactions"
+    required: true
+    type: "integer"
+    format: "int64"
+  responses:
+    200:
+      description: "Success!"
+      schema:
+        type: array
+        items:
+          $ref: "./definitions/transaction.yaml"
+    404:
+      description: "Account not found"
+    500:
+      description: "Internal server error"

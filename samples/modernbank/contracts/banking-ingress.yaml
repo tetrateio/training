@@ -1,0 +1,28 @@
+swagger: "2.0"
+info:
+  description: "This is the API exposed to customers of Modern Bank."
+  version: "1.0.0"
+  title: "Modern Bank"
+basePath: "/v1"
+tags:
+- name: "banking"
+  description: "Operations for banking services."
+schemes:
+- "http"
+paths:
+  /users/{username}:
+    $ref: "./paths/user/usersByUsername.yaml"
+  /users/{owner}/accounts:
+    $ref: "./paths/account/accountsByOwner.yaml"
+  /users/{owner}/accounts/{number}:
+    $ref: "./paths/account/accountsByOwnerAndNumber.yaml"
+  /transactions:
+    $ref: "./paths/transaction/transactions.yaml"
+  /account/{sender}/sent:
+    $ref: "./paths/transaction/transactionsSentFromAccount.yaml"
+  /account/{receiver}/received:
+    $ref: "./paths/transaction/transactionsReceivedToAccount.yaml"
+  /account/{sender}/sent/{transaction}:
+    $ref: "./paths/transaction/transactionsSentFromAccountByID.yaml"
+  /account/{receiver}/received/{transaction}:
+    $ref: "./paths/transaction/transactionsReceivedToAccountByID.yaml"
