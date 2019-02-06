@@ -25,9 +25,9 @@ type Client struct {
 }
 
 /*
-CreateTransaction creates a new transaction to an account
+CreateTransaction sends money from one account to another
 
-Creates a new transaction in the log
+Sends money from one account to another
 */
 func (a *Client) CreateTransaction(params *CreateTransactionParams) (*CreateTransactionCreated, error) {
 	// TODO: Validate the params before sending
@@ -36,7 +36,7 @@ func (a *Client) CreateTransaction(params *CreateTransactionParams) (*CreateTran
 	}
 
 	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "createTransaction",
+		ID:                 "CreateTransaction",
 		Method:             "POST",
 		PathPattern:        "/transactions",
 		ProducesMediaTypes: []string{"application/json"},
@@ -51,126 +51,6 @@ func (a *Client) CreateTransaction(params *CreateTransactionParams) (*CreateTran
 		return nil, err
 	}
 	return result.(*CreateTransactionCreated), nil
-
-}
-
-/*
-GetTransactionReceived gets a specific transaction received by a given account
-
-Get a specific transaction received by a given account
-*/
-func (a *Client) GetTransactionReceived(params *GetTransactionReceivedParams) (*GetTransactionReceivedOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewGetTransactionReceivedParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "getTransactionReceived",
-		Method:             "GET",
-		PathPattern:        "/account/{receiver}/received/{transaction}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{""},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &GetTransactionReceivedReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return result.(*GetTransactionReceivedOK), nil
-
-}
-
-/*
-GetTransactionSent gets a specific transaction sent from a given account
-
-Get a specific transaction sent from a given account
-*/
-func (a *Client) GetTransactionSent(params *GetTransactionSentParams) (*GetTransactionSentOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewGetTransactionSentParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "getTransactionSent",
-		Method:             "GET",
-		PathPattern:        "/account/{sender}/sent/{transaction}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{""},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &GetTransactionSentReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return result.(*GetTransactionSentOK), nil
-
-}
-
-/*
-ListTransactionsReceived lists all transactions sent to a given account
-
-Lists all transactions sent to a given account
-*/
-func (a *Client) ListTransactionsReceived(params *ListTransactionsReceivedParams) (*ListTransactionsReceivedOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListTransactionsReceivedParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "listTransactionsReceived",
-		Method:             "GET",
-		PathPattern:        "/account/{receiver}/received",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{""},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ListTransactionsReceivedReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return result.(*ListTransactionsReceivedOK), nil
-
-}
-
-/*
-ListTransactionsSent lists all transactions sent from a given account
-
-Lists all transactions sent from a given account
-*/
-func (a *Client) ListTransactionsSent(params *ListTransactionsSentParams) (*ListTransactionsSentOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewListTransactionsSentParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "listTransactionsSent",
-		Method:             "GET",
-		PathPattern:        "/account/{sender}/sent",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{""},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &ListTransactionsSentReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return result.(*ListTransactionsSentOK), nil
 
 }
 

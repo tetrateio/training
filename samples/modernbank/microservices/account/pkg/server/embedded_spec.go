@@ -56,7 +56,7 @@ func init() {
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Account"
+                "$ref": "#/definitions/account"
               }
             }
           },
@@ -91,7 +91,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/Account"
+              "$ref": "#/definitions/account"
             }
           },
           "500": {
@@ -131,7 +131,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "$ref": "#/definitions/Account"
+              "$ref": "#/definitions/account"
             }
           },
           "404": {
@@ -184,7 +184,7 @@ func init() {
     }
   },
   "definitions": {
-    "Account": {
+    "account": {
       "type": "object",
       "required": [
         "number",
@@ -252,7 +252,7 @@ func init() {
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Account"
+                "$ref": "#/definitions/account"
               }
             }
           },
@@ -287,7 +287,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/Account"
+              "$ref": "#/definitions/account"
             }
           },
           "500": {
@@ -327,7 +327,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "$ref": "#/definitions/Account"
+              "$ref": "#/definitions/account"
             }
           },
           "404": {
@@ -380,7 +380,7 @@ func init() {
     }
   },
   "definitions": {
-    "Account": {
+    "account": {
       "type": "object",
       "required": [
         "number",

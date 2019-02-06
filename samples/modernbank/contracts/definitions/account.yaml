@@ -1,0 +1,14 @@
+type: "object"
+required:
+  - number
+  - balance
+  - owner
+properties:
+  number:
+    type: "integer"
+    format: "int64"
+  balance:
+    type: "number"
+    format: "currency"
+  owner:
+    type: "string"

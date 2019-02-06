@@ -1,0 +1,30 @@
+get:
+  tags:
+  - "transactions"
+  summary: "Get a specific transaction received by a given account"
+  description: "Get a specific transaction received by a given account"
+  operationId: "getTransactionReceived"
+  produces:
+  - "application/json"
+  parameters:
+  - in: "path"
+    name: "receiver"
+    description: "Account number that received the transactions"
+    required: true
+    type: "integer"
+    format: "int64"
+  - in: "path"
+    name: "transaction"
+    description: "Transaction ID"
+    required: true
+    type: "integer"
+    format: "int64"
+  responses:
+    200:
+      description: "Success!"
+      schema:
+        $ref: "./definitions/transaction.yaml"
+    404:
+      description: "Transaction not found"
+    500:
+      description: "Internal server error"

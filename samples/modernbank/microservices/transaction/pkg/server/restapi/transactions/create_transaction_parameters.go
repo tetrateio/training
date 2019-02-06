@@ -26,17 +26,17 @@ func NewCreateTransactionParams() CreateTransactionParams {
 // CreateTransactionParams contains all the bound params for the create transaction operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters createTransaction
+// swagger:parameters CreateTransaction
 type CreateTransactionParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
-	/*Created transaction
+	/*Transaction to create
 	  Required: true
 	  In: body
 	*/
-	Body *model.NewTransaction
+	Body *model.Newtransaction
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -50,7 +50,7 @@ func (o *CreateTransactionParams) BindRequest(r *http.Request, route *middleware
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body model.NewTransaction
+		var body model.Newtransaction
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			if err == io.EOF {
 				res = append(res, errors.Required("body", "body"))

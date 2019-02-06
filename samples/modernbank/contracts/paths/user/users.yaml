@@ -1,0 +1,26 @@
+post:
+  tags:
+  - "users"
+  summary: "Create a new user identity for a customer"
+  description: "Creates "
+  operationId: "createUser"
+  consumes:
+  - "application/json"
+  produces:
+  - "application/json"
+  parameters:
+  - in: "body"
+    name: "body"
+    description: "Created user object"
+    required: true
+    schema:
+      $ref: "./definitions/user.yaml"
+  responses:
+    201:
+      description: "Created"
+      schema:
+          $ref: "./definitions/user.yaml"
+      409:
+        description: "User alreadys exists"
+      500:
+        description: "Internal server error"

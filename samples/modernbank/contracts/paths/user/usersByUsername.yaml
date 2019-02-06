@@ -1,0 +1,73 @@
+get:
+  tags:
+  - "users"
+  summary: "Get user by user name"
+  description: ""
+  operationId: "getUserByUserName"
+  produces:
+  - "application/json"
+  parameters:
+  - name: "username"
+    in: "path"
+    description: "The name that needs to be fetched."
+    required: true
+    type: "string"
+  responses:
+    200:
+      description: "Success!"
+      schema:
+        $ref: "./definitions/user.yaml"
+    404:
+      description: "User not found"
+    500:
+      description: "Internal server error"
+put:
+  tags:
+  - "users"
+  summary: "Update user"
+  description: "Update user by username."
+  operationId: "updateUser"
+  produces:
+  - "application/json"
+  consumes:
+  - "application/json"
+  parameters:
+  - name: "username"
+    in: "path"
+    description: "name that need to be updated"
+    required: true
+    type: "string"
+  - in: "body"
+    name: "body"
+    description: "Updated user object"
+    required: true
+    schema:
+      $ref: "./definitions/user.yaml"
+  responses:
+    200:
+      description: "Success!"
+      schema:
+        $ref: "./definitions/user.yaml"         
+    404:
+      description: "User not found"
+    500:
+      description: "Internal server error"
+delete:
+  tags:
+  - "users"
+  summary: "Delete user"
+  description: "Delete user by username."
+  operationId: "deleteUser"
+  parameters:
+  - name: "username"
+    in: "path"
+    description: "The name that needs to be deleted"
+    required: true
+    type: "string"
+  responses:
+    200:
+      description: "Success!"
+    404:
+      description: "User not found"
+    500:
+      description: "Internal server error"

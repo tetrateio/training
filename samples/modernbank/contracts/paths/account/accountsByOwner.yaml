@@ -1,0 +1,46 @@
+post:
+  tags:
+  - "accounts"
+  summary: "Create a new account for a customer"
+  description: "Creates a new account for a given customer"
+  operationId: "createAccount"
+  produces:
+  - "application/json"
+  parameters:
+  - in: "path"
+    name: "owner"
+    description: "Owner of the account"
+    required: true
+    type: string
+  responses:
+    201:
+      description: "Created"
+      schema:
+        $ref: "./definitions/account.yaml"
+    500:
+      description: "Internal server error"
+get:
+  tags:
+  - "accounts"
+  summary: "Lists all accounts for a given customer"
+  description: "Lists all accounts for a given customer"
+  operationId: "listAccounts"
+  produces:
+  - "application/json"
+  parameters:
+  - in: "path"
+    name: "owner"
+    description: "Owner of the accounts"
+    required: true
+    type: string
+  responses:
+    200:
+      description: "Success!"
+      schema:
+        type: array
+        items:
+          $ref: "./definitions/account.yaml"
+    404:
+      description: "Owner not found"
+    500:
+      description: "Internal server error"

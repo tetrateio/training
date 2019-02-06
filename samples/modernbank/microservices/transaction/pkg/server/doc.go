@@ -2,12 +2,12 @@
 
 /*
 Package server Transaction
-This is the Transaction Microservice, an immutable append-only Transaction Log in Modern Bank.
+This is the Transaction Processing Microservice, ensuring transactions are processed in Modern Bank.
 
 
     Schemes:
       http
-    Host: transactions
+    Host: transaction
     BasePath: /v1
     Version: 1.0.0
 

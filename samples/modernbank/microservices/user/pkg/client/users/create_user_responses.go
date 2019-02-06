@@ -32,20 +32,6 @@ func (o *CreateUserReader) ReadResponse(response runtime.ClientResponse, consume
 		}
 		return result, nil
 
-	case 409:
-		result := NewCreateUserConflict()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-
-	case 500:
-		result := NewCreateUserInternalServerError()
-		if err := result.readResponse(response, consumer, o.formats); err != nil {
-			return nil, err
-		}
-		return nil, result
-
 	default:
 		return nil, runtime.NewAPIError("unknown error", response, response.Code())
 	}
@@ -76,48 +62,6 @@ func (o *CreateUserCreated) readResponse(response runtime.ClientResponse, consum
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
-
-	return nil
-}
-
-// NewCreateUserConflict creates a CreateUserConflict with default headers values
-func NewCreateUserConflict() *CreateUserConflict {
-	return &CreateUserConflict{}
-}
-
-/*CreateUserConflict handles this case with default header values.
-
-User alreadys exists
-*/
-type CreateUserConflict struct {
-}
-
-func (o *CreateUserConflict) Error() string {
-	return fmt.Sprintf("[POST /users][%d] createUserConflict ", 409)
-}
-
-func (o *CreateUserConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	return nil
-}
-
-// NewCreateUserInternalServerError creates a CreateUserInternalServerError with default headers values
-func NewCreateUserInternalServerError() *CreateUserInternalServerError {
-	return &CreateUserInternalServerError{}
-}
-
-/*CreateUserInternalServerError handles this case with default header values.
-
-Internal server error
-*/
-type CreateUserInternalServerError struct {
-}
-
-func (o *CreateUserInternalServerError) Error() string {
-	return fmt.Sprintf("[POST /users][%d] createUserInternalServerError ", 500)
-}
-
-func (o *CreateUserInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

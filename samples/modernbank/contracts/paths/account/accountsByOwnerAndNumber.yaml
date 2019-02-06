@@ -1,0 +1,56 @@
+get:
+  tags:
+  - "accounts"
+  summary: "Get account details"
+  description: ""
+  operationId: "getAccountByNumber"
+  produces:
+  - "application/json"
+  parameters:
+  - in: "path"
+    name: "owner"
+    description: "Owner of the account"
+    required: true
+    type: string
+  - name: "number"
+    in: "path"
+    description: "The number of the account that is to be fetched."
+    required: true
+    type: "integer"
+    format: "int64"
+  responses:
+    200:
+      description: "Success!"
+      schema:
+        $ref: "./definitions/account.yaml"
+    404:
+      description: "Account not found"
+    500:
+      description: "Internal server error"
+delete:
+  tags:
+  - "accounts"
+  summary: "Delete account by account number"
+  description: "Delete account by account number."
+  operationId: "deleteAccount"
+  produces:
+  - "application/json"
+  parameters:
+  - in: "path"
+    name: "owner"
+    description: "Owner of the account"
+    required: true
+    type: string
+  - name: "number"
+    in: "path"
+    description: "The number of the account that is to be deleted."
+    required: true
+    type: "integer"
+    format: "int64"
+  responses:
+    200:
+      description: "Aaaaand it's gone!"
+    404:
+      description: "Account not found"
+    500:
+      description: "Internal server error"
