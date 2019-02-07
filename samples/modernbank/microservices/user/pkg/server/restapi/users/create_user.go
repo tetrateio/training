@@ -33,7 +33,7 @@ func NewCreateUser(ctx *middleware.Context, handler CreateUserHandler) *CreateUs
 
 Create a new user identity for a customer
 
-Creates
+Creates a new user
 
 */
 type CreateUser struct {

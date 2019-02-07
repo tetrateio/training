@@ -1,7 +1,7 @@
 microservice:
     name: transaction-log
     port: 8080
-    replicaCount: 2
+    replicaCount: 1
 image:
     repository: gcr.io/tetratelabs/modernbank/transaction-log
     tag: v1.0.0

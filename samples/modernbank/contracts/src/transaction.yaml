@@ -1,0 +1,15 @@
+swagger: "2.0"
+info:
+  description: "This is the Transaction Processing Microservice, ensuring transactions are processed in Modern Bank."
+  version: "1.0.0"
+  title: "Transaction"
+host: "transaction"
+basePath: "/v1"
+tags:
+- name: "transaction"
+  description: "Operations about handling transactions"
+schemes:
+- "http"
+paths:
+  /transactions:
+    $ref: "./paths/transaction/transactions.yaml"

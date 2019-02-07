@@ -1,23 +1,196 @@
+schemes:
+- http
 swagger: "2.0"
 info:
-  description: "This is the Transaction Log Microservice, an immutable append-only Transaction Log in Modern Bank."
-  version: "1.0.0"
-  title: "Transaction Log"
-host: "transaction-log"
-basePath: "/v1"
-tags:
-- name: "transaction-log"
-  description: "Operations about transactions"
-schemes:
-- "http"
+  description: This is the Transaction Log Microservice, an immutable append-only
+    Transaction Log in Modern Bank.
+  title: Transaction Log
+  version: 1.0.0
+host: transaction-log
+basePath: /v1
 paths:
-  /transactions:
-    $ref: "./paths/transaction/transactions.yaml"
-  /account/{sender}/sent:
-    $ref: "./paths/transaction/transactionsSentFromAccount.yaml"
   /account/{receiver}/received:
-    $ref: "./paths/transaction/transactionsReceivedToAccount.yaml"
-  /account/{sender}/sent/{transaction}:
-    $ref: "./paths/transaction/transactionsSentFromAccountByID.yaml"
+    get:
+      description: Lists all transactions sent to a given account
+      produces:
+      - application/json
+      tags:
+      - transactions
+      summary: Lists all transactions sent to a given account
+      operationId: listTransactionsReceived
+      parameters:
+      - type: integer
+        format: int64
+        description: Account number that received the transactions
+        name: receiver
+        in: path
+        required: true
+      responses:
+        "200":
+          description: Success!
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/transaction'
+        "404":
+          description: Account not found
+        "500":
+          description: Internal server error
   /account/{receiver}/received/{transaction}:
-    $ref: "./paths/transaction/transactionsReceivedToAccountByID.yaml"
+    get:
+      description: Get a specific transaction received by a given account
+      produces:
+      - application/json
+      tags:
+      - transactions
+      summary: Get a specific transaction received by a given account
+      operationId: getTransactionReceived
+      parameters:
+      - type: integer
+        format: int64
+        description: Account number that received the transactions
+        name: receiver
+        in: path
+        required: true
+      - type: integer
+        format: int64
+        description: Transaction ID
+        name: transaction
+        in: path
+        required: true
+      responses:
+        "200":
+          description: Success!
+          schema:
+            $ref: '#/definitions/transaction'
+        "404":
+          description: Transaction not found
+        "500":
+          description: Internal server error
+  /account/{sender}/sent:
+    get:
+      description: Lists all transactions sent from a given account
+      produces:
+      - application/json
+      tags:
+      - transactions
+      summary: Lists all transactions sent from a given account
+      operationId: listTransactionsSent
+      parameters:
+      - type: integer
+        format: int64
+        description: Account number that made the transactions
+        name: sender
+        in: path
+        required: true
+      responses:
+        "200":
+          description: Success!
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/transaction'
+        "404":
+          description: Account not found
+        "500":
+          description: Internal server error
+  /account/{sender}/sent/{transaction}:
+    get:
+      description: Get a specific transaction sent from a given account
+      produces:
+      - application/json
+      tags:
+      - transactions
+      summary: Get a specific transaction sent from a given account
+      operationId: getTransactionSent
+      parameters:
+      - type: integer
+        format: int64
+        description: Account number that made the transactions
+        name: sender
+        in: path
+        required: true
+      - type: integer
+        format: int64
+        description: Transaction ID
+        name: transaction
+        in: path
+        required: true
+      responses:
+        "200":
+          description: Success!
+          schema:
+            $ref: '#/definitions/transaction'
+        "404":
+          description: Transaction not found
+        "500":
+          description: Internal server error
+  /transactions:
+    post:
+      description: Sends money from one account to another
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - transactions
+      summary: Sends money from one account to another
+      operationId: CreateTransaction
+      parameters:
+      - description: Transaction to create
+        name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/newtransaction'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/transaction'
+        "500":
+          description: Internal server error
+definitions:
+  newtransaction:
+    type: object
+    required:
+    - sender
+    - receiver
+    - amount
+    properties:
+      amount:
+        type: number
+        format: currency
+      receiver:
+        type: integer
+        format: int64
+      sender:
+        type: integer
+        format: int64
+  transaction:
+    allOf:
+    - type: object
+      required:
+      - sender
+      - receiver
+      - amount
+      properties:
+        amount:
+          type: number
+          format: currency
+        receiver:
+          type: integer
+          format: int64
+        sender:
+          type: integer
+          format: int64
+    - type: object
+      required:
+      - id
+      properties:
+        id:
+          type: integer
+          format: int64
+tags:
+- description: Operations about transactions
+  name: transaction-log

@@ -1,0 +1,17 @@
+swagger: "2.0"
+info:
+  description: "This is the Account Microservice, responsible for managing accounts and their balances in Modern Bank."
+  version: "1.0.0"
+  title: "Account"
+host: "accounts"
+basePath: "/v1"
+tags:
+- name: "account"
+  description: "Operations about Accounts"
+schemes:
+- "http"
+paths:
+  /users/{owner}/accounts:
+    $ref: "./paths/account/accountsByOwner.yaml"
+  /users/{owner}/accounts/{number}:
+    $ref: "./paths/account/accountsByOwnerAndNumber.yaml"

@@ -27,7 +27,7 @@ type Client struct {
 /*
 CreateUser creates a new user identity for a customer
 
-Creates
+Creates a new user
 */
 func (a *Client) CreateUser(params *CreateUserParams) (*CreateUserCreated, error) {
 	// TODO: Validate the params before sending

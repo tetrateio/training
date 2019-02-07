@@ -2,7 +2,7 @@ post:
   tags:
   - "users"
   summary: "Create a new user identity for a customer"
-  description: "Creates "
+  description: "Creates a new user"
   operationId: "createUser"
   consumes:
   - "application/json"

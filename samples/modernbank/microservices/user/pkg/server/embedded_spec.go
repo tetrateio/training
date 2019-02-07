@@ -32,7 +32,7 @@ func init() {
   "paths": {
     "/users": {
       "post": {
-        "description": "Creates ",
+        "description": "Creates a new user",
         "consumes": [
           "application/json"
         ],
@@ -226,7 +226,7 @@ func init() {
   "paths": {
     "/users": {
       "post": {
-        "description": "Creates ",
+        "description": "Creates a new user",
         "consumes": [
           "application/json"
         ],

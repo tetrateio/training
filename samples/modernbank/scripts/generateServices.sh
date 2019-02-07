@@ -1,20 +1,26 @@
 #! /bin/bash -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-FLAT_DIR=${DIR}/flat
-mkdir -p ${FLAT_DIR}
+FLAT_DIR=${DIR}/../contracts
 
-for SERVICE_YAML in  $(find $DIR/../contracts -name '*.yaml' -maxdepth 1 | grep -v 'ingress.yaml')
+
+for SERVICE_YAML in  $(find $DIR/../contracts/src -name '*.yaml' -maxdepth 1)
 do 
     FILENAME=${SERVICE_YAML##*/}
     SERVICE_NAME=${FILENAME%.*}
     SERVICE_DIR=${DIR}/../microservices/${SERVICE_NAME}
 
-    mkdir -p ${SERVICE_DIR}
-
     # Swagger
     swagger validate ${SERVICE_YAML}
     swagger flatten ${SERVICE_YAML} --format yaml -o "${FLAT_DIR}/${SERVICE_NAME}.yaml"
+
+    if [[ ${SERVICE_NAME} == *"-ingress"* ]]
+    then
+        # Only want a flat/readable contract for ingress. Not whole service.
+        continue
+    fi
+
+    mkdir -p ${SERVICE_DIR}
     swagger generate server -f ${FLAT_DIR}/${SERVICE_NAME}.yaml --target ${SERVICE_DIR}  --model-package "pkg/model" --server-package "pkg/server" --api-package "restapi"
     swagger generate client -f ${FLAT_DIR}/${SERVICE_NAME}.yaml --target ${SERVICE_DIR} --model-package "pkg/model" --client-package "pkg/client"
 
