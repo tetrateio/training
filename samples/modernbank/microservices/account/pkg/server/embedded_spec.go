@@ -30,6 +30,48 @@ func init() {
   "host": "accounts",
   "basePath": "/v1",
   "paths": {
+    "/accounts/{number}/balance/{delta}": {
+      "put": {
+        "description": "Change the balance of an account",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Change the balance of an account",
+        "operationId": "changeBalance",
+        "parameters": [
+          {
+            "type": "number",
+            "format": "int64",
+            "description": "Account number",
+            "name": "number",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "number",
+            "format": "currency",
+            "description": "The amount to change the balance by (+/-)",
+            "name": "delta",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Account not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/users/{owner}/accounts": {
       "get": {
         "description": "Lists all accounts for a given customer",
@@ -226,6 +268,48 @@ func init() {
   "host": "accounts",
   "basePath": "/v1",
   "paths": {
+    "/accounts/{number}/balance/{delta}": {
+      "put": {
+        "description": "Change the balance of an account",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Change the balance of an account",
+        "operationId": "changeBalance",
+        "parameters": [
+          {
+            "type": "number",
+            "format": "int64",
+            "description": "Account number",
+            "name": "number",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "number",
+            "format": "currency",
+            "description": "The amount to change the balance by (+/-)",
+            "name": "delta",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Account not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/users/{owner}/accounts": {
       "get": {
         "description": "Lists all accounts for a given customer",

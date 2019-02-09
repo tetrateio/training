@@ -61,6 +61,12 @@ func init() {
             "schema": {
               "$ref": "#/definitions/user"
             }
+          },
+          "409": {
+            "description": "User alreadys exists"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
@@ -255,6 +261,12 @@ func init() {
             "schema": {
               "$ref": "#/definitions/user"
             }
+          },
+          "409": {
+            "description": "User alreadys exists"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }

@@ -52,7 +52,7 @@ spec:
   http:
   - match:
     - uri:
-        prefix: /v1/users/*/accounts
+        regex: /v1/users/.*/accounts
     route:
     - destination:
         host: account

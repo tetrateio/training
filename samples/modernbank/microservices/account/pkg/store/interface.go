@@ -11,6 +11,7 @@ type Interface interface {
 	Get(owner string, number int64) (*model.Account, error)
 	Create(owner string) (*model.Account, error)
 	Delete(owner string, number int64) error
+	UpdateBalance(number int64, deltaAmount float64) error
 }
 
 type Conflict struct{}

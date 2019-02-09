@@ -146,6 +146,8 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/transaction'
+        "400":
+          description: Nice try! You can't send negative amounts...
         "500":
           description: Internal server error
   /users:
@@ -171,6 +173,10 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/user'
+        "409":
+          description: User alreadys exists
+        "500":
+          description: Internal server error
   /users/{owner}/accounts:
     get:
       description: Lists all accounts for a given customer

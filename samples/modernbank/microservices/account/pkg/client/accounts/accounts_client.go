@@ -25,6 +25,36 @@ type Client struct {
 }
 
 /*
+ChangeBalance changes the balance of an account
+
+Change the balance of an account
+*/
+func (a *Client) ChangeBalance(params *ChangeBalanceParams) (*ChangeBalanceOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewChangeBalanceParams()
+	}
+
+	result, err := a.transport.Submit(&runtime.ClientOperation{
+		ID:                 "changeBalance",
+		Method:             "PUT",
+		PathPattern:        "/accounts/{number}/balance/{delta}",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{""},
+		Schemes:            []string{"http"},
+		Params:             params,
+		Reader:             &ChangeBalanceReader{formats: a.formats},
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return result.(*ChangeBalanceOK), nil
+
+}
+
+/*
 CreateAccount creates a new account for a customer
 
 Creates a new account for a given customer

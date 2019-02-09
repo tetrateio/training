@@ -32,6 +32,10 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/user'
+        "409":
+          description: User alreadys exists
+        "500":
+          description: Internal server error
   /users/{username}:
     get:
       produces:

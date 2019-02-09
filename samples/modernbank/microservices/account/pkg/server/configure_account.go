@@ -74,6 +74,15 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 		}
 		return accounts.NewListAccountsOK().WithPayload(res)
 	})
+	api.AccountsChangeBalanceHandler = accounts.ChangeBalanceHandlerFunc(func(params accounts.ChangeBalanceParams) middleware.Responder {
+		if err := accountStore.UpdateBalance(params.Number, params.Delta); err != nil {
+			if _, ok := err.(*store.NotFound); ok {
+				return accounts.NewChangeBalanceNotFound()
+			}
+			return accounts.NewChangeBalanceInternalServerError()
+		}
+		return accounts.NewChangeBalanceOK()
+	})
 
 	api.ServerShutdown = func() {}
 

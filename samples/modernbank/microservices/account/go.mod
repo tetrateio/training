@@ -12,7 +12,7 @@ require (
 	github.com/go-openapi/swag v0.18.0
 	github.com/go-openapi/validate v0.18.0
 	github.com/jessevdk/go-flags v1.4.0
-	github.com/stretchr/objx v0.1.1 // indirect
+	github.com/kr/pretty v0.1.0 // indirect
 	github.com/stretchr/testify v1.3.0 // indirect
-	golang.org/x/net v0.0.0-20190125091013-d26f9f9a57f3
+	golang.org/x/net v0.0.0-20190206173232-65e2d4e15006
 )

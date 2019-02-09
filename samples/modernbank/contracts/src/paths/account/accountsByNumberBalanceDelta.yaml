@@ -1,0 +1,28 @@
+put:
+  tags:
+  - "accounts"
+  summary: "Change the balance of an account"
+  description: "Change the balance of an account"
+  operationId: "changeBalance"
+  produces:
+  - "application/json"
+  parameters:
+  - in: "path"
+    name: "number"
+    description: "Account number"
+    required: true
+    type: number
+    format: int64
+  - in: "path"
+    name: "delta"
+    description: "The amount to change the balance by (+/-)"
+    required: true
+    type: number
+    format: currency
+  responses:
+    200:
+      description: "OK"
+    404:
+      description: "Account not found"
+    500:
+      description: "Internal server error"

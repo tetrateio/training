@@ -11,6 +11,8 @@ tags:
 schemes:
 - "http"
 paths:
+  /accounts/{number}/balance/{delta}:
+    $ref: "./paths/account/accountsByNumberBalanceDelta.yaml"
   /users/{owner}/accounts:
     $ref: "./paths/account/accountsByOwner.yaml"
   /users/{owner}/accounts/{number}:
