@@ -9,5 +9,11 @@ require (
 	github.com/go-openapi/swag v0.18.0
 	github.com/go-openapi/validate v0.18.0
 	github.com/jessevdk/go-flags v1.4.0
-	golang.org/x/net v0.0.0-20190125091013-d26f9f9a57f3
+	github.com/tetrateio/training/samples/modernbank/microservices/account v0.0.0
+	github.com/tetrateio/training/samples/modernbank/microservices/transaction-log v0.0.0
+	golang.org/x/net v0.0.0-20190206173232-65e2d4e15006
 )
+
+replace github.com/tetrateio/training/samples/modernbank/microservices/account => ../account
+
+replace github.com/tetrateio/training/samples/modernbank/microservices/transaction-log => ../transaction-log

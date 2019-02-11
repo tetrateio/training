@@ -32,6 +32,13 @@ func (o *CreateTransactionReader) ReadResponse(response runtime.ClientResponse, 
 		}
 		return result, nil
 
+	case 400:
+		result := NewCreateTransactionBadRequest()
+		if err := result.readResponse(response, consumer, o.formats); err != nil {
+			return nil, err
+		}
+		return nil, result
+
 	case 500:
 		result := NewCreateTransactionInternalServerError()
 		if err := result.readResponse(response, consumer, o.formats); err != nil {
@@ -69,6 +76,27 @@ func (o *CreateTransactionCreated) readResponse(response runtime.ClientResponse,
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
+
+	return nil
+}
+
+// NewCreateTransactionBadRequest creates a CreateTransactionBadRequest with default headers values
+func NewCreateTransactionBadRequest() *CreateTransactionBadRequest {
+	return &CreateTransactionBadRequest{}
+}
+
+/*CreateTransactionBadRequest handles this case with default header values.
+
+Nice try! You can't send negative amounts...
+*/
+type CreateTransactionBadRequest struct {
+}
+
+func (o *CreateTransactionBadRequest) Error() string {
+	return fmt.Sprintf("[POST /transactions][%d] createTransactionBadRequest ", 400)
+}
+
+func (o *CreateTransactionBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }

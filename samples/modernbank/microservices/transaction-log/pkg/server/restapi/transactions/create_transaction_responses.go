@@ -57,6 +57,30 @@ func (o *CreateTransactionCreated) WriteResponse(rw http.ResponseWriter, produce
 	}
 }
 
+// CreateTransactionBadRequestCode is the HTTP code returned for type CreateTransactionBadRequest
+const CreateTransactionBadRequestCode int = 400
+
+/*CreateTransactionBadRequest Nice try! You can't send negative amounts...
+
+swagger:response createTransactionBadRequest
+*/
+type CreateTransactionBadRequest struct {
+}
+
+// NewCreateTransactionBadRequest creates CreateTransactionBadRequest with default headers values
+func NewCreateTransactionBadRequest() *CreateTransactionBadRequest {
+
+	return &CreateTransactionBadRequest{}
+}
+
+// WriteResponse to the client
+func (o *CreateTransactionBadRequest) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(400)
+}
+
 // CreateTransactionInternalServerErrorCode is the HTTP code returned for type CreateTransactionInternalServerError
 const CreateTransactionInternalServerErrorCode int = 500
 

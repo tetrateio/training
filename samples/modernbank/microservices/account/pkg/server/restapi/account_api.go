@@ -39,6 +39,9 @@ func NewAccountAPI(spec *loads.Document) *AccountAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
+		AccountsChangeBalanceHandler: accounts.ChangeBalanceHandlerFunc(func(params accounts.ChangeBalanceParams) middleware.Responder {
+			return middleware.NotImplemented("operation AccountsChangeBalance has not yet been implemented")
+		}),
 		AccountsCreateAccountHandler: accounts.CreateAccountHandlerFunc(func(params accounts.CreateAccountParams) middleware.Responder {
 			return middleware.NotImplemented("operation AccountsCreateAccount has not yet been implemented")
 		}),
@@ -82,6 +85,8 @@ type AccountAPI struct {
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
 
+	// AccountsChangeBalanceHandler sets the operation handler for the change balance operation
+	AccountsChangeBalanceHandler accounts.ChangeBalanceHandler
 	// AccountsCreateAccountHandler sets the operation handler for the create account operation
 	AccountsCreateAccountHandler accounts.CreateAccountHandler
 	// AccountsDeleteAccountHandler sets the operation handler for the delete account operation
@@ -151,6 +156,10 @@ func (o *AccountAPI) Validate() error {
 
 	if o.JSONProducer == nil {
 		unregistered = append(unregistered, "JSONProducer")
+	}
+
+	if o.AccountsChangeBalanceHandler == nil {
+		unregistered = append(unregistered, "accounts.ChangeBalanceHandler")
 	}
 
 	if o.AccountsCreateAccountHandler == nil {
@@ -266,6 +275,11 @@ func (o *AccountAPI) initHandlerCache() {
 	if o.handlers == nil {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/accounts/{number}/balance/{delta}"] = accounts.NewChangeBalance(o.context, o.AccountsChangeBalanceHandler)
 
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)

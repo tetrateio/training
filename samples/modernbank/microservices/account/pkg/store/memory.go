@@ -13,12 +13,18 @@ import (
 var _ Interface = NewInMemory()
 
 func NewInMemory() *InMemory {
-	return &InMemory{m: &sync.RWMutex{}, currentAccountNumber: 0, ownerAccounts: map[string]accounts{}}
+	return &InMemory{
+		m:                    &sync.RWMutex{},
+		currentAccountNumber: 0,
+		ownerAccounts:        map[string]accounts{},
+		accountsOwner:        map[int64]string{},
+	}
 }
 
 type InMemory struct {
 	m                    *sync.RWMutex
 	ownerAccounts        map[string]accounts
+	accountsOwner        map[int64]string
 	currentAccountNumber int64
 }
 
@@ -99,6 +105,7 @@ func (m *InMemory) Create(owner string) (*model.Account, error) {
 		Number:  swag.Int64(newAccountNumber),
 	}
 	m.ownerAccounts[owner].add(newAccountNumber, newAccount)
+	m.accountsOwner[newAccountNumber] = owner
 	return newAccount, nil
 }
 
@@ -109,7 +116,20 @@ func (m *InMemory) Delete(owner string, number int64) error {
 	if !ok {
 		return &NotFound{}
 	}
+	delete(m.accountsOwner, number)
 	return m.ownerAccounts[owner].delete(number)
+}
+
+func (m *InMemory) UpdateBalance(number int64, deltaAmount float64) error {
+	owner, ok := m.accountsOwner[number]
+	if !ok {
+		return &NotFound{}
+	}
+	account := m.ownerAccounts[owner].accounts[number]
+	newBalance := *account.Balance + deltaAmount
+	account.Balance = &newBalance
+	m.ownerAccounts[owner].accounts[number] = account
+	return nil
 }
 
 func (m *InMemory) unAssignedAccountNumber() int64 {

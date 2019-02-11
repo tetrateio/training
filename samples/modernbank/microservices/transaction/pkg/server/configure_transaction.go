@@ -4,17 +4,29 @@ package server
 
 import (
 	"crypto/tls"
+	"log"
 	"net/http"
 
 	errors "github.com/go-openapi/errors"
 	runtime "github.com/go-openapi/runtime"
 	middleware "github.com/go-openapi/runtime/middleware"
 
+	accountsClient "github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/client"
+	accountsClientResources "github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/client/accounts"
+	translogClient "github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/client"
+	translogClientResources "github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/client/transactions"
+	translogModel "github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/model"
+	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/model"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/server/restapi"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/server/restapi/transactions"
 )
 
 //go:generate swagger generate server --target ../../../transaction --name Transaction --spec ../../../../scripts/flat/transaction.yaml --api-package restapi --model-package pkg/model --server-package pkg/server
+
+var (
+	translog *translogClientResources.Client
+	accounts *accountsClientResources.Client
+)
 
 func configureFlags(api *restapi.TransactionAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
@@ -23,25 +35,66 @@ func configureFlags(api *restapi.TransactionAPI) {
 func configureAPI(api *restapi.TransactionAPI) http.Handler {
 	// configure the api here
 	api.ServeError = errors.ServeError
+	api.Logger = log.Printf
 
-	// Set your custom logger if needed. Default one is log.Printf
-	// Expected interface func(string, ...interface{})
-	//
-	// Example:
-	// api.Logger = log.Printf
+	translog = translogClient.Default.Transactions
+	accounts = accountsClient.Default.Accounts
 
 	api.JSONConsumer = runtime.JSONConsumer()
-
 	api.JSONProducer = runtime.JSONProducer()
 
+	// TODO: handle partial failure caused by one of these requests failing
+	// Ultimately, synchronous communication is the wrong paradigm here but this is a demo app!
 	api.TransactionsCreateTransactionHandler = transactions.CreateTransactionHandlerFunc(func(params transactions.CreateTransactionParams) middleware.Responder {
-		api.Logger("received new transaction from %v to %v for %v", params.Body.Sender, params.Body.Receiver, params.Body.Amount)
-		return middleware.NotImplemented("operation transactions.CreateTransaction has not yet been implemented")
+		// Can't send negative monies!
+		if *params.Body.Amount < 0 {
+			api.Logger("Receveived transaction for negative amount")
+			return transactions.NewCreateTransactionBadRequest()
+		}
+
+		// Move the monies
+		// TODO: Verify both accounts exist before moving the money around
+		sendingParams := accountsClientResources.NewChangeBalanceParams().WithNumber(*params.Body.Sender).WithDelta(*params.Body.Amount * -1)
+		if _, err := accounts.ChangeBalance(sendingParams); err != nil {
+			api.Logger("Error updating sender balance: %v", err)
+			return transactions.NewCreateTransactionInternalServerError()
+		}
+		receivingParams := accountsClientResources.NewChangeBalanceParams().WithNumber(*params.Body.Receiver).WithDelta(*params.Body.Amount)
+		if _, err := accounts.ChangeBalance(receivingParams); err != nil {
+			api.Logger("Error updating receiver balance: %v", err)
+			return transactions.NewCreateTransactionInternalServerError()
+		}
+
+		// Add to transaction-log
+		translogParams := translogClientResources.NewCreateTransactionParams().WithBody(transToTransLogNewTransaction(params.Body))
+		res, err := translog.CreateTransaction(translogParams)
+		if err != nil {
+			log.Printf("failed to create transaction in log from %v to %v for %v: %v", *params.Body.Sender, *params.Body.Receiver, *params.Body.Amount, err)
+			return transactions.NewCreateTransactionInternalServerError()
+		}
+		return transactions.NewCreateTransactionCreated().WithPayload(transLogToTransTransaction(res.Payload))
 	})
 
 	api.ServerShutdown = func() {}
 
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))
+}
+
+func transToTransLogNewTransaction(trans *model.Newtransaction) *translogModel.Newtransaction {
+	return &translogModel.Newtransaction{
+		Amount:   trans.Amount,
+		Sender:   trans.Sender,
+		Receiver: trans.Receiver,
+	}
+}
+
+func transLogToTransTransaction(translog *translogModel.Transaction) *model.Transaction {
+	return &model.Transaction{
+		ID:       translog.ID,
+		Amount:   translog.Amount,
+		Sender:   translog.Sender,
+		Receiver: translog.Receiver,
+	}
 }
 
 // The TLS configuration before HTTPS server starts.

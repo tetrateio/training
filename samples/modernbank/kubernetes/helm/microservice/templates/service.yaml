@@ -3,13 +3,13 @@ kind: Service
 metadata:
   name: {{ .Values.microservice.name }}
   labels:
-    app.kubernetes.io/name: {{ .Values.microservice.name }}
+    app: {{ .Values.microservice.name }}
 spec:
   type: ClusterIP
   ports:
-    - port: {{ .Values.microservice.port }}
+    - port: 80
       targetPort: http
       protocol: TCP
       name: http-{{ .Values.microservice.name }}
   selector:
-    app.kubernetes.io/name: {{ .Values.microservice.name }}
+    app: {{ .Values.microservice.name }}

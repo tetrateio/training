@@ -1,17 +1,134 @@
+schemes:
+- http
 swagger: "2.0"
 info:
-  description: "This is the User Microservice, responsible for managing Users in Modern Bank."
-  version: "1.0.0"
-  title: "User"
-host: "users"
-basePath: "/v1"
-tags:
-- name: "user"
-  description: "Operations about users"
-schemes:
-- "http"
+  description: This is the User Microservice, responsible for managing Users in Modern
+    Bank.
+  title: User
+  version: 1.0.0
+host: users
+basePath: /v1
 paths:
   /users:
-    $ref: "./paths/user/users.yaml"
+    post:
+      description: Creates a new user
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - users
+      summary: Create a new user identity for a customer
+      operationId: createUser
+      parameters:
+      - description: Created user object
+        name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/user'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/user'
+        "409":
+          description: User alreadys exists
+        "500":
+          description: Internal server error
   /users/{username}:
-    $ref: "./paths/user/usersByUsername.yaml"
+    get:
+      produces:
+      - application/json
+      tags:
+      - users
+      summary: Get user by user name
+      operationId: getUserByUserName
+      parameters:
+      - type: string
+        description: The name that needs to be fetched.
+        name: username
+        in: path
+        required: true
+      responses:
+        "200":
+          description: Success!
+          schema:
+            $ref: '#/definitions/user'
+        "404":
+          description: User not found
+        "500":
+          description: Internal server error
+    put:
+      description: Update user by username.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      tags:
+      - users
+      summary: Update user
+      operationId: updateUser
+      parameters:
+      - type: string
+        description: name that need to be updated
+        name: username
+        in: path
+        required: true
+      - description: Updated user object
+        name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/user'
+      responses:
+        "200":
+          description: Success!
+          schema:
+            $ref: '#/definitions/user'
+        "404":
+          description: User not found
+        "500":
+          description: Internal server error
+    delete:
+      description: Delete user by username.
+      tags:
+      - users
+      summary: Delete user
+      operationId: deleteUser
+      parameters:
+      - type: string
+        description: The name that needs to be deleted
+        name: username
+        in: path
+        required: true
+      responses:
+        "200":
+          description: Success!
+        "404":
+          description: User not found
+        "500":
+          description: Internal server error
+definitions:
+  user:
+    type: object
+    required:
+    - username
+    - firstName
+    - lastName
+    - email
+    - password
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+tags:
+- description: Operations about users
+  name: user

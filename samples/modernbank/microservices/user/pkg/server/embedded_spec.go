@@ -32,7 +32,7 @@ func init() {
   "paths": {
     "/users": {
       "post": {
-        "description": "Creates ",
+        "description": "Creates a new user",
         "consumes": [
           "application/json"
         ],
@@ -61,6 +61,12 @@ func init() {
             "schema": {
               "$ref": "#/definitions/user"
             }
+          },
+          "409": {
+            "description": "User alreadys exists"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
@@ -226,7 +232,7 @@ func init() {
   "paths": {
     "/users": {
       "post": {
-        "description": "Creates ",
+        "description": "Creates a new user",
         "consumes": [
           "application/json"
         ],
@@ -255,6 +261,12 @@ func init() {
             "schema": {
               "$ref": "#/definitions/user"
             }
+          },
+          "409": {
+            "description": "User alreadys exists"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }

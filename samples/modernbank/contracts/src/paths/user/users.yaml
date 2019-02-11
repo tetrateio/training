@@ -2,7 +2,7 @@ post:
   tags:
   - "users"
   summary: "Create a new user identity for a customer"
-  description: "Creates "
+  description: "Creates a new user"
   operationId: "createUser"
   consumes:
   - "application/json"
@@ -20,7 +20,7 @@ post:
       description: "Created"
       schema:
           $ref: "./definitions/user.yaml"
-      409:
-        description: "User alreadys exists"
-      500:
-        description: "Internal server error"
+    409:
+      description: "User alreadys exists"
+    500:
+      description: "Internal server error"

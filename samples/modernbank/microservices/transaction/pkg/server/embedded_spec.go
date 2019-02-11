@@ -62,6 +62,9 @@ func init() {
               "$ref": "#/definitions/transaction"
             }
           },
+          "400": {
+            "description": "Nice try! You can't send negative amounts..."
+          },
           "500": {
             "description": "Internal server error"
           }
@@ -182,6 +185,9 @@ func init() {
             "schema": {
               "$ref": "#/definitions/transaction"
             }
+          },
+          "400": {
+            "description": "Nice try! You can't send negative amounts..."
           },
           "500": {
             "description": "Internal server error"
