@@ -19,3 +19,4 @@ docker-push: build docker-build
 
 deploy-kube:
 	./scripts/deployKube.sh bankingservices default
+	kubectl apply -f networking/bankingservices/gateway.yaml
