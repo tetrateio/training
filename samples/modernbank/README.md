@@ -39,3 +39,11 @@ Currently, there is only one tenancy configuration (as there is only one tenant!
 ```bash
 make deploy-kube
 ```
+
+## Traffic Generation
+
+Once you have deployed the application you may want to hit it with some artificial traffic, to do this use the traffic generation tools. It creates users and accounts, and sends random amounts of money between two random accounts.
+
+```bash
+go run tools/trafficGen/cmd/main.go --host <KUBE_LOADBALANCER_IP>
+```
