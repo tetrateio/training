@@ -8,7 +8,7 @@ Modern Bank microservices are mostly automatically generated from an initial con
 
 To create a new microservice define a new API contract with a `<service-name>.yaml` file in the `./contracts/src` directory. Contracts should reference as much as possible from the `./contracts/src/paths` and `./contracts/src/definitions` directories in order to allow re-use across other microservices and the ingress gateway.
 
-Once the contract has been defined run `make generate-services` and it will produced a flattened contract and the microservice code in the `./microservices` directory.
+Once the contract has been defined run `make generate-services` and it will produce a flattened contract and the microservice code in the `./microservices` directory.
 
 > Note: You need to have [go-swagger installed](https://goswagger.io/install.html) for code generation.
 
