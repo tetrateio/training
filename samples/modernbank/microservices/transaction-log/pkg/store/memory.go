@@ -108,11 +108,14 @@ func (m *InMemory) GetReceived(account int64, number int64) (*model.Transaction,
 func (m *InMemory) Create(transaction *model.Newtransaction) (*model.Transaction, error) {
 	m.m.Lock()
 	defer m.m.Unlock()
-	_, ok := m.sent[*transaction.Sender]
-	if !ok {
+
+	if _, ok := m.sent[*transaction.Sender]; !ok {
 		m.sent[*transaction.Sender] = transactions{m: &sync.RWMutex{}, transactions: map[int64]model.Transaction{}}
+	}
+	if _, ok := m.received[*transaction.Receiver]; !ok {
 		m.received[*transaction.Receiver] = transactions{m: &sync.RWMutex{}, transactions: map[int64]model.Transaction{}}
 	}
+
 	newTransactionNumber := m.unAssignedTransactionNumber()
 	newTransaction := &model.Transaction{transaction.Amount, transaction.Receiver, transaction.Sender, swag.Int64(newTransactionNumber)}
 	m.sent[*transaction.Sender].add(newTransactionNumber, newTransaction)

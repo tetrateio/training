@@ -27,7 +27,7 @@ func init() {
     "title": "Account",
     "version": "1.0.0"
   },
-  "host": "accounts",
+  "host": "account",
   "basePath": "/v1",
   "paths": {
     "/accounts/{number}/balance/{delta}": {
@@ -265,7 +265,7 @@ func init() {
     "title": "Account",
     "version": "1.0.0"
   },
-  "host": "accounts",
+  "host": "account",
   "basePath": "/v1",
   "paths": {
     "/accounts/{number}/balance/{delta}": {

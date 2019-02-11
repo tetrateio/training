@@ -7,7 +7,7 @@ This is the Account Microservice, responsible for managing accounts and their ba
 
     Schemes:
       http
-    Host: accounts
+    Host: account
     BasePath: /v1
     Version: 1.0.0
 

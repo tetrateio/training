@@ -3,7 +3,7 @@ info:
   description: "This is the Account Microservice, responsible for managing accounts and their balances in Modern Bank."
   version: "1.0.0"
   title: "Account"
-host: "accounts"
+host: "account"
 basePath: "/v1"
 tags:
 - name: "account"

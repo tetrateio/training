@@ -37,7 +37,7 @@ func (c *Creator) Run(ctx context.Context) {
 	for {
 		select {
 		case <-ctx.Done():
-			log.Printf("Account creation terminating, successfully created %v transactions.", c.count)
+			log.Printf("Transaction creation terminating, successfully created %v transactions.", c.count)
 			return
 		default:
 			c.limiter.Wait(ctx)

@@ -33,7 +33,7 @@ func NewCreator(host string, userStore store.Interface, limit rate.Limit) *Creat
 func (c *Creator) Run(ctx context.Context) {
 	rand.Seed(time.Now().UnixNano())
 	time.Sleep(time.Second * 5) // allow some users to be created...
-	c.prepopulate(100)
+	c.prepopulate(ctx, 100)
 	for {
 		select {
 		case <-ctx.Done():
@@ -46,9 +46,14 @@ func (c *Creator) Run(ctx context.Context) {
 	}
 }
 
-func (c *Creator) prepopulate(population int64) {
+func (c *Creator) prepopulate(ctx context.Context, population int64) {
 	for c.store.AccountCount() < population {
-		c.createAccount()
+		select {
+		case <-ctx.Done():
+			return
+		default:
+			c.createAccount()
+		}
 	}
 }
 

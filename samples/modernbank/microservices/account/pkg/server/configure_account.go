@@ -4,6 +4,7 @@ package server
 
 import (
 	"crypto/tls"
+	"log"
 	"net/http"
 
 	errors "github.com/go-openapi/errors"
@@ -26,12 +27,7 @@ func configureFlags(api *restapi.AccountAPI) {
 func configureAPI(api *restapi.AccountAPI) http.Handler {
 	// configure the api here
 	api.ServeError = errors.ServeError
-
-	// Set your custom logger if needed. Default one is log.Printf
-	// Expected interface func(string, ...interface{})
-	//
-	// Example:
-	// api.Logger = log.Printf
+	api.Logger = log.Printf
 
 	api.JSONConsumer = runtime.JSONConsumer()
 	api.JSONProducer = runtime.JSONProducer()
@@ -39,10 +35,13 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 	accountStore = store.NewInMemory()
 
 	api.AccountsCreateAccountHandler = accounts.CreateAccountHandlerFunc(func(params accounts.CreateAccountParams) middleware.Responder {
+		api.Logger("Creating an account for %q", params.Owner)
 		res, err := accountStore.Create(params.Owner)
 		if err != nil {
+			api.Logger("Error adding new account for %q to store: %v", params.Owner, err)
 			return accounts.NewCreateAccountInternalServerError()
 		}
+		api.Logger("Successfully created account for %q", params.Owner)
 		return accounts.NewCreateAccountCreated().WithPayload(res)
 	})
 	api.AccountsDeleteAccountHandler = accounts.DeleteAccountHandlerFunc(func(params accounts.DeleteAccountParams) middleware.Responder {
@@ -75,12 +74,16 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 		return accounts.NewListAccountsOK().WithPayload(res)
 	})
 	api.AccountsChangeBalanceHandler = accounts.ChangeBalanceHandlerFunc(func(params accounts.ChangeBalanceParams) middleware.Responder {
+		api.Logger("Updating balance on account %v by amount %v", params.Number, params.Delta)
 		if err := accountStore.UpdateBalance(params.Number, params.Delta); err != nil {
 			if _, ok := err.(*store.NotFound); ok {
+				api.Logger("Account not found - %v", params.Number)
 				return accounts.NewChangeBalanceNotFound()
 			}
+			api.Logger("Error updating balance on account %v by amount %v: %V", params.Number, params.Delta, err)
 			return accounts.NewChangeBalanceInternalServerError()
 		}
+		api.Logger("Successfully updated balance on account %v by amount %v", params.Number, params.Delta)
 		return accounts.NewChangeBalanceOK()
 	})
 

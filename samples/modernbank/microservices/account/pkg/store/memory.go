@@ -13,7 +13,12 @@ import (
 var _ Interface = NewInMemory()
 
 func NewInMemory() *InMemory {
-	return &InMemory{m: &sync.RWMutex{}, currentAccountNumber: 0, ownerAccounts: map[string]accounts{}}
+	return &InMemory{
+		m:                    &sync.RWMutex{},
+		currentAccountNumber: 0,
+		ownerAccounts:        map[string]accounts{},
+		accountsOwner:        map[int64]string{},
+	}
 }
 
 type InMemory struct {

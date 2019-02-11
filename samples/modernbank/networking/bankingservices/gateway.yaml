@@ -30,7 +30,7 @@ spec:
     - destination:
         host: transaction
         port:
-          number: 8080
+          number: 80
   - match:
     - uri:
         prefix: /v1/account
@@ -38,7 +38,7 @@ spec:
     - destination:
         host: transaction-log
         port:
-          number: 8080
+          number: 80
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -57,7 +57,7 @@ spec:
     - destination:
         host: account
         port:
-          number: 8080
+          number: 80
   - match:
     - uri:
         prefix: /v1/users
@@ -65,4 +65,4 @@ spec:
     - destination:
         host: user
         port:
-          number: 8080
+          number: 80

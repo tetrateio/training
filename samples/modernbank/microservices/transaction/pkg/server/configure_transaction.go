@@ -35,24 +35,20 @@ func configureFlags(api *restapi.TransactionAPI) {
 func configureAPI(api *restapi.TransactionAPI) http.Handler {
 	// configure the api here
 	api.ServeError = errors.ServeError
+	api.Logger = log.Printf
 
 	translog = translogClient.Default.Transactions
 	accounts = accountsClient.Default.Accounts
-
-	// Set your custom logger if needed. Default one is log.Printf
-	// Expected interface func(string, ...interface{})
-	//
-	// Example:
-	// api.Logger = log.Printf
 
 	api.JSONConsumer = runtime.JSONConsumer()
 	api.JSONProducer = runtime.JSONProducer()
 
 	// TODO: handle partial failure caused by one of these requests failing
-	// Ultimately, synchronous communication is the wrong method here but this is a demo app!
+	// Ultimately, synchronous communication is the wrong paradigm here but this is a demo app!
 	api.TransactionsCreateTransactionHandler = transactions.CreateTransactionHandlerFunc(func(params transactions.CreateTransactionParams) middleware.Responder {
 		// Can't send negative monies!
 		if *params.Body.Amount < 0 {
+			api.Logger("Receveived transaction for negative amount")
 			return transactions.NewCreateTransactionBadRequest()
 		}
 
@@ -60,10 +56,12 @@ func configureAPI(api *restapi.TransactionAPI) http.Handler {
 		// TODO: Verify both accounts exist before moving the money around
 		sendingParams := accountsClientResources.NewChangeBalanceParams().WithNumber(*params.Body.Sender).WithDelta(*params.Body.Amount * -1)
 		if _, err := accounts.ChangeBalance(sendingParams); err != nil {
+			api.Logger("Error updating sender balance: %v", err)
 			return transactions.NewCreateTransactionInternalServerError()
 		}
 		receivingParams := accountsClientResources.NewChangeBalanceParams().WithNumber(*params.Body.Receiver).WithDelta(*params.Body.Amount)
 		if _, err := accounts.ChangeBalance(receivingParams); err != nil {
+			api.Logger("Error updating receiver balance: %v", err)
 			return transactions.NewCreateTransactionInternalServerError()
 		}
 
