@@ -6,7 +6,7 @@ Modern Bank is the sample application used in training and in the future demonst
 
 Modern Bank microservices are mostly automatically generated from an initial contract. These contracts can be found in the [contracts](./contracts).
 
-To create a new microservice define a new API contract with a `<service-name>.yaml` file in the `./contracts/src` directory. Contracts should reference as much as possible from the `./contracts/src/paths` and `./contracts/src/definitions` in order to allow re-use across other microservices and the ingress gateway.
+To create a new microservice define a new API contract with a `<service-name>.yaml` file in the `./contracts/src` directory. Contracts should reference as much as possible from the `./contracts/src/paths` and `./contracts/src/definitions` directories in order to allow re-use across other microservices and the ingress gateway.
 
 Once the contract has been defined run `make generate-services` and it will produced a flattened contract and the microservice code in the `./microservices` directory.
 
