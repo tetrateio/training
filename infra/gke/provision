@@ -1,0 +1,47 @@
+#! /bin/bash
+
+# Generate tfvars file if not present
+TFVARS=~/.tetrate/training.tfvars
+if [ ! -f $TFVARS ]; then
+    read -p 'Project_ID: ' INPUT_PROJECT_ID
+    default_zone=europe-west2-b
+    read -ep "Zone [$default_zone]: " INPUT_ZONE
+    INPUT_ZONE=${INPUT_ZONE:=$default_zone}
+    read -p 'GCloud Account Email: ' GCLOUD_ACCOUNT
+
+    echo "Creating dev tfvars file at $TFVARS"
+    cat > $TFVARS << EOF
+project_id="${INPUT_PROJECT_ID}"
+zone="${INPUT_ZONE}"
+gcloud_account="${GCLOUD_ACCOUNT}"
+cluster_prefix="tetrate-training"
+gke_k8s_version="¯\_(ツ)_/¯"
+EOF
+fi
+
+# Use most recent Kube version
+source $TFVARS
+latest_gke_k8s_version=$(gcloud container get-server-config --zone ${zone} | yq .validMasterVersions[0])
+sed -i '' -e "s/gke_k8s_version=.*/gke_k8s_version=${latest_gke_k8s_version}/g" $TFVARS
+source $TFVARS
+
+# Handle GCP Login
+if [ ! -f ~/.config/gcloud/application_default_credentials.json ]; then
+    echo "No default credentials detected, logging in to Google Cloud."
+    gcloud auth application-default login
+fi
+
+# Terraform the things
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+terraform init $DIR
+terraform apply --auto-approve --var-file=$TFVARS $DIR
+
+# Set up user's kubeconfig to point at the dev cluster
+# Handle multipath gcloud KUBECONFIG cli issue if KUBECONFIG is set
+default_kubeconfig="~./kube/config"
+if [ -z "$KUBECONFIG" ]
+then
+    read -ep "Enter Kube Config to load context into [$default_kubeconfig]: " KUBECONFIG
+    KUBECONFIG=${KUBECONFIG:=$default_kubeconfig}
+fi
+gcloud container clusters get-credentials tetrate-training-gke-$zone --zone "$zone" --project "$project_id"
