@@ -17,7 +17,7 @@ import (
 // GetTransactionReceivedURL generates an URL for the get transaction received operation
 type GetTransactionReceivedURL struct {
 	Receiver    int64
-	Transaction int64
+	Transaction string
 
 	_basePath string
 	// avoid unkeyed usage
@@ -52,7 +52,7 @@ func (o *GetTransactionReceivedURL) Build() (*url.URL, error) {
 		return nil, errors.New("Receiver is required on GetTransactionReceivedURL")
 	}
 
-	transaction := swag.FormatInt64(o.Transaction)
+	transaction := o.Transaction
 	if transaction != "" {
 		_path = strings.Replace(_path, "{transaction}", transaction, -1)
 	} else {

@@ -1,0 +1,5 @@
+dependencies:
+  - name: mongodb
+    version: 5.3.2
+    condition: mongodb.enabled
+    repository: file://../mongodb

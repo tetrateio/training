@@ -14,6 +14,7 @@ import (
 	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/server/restapi"
 	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/server/restapi/accounts"
 	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/store"
+	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/store/mongodb"
 )
 
 var accountStore store.Interface
@@ -32,10 +33,9 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 	api.JSONConsumer = runtime.JSONConsumer()
 	api.JSONProducer = runtime.JSONProducer()
 
-	accountStore = store.NewInMemory()
+	accountStore = mongodb.NewMongoDB()
 
 	api.AccountsCreateAccountHandler = accounts.CreateAccountHandlerFunc(func(params accounts.CreateAccountParams) middleware.Responder {
-		api.Logger("Creating an account for %q", params.Owner)
 		res, err := accountStore.Create(params.Owner)
 		if err != nil {
 			api.Logger("Error adding new account for %q to store: %v", params.Owner, err)
@@ -74,7 +74,6 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 		return accounts.NewListAccountsOK().WithPayload(res)
 	})
 	api.AccountsChangeBalanceHandler = accounts.ChangeBalanceHandlerFunc(func(params accounts.ChangeBalanceParams) middleware.Responder {
-		api.Logger("Updating balance on account %v by amount %v", params.Number, params.Delta)
 		if err := accountStore.UpdateBalance(params.Number, params.Delta); err != nil {
 			if _, ok := err.(*store.NotFound); ok {
 				api.Logger("Account not found - %v", params.Number)

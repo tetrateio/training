@@ -4,6 +4,7 @@ package server
 
 import (
 	"crypto/tls"
+	"log"
 	"net/http"
 
 	errors "github.com/go-openapi/errors"
@@ -13,6 +14,7 @@ import (
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/server/restapi"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/server/restapi/users"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/store"
+	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/store/mongodb"
 )
 
 var userStore store.Interface
@@ -26,55 +28,58 @@ func configureFlags(api *restapi.UserAPI) {
 func configureAPI(api *restapi.UserAPI) http.Handler {
 	// configure the api here
 	api.ServeError = errors.ServeError
-
-	// Set your custom logger if needed. Default one is log.Printf
-	// Expected interface func(string, ...interface{})
-	//
-	// Example:
-	// api.Logger = log.Printf
+	api.Logger = log.Printf
 
 	api.JSONConsumer = runtime.JSONConsumer()
 	api.JSONProducer = runtime.JSONProducer()
 
-	userStore = store.NewInMemory()
+	userStore = mongodb.NewMongoDB()
 
 	api.UsersCreateUserHandler = users.CreateUserHandlerFunc(func(params users.CreateUserParams) middleware.Responder {
 		res, err := userStore.Create(params.Body)
 		if err != nil {
+			api.Logger("Error creating user %q: %v", *params.Body.Username, err)
 			if _, ok := err.(*store.Conflict); ok {
 				return users.NewCreateUserConflict()
 			}
 			return users.NewCreateUserInternalServerError()
 		}
+		api.Logger("Created user %q", *params.Body.Username)
 		return users.NewCreateUserCreated().WithPayload(res)
 	})
 	api.UsersDeleteUserHandler = users.DeleteUserHandlerFunc(func(params users.DeleteUserParams) middleware.Responder {
 		if err := userStore.Delete(params.Username); err != nil {
+			api.Logger("Error deleting user %q: %v", params.Username, err)
 			if _, ok := err.(*store.NotFound); ok {
 				return users.NewDeleteUserNotFound()
 			}
 			return users.NewDeleteUserInternalServerError()
 		}
+		api.Logger("Deleted user %q", params.Username)
 		return users.NewDeleteUserOK()
 	})
 	api.UsersGetUserByUserNameHandler = users.GetUserByUserNameHandlerFunc(func(params users.GetUserByUserNameParams) middleware.Responder {
 		res, err := userStore.Get(params.Username)
 		if err != nil {
+			api.Logger("Error retrieving user %q: %v", params.Username, err)
 			if _, ok := err.(*store.NotFound); ok {
 				return users.NewGetUserByUserNameNotFound()
 			}
 			return users.NewGetUserByUserNameInternalServerError()
 		}
+		api.Logger("Retrieved user %q", params.Username)
 		return users.NewGetUserByUserNameOK().WithPayload(res)
 	})
 	api.UsersUpdateUserHandler = users.UpdateUserHandlerFunc(func(params users.UpdateUserParams) middleware.Responder {
 		res, err := userStore.Update(params.Username, params.Body)
 		if err != nil {
+			api.Logger("Error updating user %q: %v", *params.Body.Username, err)
 			if _, ok := err.(*store.NotFound); ok {
 				return users.NewUpdateUserNotFound()
 			}
 			return users.NewUpdateUserInternalServerError()
 		}
+		api.Logger("Updated user %q", *params.Body.Username)
 		return users.NewUpdateUserOK().WithPayload(res)
 	})
 

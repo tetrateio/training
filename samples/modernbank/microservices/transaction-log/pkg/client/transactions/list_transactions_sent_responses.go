@@ -85,7 +85,7 @@ func NewListTransactionsSentNotFound() *ListTransactionsSentNotFound {
 
 /*ListTransactionsSentNotFound handles this case with default header values.
 
-Account not found
+No transactions found
 */
 type ListTransactionsSentNotFound struct {
 }

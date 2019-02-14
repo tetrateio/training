@@ -17,7 +17,7 @@ import (
 // GetTransactionSentURL generates an URL for the get transaction sent operation
 type GetTransactionSentURL struct {
 	Sender      int64
-	Transaction int64
+	Transaction string
 
 	_basePath string
 	// avoid unkeyed usage
@@ -52,7 +52,7 @@ func (o *GetTransactionSentURL) Build() (*url.URL, error) {
 		return nil, errors.New("Sender is required on GetTransactionSentURL")
 	}
 
-	transaction := swag.FormatInt64(o.Transaction)
+	transaction := o.Transaction
 	if transaction != "" {
 		_path = strings.Replace(_path, "{transaction}", transaction, -1)
 	} else {

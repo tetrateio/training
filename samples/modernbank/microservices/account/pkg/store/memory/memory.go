@@ -1,4 +1,4 @@
-package store
+package memory
 
 import (
 	"sync"
@@ -7,10 +7,11 @@ import (
 	"github.com/go-openapi/swag"
 
 	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
+	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/store"
 )
 
 // Enforce that InMemory matches the Store Interface
-var _ Interface = NewInMemory()
+var _ store.Interface = NewInMemory()
 
 func NewInMemory() *InMemory {
 	return &InMemory{
@@ -43,7 +44,7 @@ func (a accounts) delete(number int64) error {
 	a.m.Lock()
 	defer a.m.Unlock()
 	if _, found := a.accounts[number]; !found {
-		return &NotFound{}
+		return &store.NotFound{}
 	}
 	delete(a.accounts, number)
 	return nil
@@ -72,7 +73,7 @@ func (m *InMemory) List(owner string) ([]*model.Account, error) {
 	defer m.m.RUnlock()
 	_, ok := m.ownerAccounts[owner]
 	if !ok {
-		return nil, &NotFound{}
+		return nil, &store.NotFound{}
 	}
 	return m.ownerAccounts[owner].list(), nil
 }
@@ -82,11 +83,11 @@ func (m *InMemory) Get(owner string, number int64) (*model.Account, error) {
 	defer m.m.RUnlock()
 	res, ok := m.ownerAccounts[owner]
 	if !ok {
-		return nil, &NotFound{}
+		return nil, &store.NotFound{}
 	}
 	account, ok := res.get(number)
 	if !ok {
-		return nil, &NotFound{}
+		return nil, &store.NotFound{}
 	}
 	return account, nil
 }
@@ -114,7 +115,7 @@ func (m *InMemory) Delete(owner string, number int64) error {
 	defer m.m.Unlock()
 	_, ok := m.ownerAccounts[owner]
 	if !ok {
-		return &NotFound{}
+		return &store.NotFound{}
 	}
 	delete(m.accountsOwner, number)
 	return m.ownerAccounts[owner].delete(number)
@@ -123,7 +124,7 @@ func (m *InMemory) Delete(owner string, number int64) error {
 func (m *InMemory) UpdateBalance(number int64, deltaAmount float64) error {
 	owner, ok := m.accountsOwner[number]
 	if !ok {
-		return &NotFound{}
+		return &store.NotFound{}
 	}
 	account := m.ownerAccounts[owner].accounts[number]
 	newBalance := *account.Balance + deltaAmount

@@ -9,8 +9,8 @@ import (
 type Interface interface {
 	ListSent(account int64) ([]*model.Transaction, error)
 	ListReceived(account int64) ([]*model.Transaction, error)
-	GetSent(account int64, id int64) (*model.Transaction, error)
-	GetReceived(account int64, id int64) (*model.Transaction, error)
+	GetSent(account int64, id string) (*model.Transaction, error)
+	GetReceived(account int64, id string) (*model.Transaction, error)
 	Create(transaction *model.Newtransaction) (*model.Transaction, error)
 }
 

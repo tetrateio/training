@@ -71,7 +71,7 @@ type GetTransactionReceivedParams struct {
 	  Transaction ID
 
 	*/
-	Transaction int64
+	Transaction string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -123,13 +123,13 @@ func (o *GetTransactionReceivedParams) SetReceiver(receiver int64) {
 }
 
 // WithTransaction adds the transaction to the get transaction received params
-func (o *GetTransactionReceivedParams) WithTransaction(transaction int64) *GetTransactionReceivedParams {
+func (o *GetTransactionReceivedParams) WithTransaction(transaction string) *GetTransactionReceivedParams {
 	o.SetTransaction(transaction)
 	return o
 }
 
 // SetTransaction adds the transaction to the get transaction received params
-func (o *GetTransactionReceivedParams) SetTransaction(transaction int64) {
+func (o *GetTransactionReceivedParams) SetTransaction(transaction string) {
 	o.Transaction = transaction
 }
 
@@ -147,7 +147,7 @@ func (o *GetTransactionReceivedParams) WriteToRequest(r runtime.ClientRequest, r
 	}
 
 	// path param transaction
-	if err := r.SetPathParam("transaction", swag.FormatInt64(o.Transaction)); err != nil {
+	if err := r.SetPathParam("transaction", o.Transaction); err != nil {
 		return err
 	}
 

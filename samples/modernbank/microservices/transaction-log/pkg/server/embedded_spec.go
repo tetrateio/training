@@ -62,7 +62,7 @@ func init() {
             }
           },
           "404": {
-            "description": "Account not found"
+            "description": "No transactions found"
           },
           "500": {
             "description": "Internal server error"
@@ -91,8 +91,7 @@ func init() {
             "required": true
           },
           {
-            "type": "integer",
-            "format": "int64",
+            "type": "string",
             "description": "Transaction ID",
             "name": "transaction",
             "in": "path",
@@ -147,7 +146,7 @@ func init() {
             }
           },
           "404": {
-            "description": "Account not found"
+            "description": "No transactions found"
           },
           "500": {
             "description": "Internal server error"
@@ -176,8 +175,7 @@ func init() {
             "required": true
           },
           {
-            "type": "integer",
-            "format": "int64",
+            "type": "string",
             "description": "Transaction ID",
             "name": "transaction",
             "in": "path",
@@ -296,8 +294,7 @@ func init() {
           ],
           "properties": {
             "id": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         }
@@ -356,7 +353,7 @@ func init() {
             }
           },
           "404": {
-            "description": "Account not found"
+            "description": "No transactions found"
           },
           "500": {
             "description": "Internal server error"
@@ -385,8 +382,7 @@ func init() {
             "required": true
           },
           {
-            "type": "integer",
-            "format": "int64",
+            "type": "string",
             "description": "Transaction ID",
             "name": "transaction",
             "in": "path",
@@ -441,7 +437,7 @@ func init() {
             }
           },
           "404": {
-            "description": "Account not found"
+            "description": "No transactions found"
           },
           "500": {
             "description": "Internal server error"
@@ -470,8 +466,7 @@ func init() {
             "required": true
           },
           {
-            "type": "integer",
-            "format": "int64",
+            "type": "string",
             "description": "Transaction ID",
             "name": "transaction",
             "in": "path",
@@ -590,8 +585,7 @@ func init() {
           ],
           "properties": {
             "id": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         }

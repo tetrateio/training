@@ -4,6 +4,7 @@ package server
 
 import (
 	"crypto/tls"
+	"log"
 	"net/http"
 
 	errors "github.com/go-openapi/errors"
@@ -13,6 +14,7 @@ import (
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/server/restapi"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/server/restapi/transactions"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/store"
+	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/store/mongodb"
 )
 
 //go:generate swagger generate server --target ../../../transaction-log --name TransactionLog --spec ../../../../scripts/flat/transaction-log.yaml --api-package restapi --model-package pkg/model --server-package pkg/server
@@ -26,23 +28,20 @@ func configureFlags(api *restapi.TransactionLogAPI) {
 func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 	// configure the api here
 	api.ServeError = errors.ServeError
-
-	// Set your custom logger if needed. Default one is log.Printf
-	// Expected interface func(string, ...interface{})
-	//
-	// Example:
-	// api.Logger = log.Printf
+	api.Logger = log.Printf
 
 	api.JSONConsumer = runtime.JSONConsumer()
 	api.JSONProducer = runtime.JSONProducer()
 
-	transactionStore = store.NewInMemory()
+	transactionStore = mongodb.NewMongoDB()
 
 	api.TransactionsCreateTransactionHandler = transactions.CreateTransactionHandlerFunc(func(params transactions.CreateTransactionParams) middleware.Responder {
 		res, err := transactionStore.Create(params.Body)
 		if err != nil {
+			api.Logger("Unable to create transaction: %v", err)
 			return transactions.NewCreateTransactionInternalServerError()
 		}
+		api.Logger("Created transaction %q", *res.ID)
 		return transactions.NewCreateTransactionCreated().WithPayload(res)
 	})
 	api.TransactionsGetTransactionReceivedHandler = transactions.GetTransactionReceivedHandlerFunc(func(params transactions.GetTransactionReceivedParams) middleware.Responder {
@@ -51,8 +50,10 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 			if _, ok := err.(*store.NotFound); ok {
 				return transactions.NewGetTransactionReceivedNotFound()
 			}
+			api.Logger("Unable to retrieve transaction %v received by %v: %v", params.Transaction, params.Receiver, err)
 			return transactions.NewGetTransactionReceivedInternalServerError()
 		}
+		api.Logger("Retrieved transaction %v received by %v", params.Transaction, params.Receiver)
 		return transactions.NewGetTransactionReceivedOK().WithPayload(res)
 	})
 	api.TransactionsGetTransactionSentHandler = transactions.GetTransactionSentHandlerFunc(func(params transactions.GetTransactionSentParams) middleware.Responder {
@@ -61,8 +62,10 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 			if _, ok := err.(*store.NotFound); ok {
 				return transactions.NewGetTransactionSentNotFound()
 			}
+			api.Logger("Unable to retrieve transaction %v sent by %v: %v", params.Transaction, params.Sender, err)
 			return transactions.NewGetTransactionSentInternalServerError()
 		}
+		api.Logger("Retrieved transaction %v sent by %v", params.Transaction, params.Sender)
 		return transactions.NewGetTransactionSentOK().WithPayload(res)
 	})
 	api.TransactionsListTransactionsReceivedHandler = transactions.ListTransactionsReceivedHandlerFunc(func(params transactions.ListTransactionsReceivedParams) middleware.Responder {
@@ -71,8 +74,10 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 			if _, ok := err.(*store.NotFound); ok {
 				return transactions.NewListTransactionsReceivedNotFound()
 			}
+			api.Logger("Unable to list transactions received by %v: %v", params.Receiver, err)
 			return transactions.NewListTransactionsReceivedInternalServerError()
 		}
+		api.Logger("Retrieved all transactions received by %v", params.Receiver)
 		return transactions.NewListTransactionsReceivedOK().WithPayload(res)
 	})
 	api.TransactionsListTransactionsSentHandler = transactions.ListTransactionsSentHandlerFunc(func(params transactions.ListTransactionsSentParams) middleware.Responder {
@@ -81,8 +86,10 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 			if _, ok := err.(*store.NotFound); ok {
 				return transactions.NewListTransactionsSentNotFound()
 			}
+			api.Logger("Unable to list transactions sent by %v: %v", params.Sender, err)
 			return transactions.NewListTransactionsSentInternalServerError()
 		}
+		api.Logger("Retrieved all transactions sent by %v", params.Sender)
 		return transactions.NewListTransactionsSentOK().WithPayload(res)
 	})
 

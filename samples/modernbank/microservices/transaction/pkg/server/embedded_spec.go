@@ -126,8 +126,7 @@ func init() {
           ],
           "properties": {
             "id": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         }
@@ -250,8 +249,7 @@ func init() {
           ],
           "properties": {
             "id": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         }
