@@ -15,7 +15,7 @@ import (
 )
 
 // Enforce that InMemory matches the Store Interface
-var _ store.Interface = NewInMemory()
+var _ store.Interface = &InMemory{}
 
 func NewInMemory() *InMemory {
 	return &InMemory{
