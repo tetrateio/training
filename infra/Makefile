@@ -9,6 +9,8 @@ destroy-infra-gke:
 install-istio-gke:
 	kubectl apply --as=admin --as-group=system:masters -f ./istio/${ISTIO_VERSION}/kubernetes/crds.yaml
 	kubectl apply --as=admin --as-group=system:masters -f ./istio/${ISTIO_VERSION}/kubernetes/istio-demo-auth.yaml
+	kubectl apply --as=admin --as-group=system:masters -f ./istio/${ISTIO_VERSION}/kubernetes/kiali-secret.yaml
+	kubectl apply --as=admin --as-group=system:masters -f ./istio/${ISTIO_VERSION}/kubernetes/kiali-gateway.yaml
 	kubectl label namespace default istio-injection=enabled --overwrite
 	kubectl delete pods -n default --all
 
