@@ -17,7 +17,7 @@ import (
 
 var (
 	// Enforce that MongoDB matches the Store Interface
-	_ store.Interface = &MongoDB{}
+	_ store.Interface = MongoDB{}
 
 	defaultAddress    = "mongodb://account-mongodb:27017"
 	defaultDatabase   = "accounts"
@@ -29,7 +29,7 @@ var (
 	}
 )
 
-func NewMongoDB() *MongoDB {
+func NewMongoDB() MongoDB {
 	rand.Seed(time.Now().UnixNano())
 	client, _ := mongo.NewClient(defaultAddress)
 	// Keep retrying every 5 seconds until the mongo backend is up or 6 minutes have passed.
@@ -45,14 +45,14 @@ func NewMongoDB() *MongoDB {
 			break
 		}
 	}
-	return &MongoDB{client: client}
+	return MongoDB{client: client}
 }
 
 type MongoDB struct {
 	client *mongo.Client
 }
 
-func (m *MongoDB) List(owner string) ([]*model.Account, error) {
+func (m MongoDB) List(owner string) ([]*model.Account, error) {
 	accounts := []*model.Account{}
 	res, err := m.defaultCollection().Find(context.Background(), bson.M{"owner": owner})
 	if err != nil {
@@ -72,7 +72,7 @@ func (m *MongoDB) List(owner string) ([]*model.Account, error) {
 	return accounts, nil
 }
 
-func (m *MongoDB) Get(owner string, number int64) (*model.Account, error) {
+func (m MongoDB) Get(owner string, number int64) (*model.Account, error) {
 	var account model.Account
 	res := m.defaultCollection().FindOne(context.Background(), bson.M{"owner": owner, "number": number})
 	if res.Err().Error() == mongo.ErrNoDocuments.Error() {
@@ -83,7 +83,7 @@ func (m *MongoDB) Get(owner string, number int64) (*model.Account, error) {
 	return &account, res.Decode(&account)
 }
 
-func (m *MongoDB) Create(owner string) (*model.Account, error) {
+func (m MongoDB) Create(owner string) (*model.Account, error) {
 	newAccountNumber, err := m.unAssignedAccountNumber()
 	if err != nil {
 		return nil, fmt.Errorf("error finding a vacant account number: %v", err)
@@ -102,7 +102,7 @@ func (m *MongoDB) Create(owner string) (*model.Account, error) {
 
 // Not concurrency safe but close enough for a demo app
 // Clashes are highly unlikely
-func (m *MongoDB) unAssignedAccountNumber() (int64, error) {
+func (m MongoDB) unAssignedAccountNumber() (int64, error) {
 	var err error
 	candidate, count := int64(0), int64(0)
 	for i := 0; i < 10; i++ {
@@ -115,7 +115,7 @@ func (m *MongoDB) unAssignedAccountNumber() (int64, error) {
 	return 0, err
 }
 
-func (m *MongoDB) Delete(owner string, number int64) error {
+func (m MongoDB) Delete(owner string, number int64) error {
 	res := m.defaultCollection().FindOneAndDelete(context.Background(), bson.M{"owner": owner, "number": number})
 	if res.Err().Error() == mongo.ErrNoDocuments.Error() {
 		return &store.NotFound{}
@@ -125,7 +125,7 @@ func (m *MongoDB) Delete(owner string, number int64) error {
 	return nil
 }
 
-func (m *MongoDB) UpdateBalance(number int64, deltaAmount float64) error {
+func (m MongoDB) UpdateBalance(number int64, deltaAmount float64) error {
 	res, err := m.defaultCollection().UpdateOne(context.Background(), bson.M{"number": number}, bson.D{{"$inc", bson.D{{"amount", deltaAmount}}}})
 	if res != nil && res.ModifiedCount != 1 {
 		return &store.NotFound{}
@@ -135,6 +135,6 @@ func (m *MongoDB) UpdateBalance(number int64, deltaAmount float64) error {
 	return nil
 }
 
-func (m *MongoDB) defaultCollection() *mongo.Collection {
+func (m MongoDB) defaultCollection() *mongo.Collection {
 	return m.client.Database(defaultDatabase).Collection(defaultCollection)
 }

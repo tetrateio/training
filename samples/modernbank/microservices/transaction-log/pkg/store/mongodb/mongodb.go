@@ -18,14 +18,14 @@ import (
 
 var (
 	// Enforce that MongoDB matches the Store Interface
-	_ store.Interface = &MongoDB{}
+	_ store.Interface = MongoDB{}
 
 	defaultAddress    = "mongodb://transaction-log-mongodb:27017"
 	defaultDatabase   = "transactions"
 	defaultCollection = "transactions"
 )
 
-func NewMongoDB() *MongoDB {
+func NewMongoDB() MongoDB {
 	client, _ := mongo.NewClient(defaultAddress)
 	// Keep retrying every 5 seconds until the mongo backend is up or 6 minutes have passed.
 	for i := 1; i < 360; i += 5 {
@@ -41,14 +41,14 @@ func NewMongoDB() *MongoDB {
 		}
 	}
 
-	return &MongoDB{client: client}
+	return MongoDB{client: client}
 }
 
 type MongoDB struct {
 	client *mongo.Client
 }
 
-func (m *MongoDB) ListSent(account int64) ([]*model.Transaction, error) {
+func (m MongoDB) ListSent(account int64) ([]*model.Transaction, error) {
 	transactions := []*model.Transaction{}
 	res, err := m.defaultCollection().Find(context.Background(), bson.M{"sender": account})
 	if err != nil {
@@ -68,7 +68,7 @@ func (m *MongoDB) ListSent(account int64) ([]*model.Transaction, error) {
 	return transactions, nil
 }
 
-func (m *MongoDB) ListReceived(account int64) ([]*model.Transaction, error) {
+func (m MongoDB) ListReceived(account int64) ([]*model.Transaction, error) {
 	transactions := []*model.Transaction{}
 	res, err := m.defaultCollection().Find(context.Background(), bson.M{"receiver": account})
 	if err != nil {
@@ -88,7 +88,7 @@ func (m *MongoDB) ListReceived(account int64) ([]*model.Transaction, error) {
 	return transactions, nil
 }
 
-func (m *MongoDB) GetSent(account int64, id string) (*model.Transaction, error) {
+func (m MongoDB) GetSent(account int64, id string) (*model.Transaction, error) {
 	var transaction model.Transaction
 	res := m.defaultCollection().FindOne(context.Background(), bson.M{"_id": id, "sender": account})
 	if res.Err().Error() == mongo.ErrNoDocuments.Error() {
@@ -99,7 +99,7 @@ func (m *MongoDB) GetSent(account int64, id string) (*model.Transaction, error) 
 	return &transaction, res.Decode(&transaction)
 }
 
-func (m *MongoDB) GetReceived(account int64, id string) (*model.Transaction, error) {
+func (m MongoDB) GetReceived(account int64, id string) (*model.Transaction, error) {
 	var transaction model.Transaction
 	res := m.defaultCollection().FindOne(context.Background(), bson.M{"_id": id, "receiver": account})
 	if res.Err().Error() == mongo.ErrNoDocuments.Error() {
@@ -110,7 +110,7 @@ func (m *MongoDB) GetReceived(account int64, id string) (*model.Transaction, err
 	return &transaction, res.Decode(&transaction)
 }
 
-func (m *MongoDB) Create(transaction *model.Newtransaction) (*model.Transaction, error) {
+func (m MongoDB) Create(transaction *model.Newtransaction) (*model.Transaction, error) {
 	res, err := m.defaultCollection().InsertOne(context.Background(), transaction)
 	if err != nil {
 		return nil, fmt.Errorf("unable to create transaction in database: %v", err)
@@ -123,6 +123,6 @@ func (m *MongoDB) Create(transaction *model.Newtransaction) (*model.Transaction,
 	}, nil
 }
 
-func (m *MongoDB) defaultCollection() *mongo.Collection {
+func (m MongoDB) defaultCollection() *mongo.Collection {
 	return m.client.Database(defaultDatabase).Collection(defaultCollection)
 }
