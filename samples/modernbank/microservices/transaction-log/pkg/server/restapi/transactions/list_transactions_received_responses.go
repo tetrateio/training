@@ -63,7 +63,7 @@ func (o *ListTransactionsReceivedOK) WriteResponse(rw http.ResponseWriter, produ
 // ListTransactionsReceivedNotFoundCode is the HTTP code returned for type ListTransactionsReceivedNotFound
 const ListTransactionsReceivedNotFoundCode int = 404
 
-/*ListTransactionsReceivedNotFound Account not found
+/*ListTransactionsReceivedNotFound No transactions found
 
 swagger:response listTransactionsReceivedNotFound
 */

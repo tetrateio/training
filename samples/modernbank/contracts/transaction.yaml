@@ -75,8 +75,7 @@ definitions:
       - id
       properties:
         id:
-          type: integer
-          format: int64
+          type: string
 tags:
 - description: Operations about handling transactions
   name: transaction

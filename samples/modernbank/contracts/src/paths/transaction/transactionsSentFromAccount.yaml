@@ -21,6 +21,6 @@ get:
         items:
           $ref: "./definitions/transaction.yaml"
     404:
-      description: "Account not found"
+      description: "No transactions found"
     500:
       description: "Internal server error"

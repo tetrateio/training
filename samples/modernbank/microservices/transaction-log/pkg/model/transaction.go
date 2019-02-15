@@ -31,7 +31,7 @@ type Transaction struct {
 
 	// id
 	// Required: true
-	ID *int64 `json:"id"`
+	ID *string `json:"id"`
 }
 
 // UnmarshalJSON unmarshals this object from a JSON structure
@@ -56,7 +56,7 @@ func (m *Transaction) UnmarshalJSON(raw []byte) error {
 
 	// AO1
 	var dataAO1 struct {
-		ID *int64 `json:"id"`
+		ID *string `json:"id"`
 	}
 	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
 		return err
@@ -92,7 +92,7 @@ func (m Transaction) MarshalJSON() ([]byte, error) {
 	_parts = append(_parts, jsonDataAO0)
 
 	var dataAO1 struct {
-		ID *int64 `json:"id"`
+		ID *string `json:"id"`
 	}
 
 	dataAO1.ID = m.ID

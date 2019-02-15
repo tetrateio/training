@@ -6,3 +6,6 @@ image:
     repository: gcr.io/tetratelabs/modernbank/transaction
     tag: v1.0.0
     pullPolicy: Always
+
+mongodb:
+    enabled: false
