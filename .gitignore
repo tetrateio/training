@@ -1,3 +1,9 @@
 **/build/bin/**
 .DS_Store
 **/flat/**
+
+.terraform
+**.tfstate**
+
+
+**.lock
