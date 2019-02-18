@@ -32,6 +32,7 @@ spec:
 {{- end }}
       {{- end }}
     spec:
+      serviceAccountName: {{ template "mongodb.fullname" . }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}

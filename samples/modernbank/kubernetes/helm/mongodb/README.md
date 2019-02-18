@@ -1,4 +1,4 @@
-> NOTE: This is a copy of the [Bitnami Helm chart](https://github.com/bitnami/charts/tree/master/upstreamed/mongodb) with changes to the default `values.yaml`.
+> NOTE: This is a copy of the [Bitnami Helm chart](https://github.com/bitnami/charts/tree/master/upstreamed/mongodb) with changes to the default `values.yaml` and a service account for each instance.
 
 # MongoDB
 
