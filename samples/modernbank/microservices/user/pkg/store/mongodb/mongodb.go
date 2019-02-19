@@ -47,13 +47,13 @@ type MongoDB struct {
 
 func (m MongoDB) Get(username string) (*model.User, error) {
 	var user model.User
-	res := m.defaultCollection().FindOne(context.Background(), bson.M{"username": username})
-	if res.Err().Error() == mongo.ErrNoDocuments.Error() {
-		return nil, &store.NotFound{}
-	} else if res.Err() != nil {
-		return nil, fmt.Errorf("unable to get user in database: %v", res.Err())
+	if err := m.defaultCollection().FindOne(context.Background(), bson.M{"username": username}).Decode(&user); err != nil {
+		if err.Error() == mongo.ErrNoDocuments.Error() {
+			return nil, &store.NotFound{}
+		}
+		return nil, fmt.Errorf("unable to get user in database: %v", err)
 	}
-	return &user, res.Decode(&user)
+	return &user, nil
 }
 
 func (m MongoDB) Create(user *model.User) (*model.User, error) {

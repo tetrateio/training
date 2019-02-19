@@ -1,0 +1,45 @@
+---
+# Source: microservice/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: transaction
+  labels:
+    app: transaction
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http-transaction
+  selector:
+    app: transaction
+
+---
+# Source: microservice/templates/deployment.yaml
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: transaction
+  labels:
+    app: transaction
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transaction
+  template:
+    metadata:
+      labels:
+        app: transaction
+    spec:
+      containers:
+        - name: transaction
+          image: "gcr.io/tetratelabs/modernbank/transaction:v1.0.0"
+          imagePullPolicy: Always
+          args: ["--port", "8080"]
+          ports:
+          - name: http
+            containerPort: 8080
+

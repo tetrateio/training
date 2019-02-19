@@ -74,13 +74,13 @@ func (m MongoDB) List(owner string) ([]*model.Account, error) {
 
 func (m MongoDB) Get(owner string, number int64) (*model.Account, error) {
 	var account model.Account
-	res := m.defaultCollection().FindOne(context.Background(), bson.M{"owner": owner, "number": number})
-	if res.Err().Error() == mongo.ErrNoDocuments.Error() {
-		return nil, &store.NotFound{}
-	} else if res.Err() != nil {
-		return nil, fmt.Errorf("unable to get account in database: %v", res.Err())
+	if err := m.defaultCollection().FindOne(context.Background(), bson.M{"owner": owner, "number": number}).Decode(&account); err != nil {
+		if err.Error() == mongo.ErrNoDocuments.Error() {
+			return nil, &store.NotFound{}
+		}
+		return nil, fmt.Errorf("unable to get user in database: %v", err)
 	}
-	return &account, res.Decode(&account)
+	return &account, nil
 }
 
 func (m MongoDB) Create(owner string) (*model.Account, error) {
