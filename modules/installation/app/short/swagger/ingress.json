@@ -1,0 +1,640 @@
+{
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "This is the API exposed to customers of Modern Bank.",
+    "title": "Modern Bank",
+    "version": "1.0.0"
+  },
+  "basePath": "/v1",
+  "paths": {
+    "/account/{receiver}/received": {
+      "get": {
+        "description": "Lists all transactions sent to a given account",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "transactions"
+        ],
+        "summary": "Lists all transactions sent to a given account",
+        "operationId": "listTransactionsReceived",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "Account number that received the transactions",
+            "name": "receiver",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/transaction"
+              }
+            }
+          },
+          "404": {
+            "description": "No transactions found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/account/{receiver}/received/{transaction}": {
+      "get": {
+        "description": "Get a specific transaction received by a given account",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "transactions"
+        ],
+        "summary": "Get a specific transaction received by a given account",
+        "operationId": "getTransactionReceived",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "Account number that received the transactions",
+            "name": "receiver",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Transaction ID",
+            "name": "transaction",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "schema": {
+              "$ref": "#/definitions/transaction"
+            }
+          },
+          "404": {
+            "description": "Transaction not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/account/{sender}/sent": {
+      "get": {
+        "description": "Lists all transactions sent from a given account",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "transactions"
+        ],
+        "summary": "Lists all transactions sent from a given account",
+        "operationId": "listTransactionsSent",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "Account number that made the transactions",
+            "name": "sender",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/transaction"
+              }
+            }
+          },
+          "404": {
+            "description": "No transactions found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/account/{sender}/sent/{transaction}": {
+      "get": {
+        "description": "Get a specific transaction sent from a given account",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "transactions"
+        ],
+        "summary": "Get a specific transaction sent from a given account",
+        "operationId": "getTransactionSent",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "Account number that made the transactions",
+            "name": "sender",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Transaction ID",
+            "name": "transaction",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "schema": {
+              "$ref": "#/definitions/transaction"
+            }
+          },
+          "404": {
+            "description": "Transaction not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/transactions": {
+      "post": {
+        "description": "Sends money from one account to another",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "transactions"
+        ],
+        "summary": "Sends money from one account to another",
+        "operationId": "CreateTransaction",
+        "parameters": [
+          {
+            "description": "Transaction to create",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/newtransaction"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/transaction"
+            }
+          },
+          "400": {
+            "description": "Nice try! You can't send negative amounts..."
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "description": "Creates a new user",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Create a new user identity for a customer",
+        "operationId": "createUser",
+        "parameters": [
+          {
+            "description": "Created user object",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "409": {
+            "description": "User alreadys exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/{owner}/accounts": {
+      "get": {
+        "description": "Lists all accounts for a given customer",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Lists all accounts for a given customer",
+        "operationId": "listAccounts",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Owner of the accounts",
+            "name": "owner",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/account"
+              }
+            }
+          },
+          "404": {
+            "description": "Owner not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "description": "Creates a new account for a given customer",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Create a new account for a customer",
+        "operationId": "createAccount",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Owner of the account",
+            "name": "owner",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/account"
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/{owner}/accounts/{number}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Get account details",
+        "operationId": "getAccountByNumber",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Owner of the account",
+            "name": "owner",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "The number of the account that is to be fetched.",
+            "name": "number",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "schema": {
+              "$ref": "#/definitions/account"
+            }
+          },
+          "404": {
+            "description": "Account not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete account by account number.",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "accounts"
+        ],
+        "summary": "Delete account by account number",
+        "operationId": "deleteAccount",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Owner of the account",
+            "name": "owner",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "The number of the account that is to be deleted.",
+            "name": "number",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Aaaaand it's gone!"
+          },
+          "404": {
+            "description": "Account not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/{username}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Get user by user name",
+        "operationId": "getUserByUserName",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The name that needs to be fetched.",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "description": "Update user by username.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "users"
+        ],
+        "summary": "Update user",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "name that need to be updated",
+            "name": "username",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "Updated user object",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete user by username.",
+        "tags": [
+          "users"
+        ],
+        "summary": "Delete user",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The name that needs to be deleted",
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "account": {
+      "type": "object",
+      "required": [
+        "number",
+        "balance",
+        "owner"
+      ],
+      "properties": {
+        "balance": {
+          "type": "number",
+          "format": "currency"
+        },
+        "number": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "owner": {
+          "type": "string"
+        }
+      }
+    },
+    "newtransaction": {
+      "type": "object",
+      "required": [
+        "sender",
+        "receiver",
+        "amount"
+      ],
+      "properties": {
+        "amount": {
+          "type": "number",
+          "format": "currency"
+        },
+        "receiver": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "sender": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "transaction": {
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "sender",
+            "receiver",
+            "amount"
+          ],
+          "properties": {
+            "amount": {
+              "type": "number",
+              "format": "currency"
+            },
+            "receiver": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "sender": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "user": {
+      "type": "object",
+      "required": [
+        "username",
+        "firstName",
+        "lastName",
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "description": "Operations for banking services.",
+      "name": "banking"
+    }
+  ]
+}

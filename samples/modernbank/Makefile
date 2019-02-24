@@ -28,3 +28,6 @@ docker-push-third-party:
 deploy-kube:
 	./scripts/deployKube.sh bankingservices default
 	kubectl apply -f networking/bankingservices/gateway.yaml
+
+build-module-config:
+	./scripts/buildModuleConfig.sh bankingservices
