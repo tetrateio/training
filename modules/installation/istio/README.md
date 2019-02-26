@@ -20,7 +20,7 @@ kubectl apply -f config/crds.yaml
 Next, install Istio.
 
 ```bash
-kubectl apply -f config/istio-demo-auth.yaml -f config/kiali-secret.yaml
+kubectl apply -f config/istio-demo-auth.yaml -f config/kiali-secret.yaml --as=admin --as-group=system:masters
 ```
 
 Verify Istio components have been installed successfully.
