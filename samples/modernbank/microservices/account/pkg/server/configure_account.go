@@ -6,6 +6,7 @@ import (
 	"crypto/tls"
 	"log"
 	"net/http"
+	"os"
 
 	errors "github.com/go-openapi/errors"
 	runtime "github.com/go-openapi/runtime"
@@ -70,6 +71,13 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 				return accounts.NewListAccountsNotFound()
 			}
 			return accounts.NewListAccountsInternalServerError()
+		}
+		if len(os.Getenv("CANARY")) != 0 {
+			for i, account := range res {
+				newBalance := *account.Balance * 1000
+				res[i].Balance = &newBalance
+
+			}
 		}
 		return accounts.NewListAccountsOK().WithPayload(res)
 	})

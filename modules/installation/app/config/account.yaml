@@ -1,4 +1,18 @@
 ---
+# Source: microservice/charts/mongodb/templates/sa-standalone.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: account-mongodb
+
+---
+# Source: microservice/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: account
+
+---
 # Source: microservice/charts/mongodb/templates/svc-standalone.yaml
 
 apiVersion: v1
@@ -62,6 +76,7 @@ spec:
         release: "account"
         chart: mongodb-5.3.2
     spec:
+      serviceAccountName: account-mongodb
       containers:
       - name: account-mongodb
         image: gcr.io/tetratelabs/modernbank/mongodb:4.0.6
@@ -115,6 +130,7 @@ metadata:
   name: account
   labels:
     app: account
+    version: v1
 spec:
   replicas: 1
   selector:
@@ -124,7 +140,9 @@ spec:
     metadata:
       labels:
         app: account
+        version: v1
     spec:
+      serviceAccountName: account
       containers:
         - name: account
           image: "gcr.io/tetratelabs/modernbank/account:v1.0.0"

@@ -1,11 +1,12 @@
 microservice:
-    name: transaction
+    name: user
     port: 8080
     replicaCount: 1
+    version: v1
 image:
-    repository: gcr.io/tetratelabs/modernbank/transaction
+    repository: gcr.io/tetratelabs/modernbank/user
     tag: v1.0.0
     pullPolicy: Always
 
 mongodb:
-    enabled: false
+    enabled: true
