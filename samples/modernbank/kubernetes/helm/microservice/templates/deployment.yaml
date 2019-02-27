@@ -21,14 +21,7 @@ spec:
         - name: {{ .Values.microservice.name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args: ["--port", "{{ .Values.microservice.port }}"]
+          args: ["--port", "{{ .Values.microservice.port }}", "--version", "{{ .Values.microservice.version }}"]
           ports:
           - name: http
             containerPort: {{ .Values.microservice.port }}
-          {{- if .Values.env }}
-          env:
-          {{- range $key, $val := .Values.env }}
-          - name: {{ $key }}
-            value: "{{ $val }}"
-          {{- end }}
-          {{- end }}

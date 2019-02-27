@@ -3,8 +3,6 @@ microservice:
     port: 8080
     replicaCount: 1
     version: v2
-env:
-    CANARY: true
 image:
     repository: gcr.io/tetratelabs/modernbank/account
     tag: v1.0.0
