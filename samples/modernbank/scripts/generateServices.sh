@@ -21,7 +21,7 @@ do
     fi
 
     mkdir -p ${SERVICE_DIR}
-    swagger generate server -f ${FLAT_DIR}/${SERVICE_NAME}.yaml --target ${SERVICE_DIR}  --model-package "pkg/model" --server-package "pkg/server" --api-package "restapi"
+    swagger generate server -f ${FLAT_DIR}/${SERVICE_NAME}.yaml --target ${SERVICE_DIR}  --model-package "pkg/model" --server-package "pkg/serve" --api-package "restapi" --flag-strategy pflag
     swagger generate client -f ${FLAT_DIR}/${SERVICE_NAME}.yaml --target ${SERVICE_DIR} --model-package "pkg/model" --client-package "pkg/client"
 
     # Dockerfile

@@ -1,4 +1,18 @@
 ---
+# Source: microservice/charts/mongodb/templates/sa-standalone.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: transaction-log-mongodb
+
+---
+# Source: microservice/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: transaction-log
+
+---
 # Source: microservice/charts/mongodb/templates/svc-standalone.yaml
 
 apiVersion: v1
@@ -62,6 +76,7 @@ spec:
         release: "transaction-log"
         chart: mongodb-5.3.2
     spec:
+      serviceAccountName: transaction-log-mongodb
       containers:
       - name: transaction-log-mongodb
         image: gcr.io/tetratelabs/modernbank/mongodb:4.0.6
@@ -115,6 +130,7 @@ metadata:
   name: transaction-log
   labels:
     app: transaction-log
+    version: v1
 spec:
   replicas: 1
   selector:
@@ -124,7 +140,9 @@ spec:
     metadata:
       labels:
         app: transaction-log
+        version: v1
     spec:
+      serviceAccountName: transaction-log
       containers:
         - name: transaction-log
           image: "gcr.io/tetratelabs/modernbank/transaction-log:v1.0.0"

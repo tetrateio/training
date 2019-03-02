@@ -1,4 +1,11 @@
 ---
+# Source: microservice/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: transaction
+
+---
 # Source: microservice/templates/service.yaml
 apiVersion: v1
 kind: Service
@@ -24,6 +31,7 @@ metadata:
   name: transaction
   labels:
     app: transaction
+    version: v1
 spec:
   replicas: 1
   selector:
@@ -33,7 +41,9 @@ spec:
     metadata:
       labels:
         app: transaction
+        version: v1
     spec:
+      serviceAccountName: transaction
       containers:
         - name: transaction
           image: "gcr.io/tetratelabs/modernbank/transaction:v1.0.0"

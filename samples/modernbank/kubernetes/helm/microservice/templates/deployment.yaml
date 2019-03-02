@@ -1,9 +1,10 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: {{ .Values.microservice.name }}
+  name: {{ .Values.microservice.name }}-{{ .Values.microservice.version }}
   labels:
     app: {{ .Values.microservice.name }}
+    version: {{ .Values.microservice.version }}
 spec:
   replicas: {{ .Values.microservice.replicaCount }}
   selector:
@@ -13,13 +14,14 @@ spec:
     metadata:
       labels:
         app: {{ .Values.microservice.name }}
+        version: {{ .Values.microservice.version }}
     spec:
       serviceAccountName: {{ .Values.microservice.name }}
       containers:
         - name: {{ .Values.microservice.name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args: ["--port", "{{ .Values.microservice.port }}"]
+          args: ["--port", "{{ .Values.microservice.port }}", "--version", "{{ .Values.microservice.version }}"]
           ports:
           - name: http
             containerPort: {{ .Values.microservice.port }}

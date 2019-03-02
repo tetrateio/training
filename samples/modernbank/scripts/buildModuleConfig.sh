@@ -1,6 +1,7 @@
 #! /bin/bash -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DEMO_APP_DIR=${DIR}/../../../modules/installation/app
 
 TENANT=$1
 
@@ -8,14 +9,18 @@ TENANT=$1
 for VALUES_YAML in  $(find $DIR/../kubernetes/helm/values/$TENANT -name '*.yaml')
 do 
     FILENAME=${VALUES_YAML##*/}
-    SERVICE_NAME=${FILENAME%.*}
+    SERVICE_NAME=${FILENAME%-*}
     helm dependencies update $DIR/../kubernetes/helm/microservice
 
-    helm template --name ${SERVICE_NAME} ${DIR}/../kubernetes/helm/microservice -f $VALUES_YAML > ${DIR}/../../../modules/installation/demo-app-short/config/${SERVICE_NAME}.yaml
+    if [[ ${SERVICE_NAME} != *"-v2"* ]]
+    then
+        # Only want normal app for base install, v1 only.
+        helm template --name ${SERVICE_NAME} ${DIR}/../kubernetes/helm/microservice -f $VALUES_YAML > ${DEMO_APP_DIR}/short/config/${SERVICE_NAME}.yaml
+    fi
 done
 
 # Default Istio Gateway
-cp ${DIR}/../networking/${TENANT}/gateway.yaml ${DIR}/../../../modules/installation/demo-app-short/config/gateway.yaml
+cp ${DIR}/../networking/${TENANT}/gateway.yaml ${DEMO_APP_DIR}/short/config/gateway.yaml
 
 # Ingress Swagger/API Contract
-cat ${DIR}/../contracts/banking-ingress.yaml | yq . > ${DIR}/../../../modules/installation/demo-app-short/swagger/ingress.json
+cat ${DIR}/../contracts/banking-ingress.yaml | yq . > ${DEMO_APP_DIR}/short/swagger/ingress.json
