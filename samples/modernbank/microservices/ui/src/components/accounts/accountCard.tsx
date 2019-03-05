@@ -11,12 +11,20 @@ import {AccountsPageLink, transferPageLink} from "../../routes";
 
 const styles = (theme: Theme) => createStyles({
     card: {},
+    centerGridItem: {
+        paddingRight: "30vh",
+        textAlign: "center",
+    },
     gridContainer: {
         height: "100%",
     },
-    headerText: {},
+    headerText: {
+    },
     root: {
-        padding: "10px 20px",
+        paddingBottom: "1vh",
+        paddingLeft: "2vh",
+        paddingRight: "2vh",
+        paddingTop: "1vh",
     },
 });
 
@@ -45,13 +53,15 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                             <Grid item={true}>
                                 <AccountBalanceWallet/>
                             </Grid>
-                            <Grid item={true}>
-                                <Typography variant="subtitle1" className={props.classes.headerText}>
+                            <Grid item={true} className={props.classes.centerGridItem}>
+                                <Typography
+                                    variant="subtitle1"
+                                    className={props.classes.headerText}
+                                >
                                     {props.accountName}
                                 </Typography>
                                 <Typography variant={"body1"}>{props.accountNumber}</Typography>
                             </Grid>
-                            <Grid item={true} xs={4}/>
                             <Grid item={true}>
                                 <div>
                                     {"$" + props.accountBalance.toFixed(2)}
