@@ -1,5 +1,4 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
@@ -11,10 +10,24 @@ import {CreditAccounts} from "./creditAccounts";
 import {InvestmentAccounts} from "./investmentAccounts";
 import {TotalAccountValue} from "./totalAccountValue";
 import {Account, AccountsApi} from "../../api/client";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
 
-const styles = (theme: Theme) => createStyles({
-    paper: {
-        opacity: 0.5,
+const styles = () => createStyles({
+    divider: {
+        backgroundColor: "black",
+        height: "0.25vh",
+    },
+    fillerPaper: {
+        backgroundColor: "rgba(255,255,255,0.95)",
+        height: "100%",
+    },
+    fillerPaperGridItem: {
+        height: "100%",
+    },
+    gridContainer: {
+        flexWrap: "nowrap",
+        height: "100%",
     },
     subheader: {
         backgroundColor: "rgba(172,37,45, 1)",
@@ -54,20 +67,54 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => {
 
     return (
         <>
-            <div className={props.classes.subheader}>
-                <Typography variant="h6" className={props.classes.subheaderText}>
-                    Account summary / Checking account
-                </Typography>
-            </div>
-            <AccountSummary
-                plusAccounts={cashAccounts.concat(investmentAccounts)}
-                minusAccounts={creditAccounts}
-            />
-            <CashAccounts accounts={cashAccounts}/>
-            <InvestmentAccounts accounts={investmentAccounts}/>
-            <CreditAccounts accounts={creditAccounts}/>
-            <Divider/>
-            <TotalAccountValue plusAccounts={cashAccounts.concat(investmentAccounts)} minusAccounts={creditAccounts}/>
+            <Grid
+                container={true}
+                alignItems={"stretch"}
+                direction={"column"}
+                justify={"flex-start"}
+                className={props.classes.gridContainer}
+            >
+
+                <Grid item={true}>
+                    <div className={props.classes.subheader}>
+                        <Typography variant="h6" className={props.classes.subheaderText}>
+                            Account summary / Checking account
+                        </Typography>
+                    </div>
+                </Grid>
+
+                <Grid item={true}>
+                    <AccountSummary
+                        plusAccounts={cashAccounts.concat(investmentAccounts)}
+                        minusAccounts={creditAccounts}
+                    />
+                </Grid>
+
+                <Grid item={true}>
+                    <CashAccounts accounts={cashAccounts}/>
+                </Grid>
+
+                <Grid item={true}>
+                    <InvestmentAccounts accounts={investmentAccounts}/>
+                </Grid>
+
+                <Grid item={true}>
+                    <CreditAccounts accounts={creditAccounts}/>
+                </Grid>
+                <Grid item={true}>
+                    <Divider className={props.classes.divider}/>
+                </Grid>
+                <Grid item={true}>
+                    <TotalAccountValue
+                        plusAccounts={cashAccounts.concat(investmentAccounts)}
+                        minusAccounts={creditAccounts}
+                    />
+                </Grid>
+
+                <Grid item={true} className={props.classes.fillerPaperGridItem}>
+                    <Paper square={true} className={props.classes.fillerPaper}/>
+                </Grid>
+            </Grid>
         </>
     );
 };

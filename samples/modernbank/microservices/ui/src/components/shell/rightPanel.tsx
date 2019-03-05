@@ -10,7 +10,7 @@ const borderTopWidth = 7;
 
 const styles = (theme: Theme) => createStyles({
     gridContainer: {
-        height: "100vh",
+        height: "100%",
         paddingLeft: "2vw",
         paddingRight: "2vw",
         paddingTop: "5vh",

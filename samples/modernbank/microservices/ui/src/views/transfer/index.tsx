@@ -76,7 +76,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
         <>
             <div className={props.classes.subheader}>
                 <Typography variant="h6" className={props.classes.subheaderText}>
-                    Account summary / Checking account
+                    Account summary
                 </Typography>
             </div>
             <Navbar/>
@@ -84,7 +84,6 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
             <Paper square={true} className={props.classes.paper}>
                 <Grid
                     container={true}
-                    // alignItems={"center"}
                     justify={"space-between"}
                     className={props.classes.gridContainer}
                 >

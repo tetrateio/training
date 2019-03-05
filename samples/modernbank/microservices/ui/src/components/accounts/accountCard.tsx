@@ -8,12 +8,11 @@ import Typography from "@material-ui/core/Typography";
 import {AccountBalanceWallet} from "@material-ui/icons";
 import React from "react";
 import {AccountsPageLink, transferPageLink} from "../../routes";
-import {RouteComponentProps, withRouter} from "react-router";
 
 const styles = (theme: Theme) => createStyles({
     card: {},
     gridContainer: {
-        height: "100%", /* Force the grid to be same size as parent Paper component. */
+        height: "100%",
     },
     headerText: {},
     root: {
@@ -30,8 +29,8 @@ interface IProps extends WithStyles<typeof styles> {
 export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     const redirectLink =
         (!!props.accountNumber)
-        ? transferPageLink(props.accountNumber.toString())
-        : AccountsPageLink;
+            ? transferPageLink(props.accountNumber.toString())
+            : AccountsPageLink;
     return (
         <div className={props.classes.root}>
             <Card className={props.classes.card}>

@@ -2,11 +2,13 @@ import {createStyles, WithStyles, withStyles} from "@material-ui/core";
 import {Theme} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import React from "react";
-import {AccountCard} from "../../components/accounts/accountCard";
 import {Account} from "../../api/client";
+import {AccountCard} from "../../components/accounts/accountCard";
 
 const styles = (theme: Theme) => createStyles({
     contentPaper: {
+        backgroundColor: "rgba(255,255,255,0.95)",
+        boxShadow: "none",
         paddingBottom: "10px",
         paddingTop: "10px",
     },

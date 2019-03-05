@@ -11,6 +11,7 @@ const height = 35;
 
 const styles = (theme: Theme) => createStyles({
     button: {
+        color: "white",
         textTransform: "none", /* Material button text defaults to upper case; disable it. */
     },
     gridContainer: {
@@ -46,11 +47,6 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                         Accounts
                     </Button>
                 </Grid>
-                {/*<Grid item={true}>*/}
-                    {/*<Button className={props.classes.button}>*/}
-                        {/*Pay bills*/}
-                    {/*</Button>*/}
-                {/*</Grid>*/}
                 <Grid item={true}>
                     <Button
                         component={transferPageLink(props.match.params.accountNumber)}
@@ -59,11 +55,6 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                         Send money
                     </Button>
                 </Grid>
-                {/*<Grid item={true}>*/}
-                    {/*<Button className={props.classes.button}>*/}
-                        {/*View statements*/}
-                    {/*</Button>*/}
-                {/*</Grid>*/}
                 <Grid item={true}>
                     <Button
                         component={transactionsPageLink(props.match.params.accountNumber)}
@@ -71,7 +62,6 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                     >
                         Transactions
                     </Button>
-                    {/*<Search className={props.classes.searchIcon}/>*/}
                 </Grid>
             </Grid>
         </Paper>

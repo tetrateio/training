@@ -8,6 +8,7 @@ import {Account} from "../../api/client";
 
 const styles = (theme: Theme) => createStyles({
     contentPaper: {
+        backgroundColor: "rgba(255,255,255,0.95)",
         paddingBottom: "10px",
         paddingTop: "10px",
     },

@@ -1,5 +1,4 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -10,13 +9,17 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 import {Account} from "../../api/client";
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     gridContainer: {
-        height: "100%", /* Force the grid to be same size as parent Paper component. */
+        height: "100%",
     },
     headerText: {},
     paper: {
-        padding: "5px 40px",
+        backgroundColor: "rgba(255,255,255,0.95)",
+        paddingBottom: "1vh",
+        paddingLeft: "2vh",
+        paddingRight: "2vh",
+        paddingTop: "1vh",
     },
     table: {},
 });
@@ -35,6 +38,7 @@ export const component: React.FunctionComponent<IProps> = (props: IProps) => {
         props.minusAccounts
             .map((account) => account.balance)
             .reduce((sum, b) => sum + b, 0);
+    const totalAmount = creditAmount - debtAmount;
 
     return (
         <Paper square={true} className={props.classes.paper}>
@@ -51,6 +55,9 @@ export const component: React.FunctionComponent<IProps> = (props: IProps) => {
                 </Grid>
                 <Grid item={true} xs={4}/>
                 <Grid item={true}>
+                    <Typography variant="body1">
+                        {`$${totalAmount.toFixed(2)}`}
+                    </Typography>
                     <Typography variant="body1">
                         Total available cash
                     </Typography>

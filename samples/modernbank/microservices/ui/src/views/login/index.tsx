@@ -10,7 +10,7 @@ const styles = () => createStyles({
     gridContainer: {
         borderTopColor: "rgb(172,37,45)",
         borderTopStyle: "solid",
-        borderTopWidth: "0.5vh",
+        borderTopWidth: "0.6vh",
         height: "100%",
         width: "100%",
     },

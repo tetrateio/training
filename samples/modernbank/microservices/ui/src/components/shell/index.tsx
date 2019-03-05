@@ -1,4 +1,4 @@
-import {createStyles, Theme, withStyles, WithStyles} from "@material-ui/core";
+import {createStyles, withStyles, WithStyles} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
 import React from "react";
@@ -7,7 +7,7 @@ import {Header} from "./header";
 import "./index.css";
 import {RightPanel} from "./rightPanel";
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     banner: {
         backgroundColor: "rgba(130,138,161, 0.99)",
         borderBottomColor: "rgb(172,235,252)",
@@ -17,6 +17,7 @@ const styles = (theme: Theme) => createStyles({
         width: "100vw",
     },
     gridContainer: {
+        height: "100%",
         width: "100%",
     },
     mdUpContent: {
@@ -24,9 +25,9 @@ const styles = (theme: Theme) => createStyles({
         height: "85vh",
         left: "0",
         margin: "auto",
-        position: "absolute",
+        position: "relative",
         right: "0",
-        top: "15vh",
+        top: "-15.5vh",
         width: "75vw",
     },
     mdUpHeader: {
@@ -50,9 +51,9 @@ const styles = (theme: Theme) => createStyles({
         height: "85vh",
         left: "0",
         margin: "auto",
-        position: "absolute",
+        position: "relative",
         right: "0",
-        top: "15vh",
+        top: "-15.5vh",
         width: "100vw",
     },
     smDownHeader: {
