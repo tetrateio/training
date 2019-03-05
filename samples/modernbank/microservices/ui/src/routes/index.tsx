@@ -13,7 +13,6 @@ import {RegisterView} from "../views/register";
 export const AccountsPath = "/accounts";
 export const LoginPath = "/login";
 export const RegisterPath = "/register";
-export const TransferPath = "/transfer";
 
 // Paths that take a parameter.
 export const transferPath = (accountNumber: string) => ("/accounts/" + accountNumber + "/transfer");
@@ -71,7 +70,8 @@ export const ViewsRouter: React.FunctionComponent<{}> = () => {
                 />
                 <Route path={LoginPath} exact={true} component={LoginView}/>
                 <Route path={RegisterPath} exact={true} component={RegisterView}/>
-                <PrivateRoute component={NotFoundView}/>
+                <Route path="/404" exact={true} component={NotFoundView}/>
+                <PrivateRoute path="*" component={NotFoundView}/>
                 <Route path="*" exact={true} component={LoginView}/>
             </Switch>
         </BrowserRouter>

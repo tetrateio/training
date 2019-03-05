@@ -1,5 +1,4 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
@@ -9,7 +8,7 @@ import {AccountBalanceWallet} from "@material-ui/icons";
 import React from "react";
 import {AccountsPageLink, transferPageLink} from "../../routes";
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     card: {},
     centerGridItem: {
         textAlign: "center",

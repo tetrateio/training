@@ -1,5 +1,4 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Snackbar from "@material-ui/core/Snackbar";
@@ -7,11 +6,11 @@ import SnackbarContent from "@material-ui/core/SnackbarContent";
 import TextField from "@material-ui/core/TextField";
 import React from "react";
 import {RouteComponentProps, withRouter} from "react-router";
+import {authenticationCheck} from "../../api/client-utils";
 import {AuthContext} from "../../components/auth/authContext";
-import {authenticationCheck} from "../../components/auth/fakeAuth";
 import {AccountsPath} from "../../routes";
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     paper: {
         backgroundColor: "rgba(255,255,255,0.95)",
         boxSizing: "border-box",
@@ -26,6 +25,7 @@ const styles = (theme: Theme) => createStyles({
     signOnButton: {
         backgroundColor: "rgb(233,121,51)",
         marginTop: "3vh",
+        textTransform: "none", /* Material button text defaults to all-caps; disable this. */
     },
     usernameTextField: {
     },
@@ -37,9 +37,7 @@ interface IProps extends WithStyles<typeof styles>, RouteComponentProps<{}> {
 const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     const [username, setUsername] = React.useState<string>("");
     const [password, setPassword] = React.useState<string>("");
-
     const [loginFailed, setLoginFailed] = React.useState<boolean>(false);
-
     const authContext = React.useContext(AuthContext);
 
     const signInHandler = async () => {

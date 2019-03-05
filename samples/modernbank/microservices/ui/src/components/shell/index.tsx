@@ -73,6 +73,7 @@ interface IProps extends WithStyles<typeof styles> {
     children: JSX.Element;
 }
 
+// This is the component rendered for 'sm' and 'xs' devices.
 const SmDownComponent: React.FunctionComponent<IProps> = (props: IProps) => {
     return (
         <>
@@ -96,6 +97,7 @@ const SmDownComponent: React.FunctionComponent<IProps> = (props: IProps) => {
     );
 };
 
+// This is the component rendered for 'md' and larger devices.
 const MdUpComponent: React.FunctionComponent<IProps> = (props: IProps) => {
     const rightPanelElem =
         (props.showRightPanel)
@@ -107,9 +109,8 @@ const MdUpComponent: React.FunctionComponent<IProps> = (props: IProps) => {
                     <Grid item={true} className={props.classes.mdUpRightPanel}>
                         <RightPanel/>
                     </Grid>
-                </>
-            ) :
-            (
+                </>)
+            : (
                 <>
                     <Grid item={true} className={props.classes.mdUpMainPanelWithoutRightPanel}>
                         {props.children}

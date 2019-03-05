@@ -6,22 +6,16 @@ import React from "react";
 import {RouteComponentProps, withRouter} from "react-router";
 import {AccountsPageLink, transactionsPageLink, transferPageLink} from "../../routes";
 
-const height = 35;
-
 const styles = () => createStyles({
     button: {
         color: "white",
-        textTransform: "none", /* Material button text defaults to upper case; disable it. */
+        textTransform: "none", /* Material button text defaults to all-caps; disable this. */
     },
     gridContainer: {
-        height: "100%", /* Force the grid to be same size as parent Paper component. */
+        height: "100%",
     },
     paper: {
         backgroundColor: "rgb(233,121,51)",
-        height: `${height}px`,
-    },
-    searchIcon: {
-        height: "100%",
     },
 });
 
@@ -32,40 +26,38 @@ interface IUrlParams {
 interface IProps extends WithStyles<typeof styles>, RouteComponentProps<IUrlParams> {
 }
 
-export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
-    return (
-        <Paper square={true} className={props.classes.paper}>
-            <Grid
-                container={true}
-                alignItems="center"
-                justify="space-around"
-                className={props.classes.gridContainer}
-            >
-                <Grid item={true}>
-                    <Button component={AccountsPageLink} className={props.classes.button}>
-                        Accounts
-                    </Button>
-                </Grid>
-                <Grid item={true}>
-                    <Button
-                        component={transferPageLink(props.match.params.accountNumber)}
-                        className={props.classes.button}
-                    >
-                        Send money
-                    </Button>
-                </Grid>
-                <Grid item={true}>
-                    <Button
-                        component={transactionsPageLink(props.match.params.accountNumber)}
-                        className={props.classes.button}
-                    >
-                        Transactions
-                    </Button>
-                </Grid>
+export const Component: React.FunctionComponent<IProps> = (props: IProps) => (
+    <Paper square={true} className={props.classes.paper}>
+        <Grid
+            container={true}
+            alignItems="center"
+            justify="space-around"
+            className={props.classes.gridContainer}
+        >
+            <Grid item={true}>
+                <Button component={AccountsPageLink} className={props.classes.button}>
+                    Accounts
+                </Button>
             </Grid>
-        </Paper>
-    );
-};
+            <Grid item={true}>
+                <Button
+                    component={transferPageLink(props.match.params.accountNumber)}
+                    className={props.classes.button}
+                >
+                    Send money
+                </Button>
+            </Grid>
+            <Grid item={true}>
+                <Button
+                    component={transactionsPageLink(props.match.params.accountNumber)}
+                    className={props.classes.button}
+                >
+                    Transactions
+                </Button>
+            </Grid>
+        </Grid>
+    </Paper>
+);
 
 const RoutingComponent = withRouter(Component);
 

@@ -1,22 +1,21 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import {AccountCircle} from "@material-ui/icons";
 import React from "react";
-import {Logo} from "./logo";
-import Button from "@material-ui/core/Button";
-import {AccountsPageLink, LoginPath} from "../../routes";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import {AuthContext} from "../auth/authContext";
 import {RouteComponentProps, withRouter} from "react-router";
+import {AccountsPageLink, LoginPath} from "../../routes";
+import {AuthContext} from "../auth/authContext";
+import {Logo} from "./logo";
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     companyLogoButton: {
-        textTransform: "none", /* Material button text defaults to upper case; disable it. */
+        textTransform: "none", /* Material button text defaults to all-caps; disable this. */
     },
     companyText: {
         color: "white",
@@ -48,6 +47,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
         props.history.push(LoginPath);
     };
 
+    // Don't show the account icon when the user is not signed in.
     const accountIcon = (authContext.isAuthenticated) ? (
         <>
             <Button
@@ -102,6 +102,6 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     );
 };
 
-const RoutingComponent = withRouter(Component);
+const RoutingAwareComponent = withRouter(Component);
 
-export const Header = withStyles(styles)(RoutingComponent);
+export const Header = withStyles(styles)(RoutingAwareComponent);
