@@ -30,7 +30,7 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => (
         className={props.classes.gridContainer}
     >
         <Hidden smDown={true}>
-            <Grid item={true} xs={6} className={props.classes.mdUpLoginForm}>
+            <Grid item={true} xs={5} className={props.classes.mdUpLoginForm}>
                 <LoginForm/>
             </Grid>
             <Grid item={true} xs={6}>

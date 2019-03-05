@@ -22,10 +22,20 @@ const styles = (theme: Theme) => createStyles({
 });
 
 interface IProps extends WithStyles<typeof styles> {
-    accounts: Account[];
+    plusAccounts: Account[];
+    minusAccounts: Account[];
 }
 
 export const component: React.FunctionComponent<IProps> = (props: IProps) => {
+    const creditAmount =
+        props.plusAccounts
+            .map((account) => account.balance)
+            .reduce((sum, b) => sum + b, 0);
+    const debtAmount =
+        props.minusAccounts
+            .map((account) => account.balance)
+            .reduce((sum, b) => sum + b, 0);
+
     return (
         <Paper square={true} className={props.classes.paper}>
             <Grid
@@ -48,14 +58,18 @@ export const component: React.FunctionComponent<IProps> = (props: IProps) => {
             </Grid>
             <Table className={props.classes.table}>
                 <TableBody>
-                    {props.accounts.map((account: Account) => (
-                        <TableRow key={account.number}>
-                            <TableCell component="th" scope="row">
-                                {`Account ${account.number}`}
-                            </TableCell>
-                            <TableCell align="right">{account.balance}</TableCell>
-                        </TableRow>
-                    ))}
+                    <TableRow key={"credit"}>
+                        <TableCell component="th" scope="row">
+                            Credit
+                        </TableCell>
+                        <TableCell align="right">{`$${creditAmount.toFixed(2)}`}</TableCell>
+                    </TableRow>
+                    <TableRow key={"debt"}>
+                        <TableCell component="th" scope="row">
+                            Debt
+                        </TableCell>
+                        <TableCell align="right">{`$${debtAmount.toFixed(2)}`}</TableCell>
+                    </TableRow>
                 </TableBody>
             </Table>
         </Paper>

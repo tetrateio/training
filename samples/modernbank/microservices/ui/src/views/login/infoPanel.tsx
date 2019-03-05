@@ -14,8 +14,8 @@ const styles = () => createStyles({
     headerText: {
         color: "white",
         fontSize: "3.5vw",
-        paddingBottom: "4vw",
-        paddingTop: "4vw",
+        paddingBottom: "2vw",
+        paddingTop: "3vw",
         textAlign: "right",
     },
     joinNowButton: {

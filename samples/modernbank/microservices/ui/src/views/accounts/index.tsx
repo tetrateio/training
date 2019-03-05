@@ -40,7 +40,6 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     };
 
     React.useEffect(() => {
-        setDoFetch(false);
         fetchAccounts();
     }, []);
 
@@ -60,7 +59,10 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                     Account summary / Checking account
                 </Typography>
             </div>
-            <AccountSummary accounts={accounts}/>
+            <AccountSummary
+                plusAccounts={cashAccounts.concat(investmentAccounts)}
+                minusAccounts={creditAccounts}
+            />
             <CashAccounts accounts={cashAccounts}/>
             <InvestmentAccounts accounts={investmentAccounts}/>
             <CreditAccounts accounts={creditAccounts}/>

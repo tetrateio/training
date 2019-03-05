@@ -15,7 +15,7 @@ const styles = (theme: Theme) => createStyles({
     paper: {
         backgroundColor: "rgba(255,255,255,0.95)",
         boxSizing: "border-box",
-        height: "50vh",
+        height: "40vh",
         paddingLeft: "3vw",
         paddingRight: "3vw",
         paddingTop: "4vw",
