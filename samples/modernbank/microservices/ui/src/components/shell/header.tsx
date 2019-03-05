@@ -20,16 +20,18 @@ const styles = (theme: Theme) => createStyles({
     },
     companyText: {
         color: "white",
+        fontSize: "4vw",
         fontStyle: "italic",
-        marginRight: "20px",
+        paddingRight: "2vw",
     },
     gridContainer: {
-        height: "100%", /* Force the grid to be same size as parent Paper component. */
+        height: "100%",
     },
     paper: {
         background: "linear-gradient(90deg, rgba(60,79,112,1) 0%, rgba(128,121,141,1) 50%, rgba(213,173,177,1) 100%)",
         height: "100%",
-        padding: "0px 20px",
+        paddingLeft: "2vw",
+        paddingRight: "2vw",
     },
 });
 
@@ -81,18 +83,16 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                 className={props.classes.gridContainer}
             >
                 <Grid item={true}>
-                    <div>
-                        <Button component={AccountsPageLink} className={props.classes.companyLogoButton}>
-                            <Typography
-                                variant="h4"
-                                inline={true}
-                                className={props.classes.companyText}
-                            >
-                                BridgeNational
-                            </Typography>
-                            <Logo/>
-                        </Button>
-                    </div>
+                    <Button component={AccountsPageLink} className={props.classes.companyLogoButton}>
+                        <Typography
+                            variant="h4"
+                            inline={true}
+                            className={props.classes.companyText}
+                        >
+                            BridgeNational
+                        </Typography>
+                        <Logo/>
+                    </Button>
                 </Grid>
                 <Grid item={true}>
                     {accountIcon}

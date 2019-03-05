@@ -1,32 +1,30 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import React from "react";
-import {bannerBorderBottomWidth, Shell} from "../../components/shell";
-import {LoginForm} from "./loginForm";
+import {Shell} from "../../components/shell";
 import {InfoPanel} from "./infoPanel";
+import {LoginForm} from "./loginForm";
+import Hidden from "@material-ui/core/Hidden";
 
-const borderTopWidth = bannerBorderBottomWidth;
-
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     gridContainer: {
-        borderTop: `${borderTopWidth}px solid rgb(172,37,45)`,
+        borderTopColor: "rgb(172,37,45)",
+        borderTopStyle: "solid",
+        borderTopWidth: "0.5vh",
         height: "100%", /* Force the grid to be same size as parent Paper component. */
-        paddingLeft: "50px",
         width: "100%",
+    },
+    mdUpLoginForm: {
+        paddingLeft: "2vw",
     },
     paper: {
         backgroundColor: "white",
         height: "50%",
         // opacity: 0.5,
+        paddingLeft: "2vw",
+        paddingRight: "2vw",
+        paddingTop: "3vh",
         width: "100%",
-        paddingLeft: 3 * theme.spacing.unit,
-        paddingRight: 3 * theme.spacing.unit,
-        paddingTop: 5 * theme.spacing.unit,
-    },
-    signOnButton: {
-        color: "rgb(233,121,51)",
-        marginTop: 3 * theme.spacing.unit,
     },
     subheader: {
         backgroundColor: "rgba(172,37,45, 1)",
@@ -51,12 +49,19 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => (
         justify={"space-between"}
         className={props.classes.gridContainer}
     >
-        <Grid item={true} xs={4}>
-            <LoginForm/>
-        </Grid>
-        <Grid item={true} xs={6}>
-            <InfoPanel/>
-        </Grid>
+        <Hidden smDown={true}>
+            <Grid item={true} xs={6} className={props.classes.mdUpLoginForm}>
+                <LoginForm/>
+            </Grid>
+            <Grid item={true} xs={6}>
+                <InfoPanel/>
+            </Grid>
+        </Hidden>
+        <Hidden mdUp={true}>
+            <Grid item={true} xs={12}>
+                <LoginForm/>
+            </Grid>
+        </Hidden>
     </Grid>
 );
 

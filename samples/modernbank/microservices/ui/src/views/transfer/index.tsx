@@ -4,14 +4,14 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
+import {RouteComponentProps} from "react-router";
+import {Account, AccountsApi} from "../../api/client";
+import {AuthContext} from "../../components/auth/authContext";
 import {Shell} from "../../components/shell";
 import {Navbar} from "../../components/viewAppBar/navbar";
 import {Subheader} from "../../components/viewAppBar/subheader";
 import {Form} from "./form";
 import {InfoPanel} from "./infoPanel";
-import {RouteComponentProps} from "react-router";
-import {Account, AccountsApi} from "../../api/client";
-import {AuthContext} from "../../components/auth/authContext";
 
 const styles = (theme: Theme) => createStyles({
     gridContainer: {

@@ -11,9 +11,9 @@ const borderTopWidth = 7;
 const styles = (theme: Theme) => createStyles({
     gridContainer: {
         height: "100vh",
-        paddingLeft: "20px",
-        paddingRight: "20px",
-        paddingTop: "50px",
+        paddingLeft: "2vw",
+        paddingRight: "2vw",
+        paddingTop: "5vh",
     },
     headerText: {
         color: "rgb(246, 193, 118)",
@@ -21,7 +21,7 @@ const styles = (theme: Theme) => createStyles({
     paper: {
         backgroundColor: "black",
         borderTop: `${borderTopWidth}px solid rgb(233,121,51)`,
-        height: "100%", /* Force the Paper component to use up the full page height */
+        height: "100%",
         opacity: 0.7,
     },
     subheaderText: {

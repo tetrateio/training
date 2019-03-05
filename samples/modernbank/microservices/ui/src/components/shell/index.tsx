@@ -1,41 +1,19 @@
-import {install} from "@material-ui/styles";
 import {createStyles, Theme, withStyles, WithStyles} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import makeStyles from "@material-ui/styles/makeStyles";
+import Hidden from "@material-ui/core/Hidden";
 import React from "react";
 import "typeface-roboto";
 import {Header} from "./header";
 import "./index.css";
 import {RightPanel} from "./rightPanel";
 
-// CSS pixel constants.
-const bannerHeight = 100;
-export const bannerBorderBottomWidth = 7;
-const headerWidth = 1000;
-const contentWidth = headerWidth;
-
-// CSS constants that vary on the component props.
-const mainPanelWidth = (props: IProps): number => {
-    return (props.showRightPanel) ? 750 : headerWidth;
-};
-const rightPanelWidth = (props: IProps): number => {
-    return (props.showRightPanel) ? (contentWidth - mainPanelWidth(props)) : 0;
-};
-
-const useStyles = makeStyles({
-    mainPanel: (props: IProps) => ({
-        width: `${mainPanelWidth(props)}px`,
-    }),
-    rightPanel: (props: IProps) => ({
-        width: `${rightPanelWidth(props)}px`,
-    }),
-});
-
 const styles = (theme: Theme) => createStyles({
     banner: {
         backgroundColor: "rgba(130,138,161, 0.99)",
-        borderBottom: `${bannerBorderBottomWidth}px solid rgb(172,235,252)`,
-        height: `${bannerHeight}px`,
+        borderBottomColor: "rgb(172,235,252)",
+        borderBottomStyle: "solid",
+        borderBottomWidth: "0.5vh",
+        height: "15vh",
         width: "100vw",
     },
     content: {
@@ -44,19 +22,30 @@ const styles = (theme: Theme) => createStyles({
         margin: "auto",
         position: "absolute",
         right: "0",
-        top: `${bannerHeight}px`,
-        width: `${contentWidth}px`,
+        top: "15vh",
+        width: "75vw",
     },
     gridContainer: {
-        // height: "100vh",
-        width: "100%", /* Force the grid to be same size as parent div. */
+        width: "100%",
     },
     header: {
-        height: "100px",
+        height: "15vh",
         margin: "auto",
         position: "relative",
-        top: `${-1 * (bannerHeight + bannerBorderBottomWidth)}px`,
-        width: `${headerWidth}px`,
+        top: "-15.5vh",
+        width: "75vw",
+    },
+    mdUpMainPanelWithRightPanel: {
+        width: "55vw",
+    },
+    mdUpMainPanelWithoutRightPanel: {
+        width: "75vw",
+    },
+    mdUpRightPanel: {
+        width: "20vw",
+    },
+    smDownMainPanel: {
+        width: "75vw",
     },
 });
 
@@ -66,15 +55,23 @@ interface IProps extends WithStyles<typeof styles> {
 }
 
 const component: React.FunctionComponent<IProps> = (props: IProps) => {
-    const dynamicClasses = useStyles(props);
-
-    const rightPanel = (props.showRightPanel)
-        ? (
-            <Grid item={true} className={dynamicClasses.rightPanel}>
-                <RightPanel/>
-            </Grid>
-        )
-        : (<></>);
+    const mdUpElement =
+        (props.showRightPanel)
+            ? (
+                <>
+                    <Grid item={true} className={props.classes.mdUpMainPanelWithRightPanel}>
+                        {props.children}
+                    </Grid>
+                    <Grid item={true} className={props.classes.mdUpRightPanel}>
+                        <RightPanel/>
+                    </Grid>
+                </>
+            ) :
+            (
+                <Grid item={true} className={props.classes.mdUpMainPanelWithoutRightPanel}>
+                    {props.children}
+                </Grid>
+            );
 
     return (
         <>
@@ -87,10 +84,14 @@ const component: React.FunctionComponent<IProps> = (props: IProps) => {
                     container={true}
                     className={props.classes.gridContainer}
                 >
-                    <Grid item={true} className={dynamicClasses.mainPanel}>
-                        {props.children}
-                    </Grid>
-                    {rightPanel}
+                    <Hidden smDown={true}>
+                        {mdUpElement}
+                    </Hidden>
+                    <Hidden mdUp={true}>
+                        <Grid item={true} className={props.classes.smDownMainPanel}>
+                            {props.children}
+                        </Grid>
+                    </Hidden>
                 </Grid>
             </div>
         </>

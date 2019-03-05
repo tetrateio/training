@@ -12,33 +12,20 @@ import {authenticationCheck} from "../../components/auth/fakeAuth";
 import {AccountsPath} from "../../routes";
 
 const styles = (theme: Theme) => createStyles({
-    gridContainer: {
-        height: "100%", /* Force the grid to be same size as parent Paper component. */
-        paddingLeft: 5 * theme.spacing.unit,
-        width: "100%",
-    },
-    headerText: {},
-    inputField: {},
     paper: {
         backgroundColor: "rgba(255,255,255,0.95)",
+        boxSizing: "border-box",
         height: "50vh",
-        paddingLeft: 3 * theme.spacing.unit,
-        paddingRight: 3 * theme.spacing.unit,
-        paddingTop: 5 * theme.spacing.unit,
+        paddingLeft: "3vw",
+        paddingRight: "3vw",
+        paddingTop: "4vw",
         width: "100%",
     },
     passwordTextField: {
     },
     signOnButton: {
         backgroundColor: "rgb(233,121,51)",
-        marginTop: 3 * theme.spacing.unit,
-    },
-    subheader: {
-        backgroundColor: "rgba(172,37,45, 1)",
-    },
-    subheaderText: {
-        color: "white",
-        marginLeft: "30px",
+        marginTop: "3vh",
     },
     usernameTextField: {
     },
@@ -85,11 +72,6 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                     variant="outlined"
                     fullWidth={true}
                     required={true}
-                    InputProps={{
-                        classes: {
-                            root: props.classes.inputField,
-                        },
-                    }}
                     className={props.classes.usernameTextField}
                 />
                 <TextField

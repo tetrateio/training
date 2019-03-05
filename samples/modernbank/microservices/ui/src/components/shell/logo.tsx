@@ -5,7 +5,7 @@ import React from "react";
 const styles = (theme: Theme) => createStyles({
     img: {
         filter: "invert(100%)",
-        width: "70px",
+        width: "8vw",
     },
 });
 

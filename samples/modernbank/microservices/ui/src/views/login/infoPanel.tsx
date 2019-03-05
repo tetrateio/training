@@ -1,36 +1,38 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import Grid from "@material-ui/core/Grid";
 import {RegisterPageLink} from "../../routes";
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     gridContainer: {
         height: "100%", /* Force the grid to be same size as parent Paper component. */
-        paddingRight: 3 * theme.spacing.unit,
+        paddingRight: "3vw",
         width: "100%",
     },
     headerText: {
         color: "white",
-        marginBottom: 5 * theme.spacing.unit,
-        marginTop: 10 * theme.spacing.unit,
+        fontSize: "3.5vw",
+        paddingBottom: "4vw",
+        paddingTop: "4vw",
         textAlign: "right",
     },
     joinNowButton: {
         backgroundColor: "rgb(172,235,252)",
+        fontSize: "1.5vw",
     },
     root: {
         display: "flex",
     },
     subheaderText: {
         color: "white",
-        marginBottom: 3 * theme.spacing.unit,
+        fontSize: "1.5vw",
+        marginBottom: "3vw",
         textAlign: "right",
     },
     subtitleTextGridItem: {
-        width: "50%",
+        width: "60%",
     },
 });
 
@@ -57,7 +59,9 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => (
         <Grid item={true}>
             <Button
                 component={RegisterPageLink}
-                variant={"outlined"} className={props.classes.joinNowButton}>
+                variant={"outlined"}
+                className={props.classes.joinNowButton}
+            >
                 Join now
             </Button>
         </Grid>

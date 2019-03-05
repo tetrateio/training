@@ -1,15 +1,15 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
 import {Theme} from "@material-ui/core";
-import React from "react";
-import {bannerBorderBottomWidth, Shell} from "../../components/shell";
-import {RegisterForm} from "./registerForm";
 import Paper from "@material-ui/core/Paper";
-
-const borderTopWidth = bannerBorderBottomWidth;
+import React from "react";
+import {Shell} from "../../components/shell";
+import {RegisterForm} from "./registerForm";
 
 const styles = (theme: Theme) => createStyles({
     gridContainer: {
-        borderTop: `${borderTopWidth}px solid rgb(172,37,45)`,
+        borderTopColor: "rgb(172,37,45)",
+        borderTopStyle: "solid",
+        borderTopWidth: "0.5vh",
         height: "100%", /* Force the grid to be same size as parent Paper component. */
         paddingLeft: "50px",
         width: "100%",
