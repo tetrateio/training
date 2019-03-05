@@ -17,6 +17,7 @@ const styles = () => createStyles({
         height: "100%", /* Force the grid to be same size as parent Paper component. */
     },
     paper: {
+        backgroundColor: "rgba(255,255,255,0.95)",
         borderBottom: `${borderBottomWidth}px solid rgb(196,196,196)`,
         height: `${height}px`,
         paddingLeft: "1vw",
