@@ -1,5 +1,4 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
@@ -12,7 +11,7 @@ import {Navbar} from "../../components/viewAppBar/navbar";
 import {Subheader} from "../../components/viewAppBar/subheader";
 import {TransactionsTable} from "./table";
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     fillerPaper: {
         backgroundColor: "rgba(255,255,255,0.95)",
         boxShadow: "none",
@@ -25,17 +24,12 @@ const styles = (theme: Theme) => createStyles({
         flexWrap: "nowrap",
         height: "100%",
     },
-    paper: {
-        backgroundColor: "rgba(255,255,255,0.97)",
-        paddingLeft: 2 * theme.spacing.unit,
-        paddingRight: 2 * theme.spacing.unit,
-    },
     subheader: {
         backgroundColor: "rgb(172,37,45)",
     },
     subheaderText: {
         color: "white",
-        marginLeft: "30px",
+        marginLeft: "5vh",
     },
 });
 

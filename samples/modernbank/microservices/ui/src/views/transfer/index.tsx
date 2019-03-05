@@ -11,6 +11,7 @@ import {Navbar} from "../../components/viewAppBar/navbar";
 import {Subheader} from "../../components/viewAppBar/subheader";
 import {Form} from "./form";
 import {InfoPanel} from "./infoPanel";
+import {accountsApi} from "../../api/client-utils";
 
 const styles = () => createStyles({
     contentPaper: {
@@ -51,8 +52,6 @@ interface IUrlParams {
 
 interface IProps extends WithStyles<typeof styles>, RouteComponentProps<IUrlParams> {
 }
-
-const accountsApi = new AccountsApi({basePath: "http://35.192.59.252/v1"});
 
 const initialAccount: Account = {
     balance: 0,

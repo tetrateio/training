@@ -9,7 +9,6 @@ import {TransferView} from "../views/transfer";
 import {TransactionsView} from "../views/transactions";
 import {RegisterView} from "../views/register";
 
-// Single location for all paths.
 export const AccountsPath = "/accounts";
 export const LoginPath = "/login";
 export const RegisterPath = "/register";
@@ -18,13 +17,10 @@ export const RegisterPath = "/register";
 export const transferPath = (accountNumber: string) => ("/accounts/" + accountNumber + "/transfer");
 export const transactionsPath = (accountNumber: string) => `/accounts/${accountNumber}/transactions`;
 
-// Convenient Link components to pass as the ButtonBase#component prop to navigation Buttons, e.g.
+// Convenient redirect Link components to pass as the ButtonBase#component prop to navigation Buttons, e.g.
 //     <Button component={AccountsPageLink}>Button text</Button>
 export const AccountsPageLink: React.FunctionComponent<{}> = (props) => <Link to={AccountsPath} {...props}/>;
 export const RegisterPageLink: React.FunctionComponent<{}> = (props) => <Link to={RegisterPath} {...props}/>;
-
-// export const TransactionsPageLink: React.FunctionComponent<{}> = (props) => <Link to={TransactionsPath} {...props}/>;
-
 export const transactionsPageLink =
     (accountNumber: string): React.FunctionComponent<{}> =>
         ((props) => <Link to={transactionsPath(accountNumber)} {...props}/>);
@@ -50,7 +46,7 @@ const PrivateRoute: React.FunctionComponent<IPrivateRouteProps> = ({component: C
     );
 };
 
-// Route-to-component table. Should only be used as the root component in src/index.tsx.
+// Component routing table. Should only be used as the root component in src/index.tsx.
 export const ViewsRouter: React.FunctionComponent<{}> = () => {
     return (
         <BrowserRouter>

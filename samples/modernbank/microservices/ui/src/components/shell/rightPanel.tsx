@@ -5,11 +5,10 @@ import Typography from "@material-ui/core/Typography";
 import {AttachMoney} from "@material-ui/icons";
 import React from "react";
 
-const borderTopWidth = 7;
-
 const styles = () => createStyles({
     gridContainer: {
         height: "100%",
+        paddingBottom: "5vh",
         paddingLeft: "2vw",
         paddingRight: "2vw",
         paddingTop: "5vh",
@@ -18,10 +17,12 @@ const styles = () => createStyles({
         color: "rgb(246, 193, 118)",
     },
     paper: {
-        backgroundColor: "black",
-        borderTop: `${borderTopWidth}px solid rgb(233,121,51)`,
+        backgroundColor: "rgba(0,0,0,0.7)",
+        borderTopColor: "rgb(233,121,51)",
+        borderTopStyle: "solid",
+        borderTopWidth: "0.5vh",
+        boxSizing: "border-box",
         height: "100%",
-        opacity: 0.7,
         textAlign: "center",
     },
     subheaderText: {
@@ -43,7 +44,7 @@ export const component: React.FunctionComponent<IProps> = (props: IProps) => {
                 className={props.classes.gridContainer}
             >
                 <Grid item={true}>
-                    <AttachMoney color={"primary"}/>
+                    <AttachMoney color={"primary"} fontSize="large"/>
                 </Grid>
                 <Grid item={true}>
                     <Typography variant={"h4"} className={props.classes.headerText}>Need cash?</Typography>
