@@ -33,12 +33,10 @@ const accountsApi = new AccountsApi({basePath: "http://35.192.59.252/v1"});
 const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     const [accounts, setAccounts] = React.useState<Account[]>([]);
     const authContext = React.useContext(AuthContext);
-    const [doFetch, setDoFetch] = React.useState<boolean>(true);
 
     const fetchAccounts = async () => {
         const resp: Account[] = await accountsApi.listAccounts(authContext.user!.username);
         setAccounts(resp);
-        console.log("jiajesse - accounts");
     };
 
     React.useEffect(() => {
