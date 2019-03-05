@@ -8,8 +8,8 @@ import {AccountCard} from "../../components/accounts/accountCard";
 const styles = () => createStyles({
     contentPaper: {
         backgroundColor: "rgba(255,255,255,0.95)",
-        paddingBottom: "2vh",
-        paddingTop: "2vh",
+        paddingBottom: "1vh",
+        paddingTop: "1vh",
     },
     headerPaper: {
         backgroundColor: "rgb(173,187,202)",

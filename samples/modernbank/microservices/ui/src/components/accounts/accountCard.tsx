@@ -19,10 +19,10 @@ const styles = () => createStyles({
     headerText: {
     },
     root: {
-        paddingBottom: "1vh",
+        paddingBottom: "0.5vh",
         paddingLeft: "2vw",
         paddingRight: "2vw",
-        paddingTop: "1vh",
+        paddingTop: "0.5vh",
     },
     subheaderText: {
     },
