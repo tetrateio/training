@@ -3,10 +3,10 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import React from "react";
 import {RouteComponentProps, withRouter} from "react-router";
-import {User, UsersApi} from "../../api/client";
+import {User} from "../../api/client";
+import {usersApi} from "../../api/client-utils";
 import {AuthContext} from "../../components/auth/authContext";
 import {AccountsPageLink, AccountsPath} from "../../routes";
-import {usersApi} from "../../api/client-utils";
 
 const styles = () => createStyles({
     button: {

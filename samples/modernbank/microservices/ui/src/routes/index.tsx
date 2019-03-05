@@ -5,9 +5,9 @@ import {AuthContext, IAuthContext} from "../components/auth/authContext";
 import {AccountsView} from "../views/accounts";
 import {LoginView} from "../views/login";
 import {NotFoundView} from "../views/notfound";
-import {TransferView} from "../views/transfer";
-import {TransactionsView} from "../views/transactions";
 import {RegisterView} from "../views/register";
+import {TransactionsView} from "../views/transactions";
+import {TransferView} from "../views/transfer";
 
 export const AccountsPath = "/accounts";
 export const LoginPath = "/login";
