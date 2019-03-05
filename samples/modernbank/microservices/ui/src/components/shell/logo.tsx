@@ -1,11 +1,10 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import React from "react";
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     img: {
         filter: "invert(100%)",
-        width: "70px",
+        width: "8vw",
     },
 });
 

@@ -1,28 +1,29 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import {AttachMoney} from "@material-ui/icons";
 import React from "react";
 
-const borderTopWidth = 7;
-
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     gridContainer: {
-        height: "100%", /* Force the grid to be same size as parent Paper component. */
-        paddingLeft: "20px",
-        paddingRight: "20px",
-        paddingTop: "50px",
+        height: "100%",
+        paddingBottom: "5vh",
+        paddingLeft: "2vw",
+        paddingRight: "2vw",
+        paddingTop: "5vh",
     },
     headerText: {
         color: "rgb(246, 193, 118)",
     },
     paper: {
-        backgroundColor: "black",
-        borderTop: `${borderTopWidth}px solid rgb(233,121,51)`,
-        height: "100%", /* Force the Paper component to use up the full page height */
-        opacity: 0.7,
+        backgroundColor: "rgba(0,0,0,0.7)",
+        borderTopColor: "rgb(233,121,51)",
+        borderTopStyle: "solid",
+        borderTopWidth: "0.5vh",
+        boxSizing: "border-box",
+        height: "100%",
+        textAlign: "center",
     },
     subheaderText: {
         color: "white",
@@ -43,7 +44,7 @@ export const component: React.FunctionComponent<IProps> = (props: IProps) => {
                 className={props.classes.gridContainer}
             >
                 <Grid item={true}>
-                    <AttachMoney color={"primary"}/>
+                    <AttachMoney color={"primary"} fontSize="large"/>
                 </Grid>
                 <Grid item={true}>
                     <Typography variant={"h4"} className={props.classes.headerText}>Need cash?</Typography>

@@ -1,5 +1,4 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import FormControl from "@material-ui/core/FormControl";
@@ -8,38 +7,35 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import React, {Dispatch, SetStateAction} from "react";
-import {AccountsPageLink} from "../../routes";
+import {RouteComponentProps, withRouter} from "react-router";
+import {Account, AccountsApi, TransactionsApi} from "../../api/client";
+import {AuthContext} from "../../components/auth/authContext";
+import {AccountsPageLink, AccountsPath} from "../../routes";
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     button: {
-        margin: theme.spacing.unit,
-        width: "120px",
+        margin: "1vh",
+        width: "20vh",
     },
     formControl: {
-        margin: theme.spacing.unit,
-        minWidth: 120,
-    },
-    selectEmpty: {
-        marginTop: 2 * theme.spacing.unit,
+        paddingBottom: "1vh",
+        width: "100%",
     },
     textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
+        paddingBottom: "1vh",
     },
 });
 
-interface IProps extends WithStyles<typeof styles> {
+interface IUrlParams {
+    accountNumber: string;
 }
 
-const fetchedAccounts: number[] = [
-    1001, 1002, 1003,
-];
+interface IProps extends WithStyles<typeof styles>, RouteComponentProps<IUrlParams> {
+}
 
 interface IFormState {
     fromAccount: string;
     toAccount: string;
-    routingNumber: string;
-    date: string;
     amount: string;
 }
 
@@ -48,24 +44,46 @@ function isPositiveInteger(s: string): boolean {
     return !isNaN(n) && Number.isInteger(n) && n > 0;
 }
 
-function disableSubmitButton(s: IFormState): boolean {
-    return !s.fromAccount || !s.toAccount || !s.routingNumber || !s.date || !s.amount;
+// Input validation functions.
+function isValidPositiveIntegerInput(input: string): boolean {
+    if (input === "") {
+        // Don't invalidate empty inputs.
+        return true;
+    }
+    return isPositiveInteger(input);
 }
 
-export const component: React.FunctionComponent<IProps> = (props: IProps) => {
-    const [fromAccount, setFromAccount] = React.useState<string>("");
+function disableSubmitButton(s: IFormState): boolean {
+    return !s.fromAccount || !s.toAccount || !s.amount ||
+        !isValidPositiveIntegerInput(s.fromAccount) ||
+        !isValidPositiveIntegerInput(s.toAccount) ||
+        !isValidPositiveIntegerInput(s.amount);
+}
+
+const accountsApi = new AccountsApi({basePath: "http://35.192.59.252/v1"});
+
+export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     const [toAccount, setToAccount] = React.useState<string>("");
-    const [routingNumber, setRoutingNumber] = React.useState<string>("");
-    const [date, setDate] = React.useState<string>("");
     const [amount, setAmount] = React.useState<string>("");
+    const authContext = React.useContext(AuthContext);
+
+    const fromAccount = props.match.params.accountNumber;
+
+    const [accounts, setAccounts] = React.useState<Account[]>([]);
+    const fetchAccounts = async () => {
+        const resp: Account[] = await accountsApi.listAccounts(authContext.user!.username);
+        setAccounts(resp);
+    };
+
+    React.useEffect(() => {
+        fetchAccounts();
+    }, []);
 
     // Helper method to package all form inputs into a typed object.
     function formState(): IFormState {
         return {
             amount,
-            date,
             fromAccount,
-            routingNumber,
             toAccount,
         };
     }
@@ -77,71 +95,50 @@ export const component: React.FunctionComponent<IProps> = (props: IProps) => {
         };
     }
 
-    const fromAccountInputHandler = intFieldInputHandler(setFromAccount);
     const toAccountInputHandler = intFieldInputHandler(setToAccount);
-    const routingNumberInputHandler = intFieldInputHandler(setRoutingNumber);
-    const dateInputHandler = intFieldInputHandler(setDate);
     const amountInputHandler = intFieldInputHandler(setAmount);
 
-    // Input validation functions.
-    function isValidPositiveIntegerInput(input: string): boolean {
-        if (input === "") {
-            // Don't invalidate for empty inputs.
-            return true;
-        }
-        return isPositiveInteger(input);
-    }
+    const submitTransfer = async () => {
+        const transactionsApi = new TransactionsApi({basePath: "http://35.192.59.252/v1"});
+        const newTransaction = await transactionsApi.createTransaction({
+            amount: Number(amount),
+            receiver: parseInt(toAccount, 10),
+            sender: parseInt(fromAccount, 10),
+        });
+        // TODO: block on await
+        props.history.push(AccountsPath);
+    };
 
     return (
         <form>
+            <TextField
+                value={fromAccount}
+                id="from-account-read-only"
+                label="From account"
+                margin="normal"
+                variant="outlined"
+                fullWidth={true}
+                required={true}
+                className={props.classes.textField}
+                InputProps={{
+                    readOnly: true,
+                }}
+            />
             <FormControl className={props.classes.formControl}>
-                <InputLabel>From account</InputLabel>
+                <InputLabel>To account</InputLabel>
                 <Select
-                    value={fromAccount}
-                    onChange={fromAccountInputHandler}
+                    value={toAccount}
+                    onChange={toAccountInputHandler}
                 >
-                    {fetchedAccounts.map((accountNumber: number) => (
-                        <MenuItem value={accountNumber} key={accountNumber}>
-                            {accountNumber}
-                        </MenuItem>
-                    ))}
+                    {accounts
+                        .filter((account) => account.number !== parseInt(props.match.params.accountNumber, 10))
+                        .map((account: Account) => (
+                            <MenuItem value={account.number} key={account.number}>
+                                {account.number}
+                            </MenuItem>
+                        ))}
                 </Select>
             </FormControl>
-            <TextField
-                value={toAccount}
-                onChange={toAccountInputHandler}
-                error={!isValidPositiveIntegerInput(toAccount)}
-                id="to-account-input"
-                label="To account"
-                margin="normal"
-                variant="outlined"
-                fullWidth={true}
-                required={true}
-                className={props.classes.textField}
-            />
-            <TextField
-                value={routingNumber}
-                onChange={routingNumberInputHandler}
-                error={!isValidPositiveIntegerInput(routingNumber)}
-                id="routing-number-input"
-                label="Routing number"
-                margin="normal"
-                variant="outlined"
-                fullWidth={true}
-                required={true}
-                className={props.classes.textField}
-            />
-            <TextField
-                value={date}
-                onChange={dateInputHandler}
-                error={!isValidPositiveIntegerInput(date)}
-                id="date-input"
-                label="Date"
-                margin="normal"
-                variant="outlined"
-                required={true}
-                className={props.classes.textField}
-            />
             <TextField
                 value={amount}
                 onChange={amountInputHandler}
@@ -150,6 +147,7 @@ export const component: React.FunctionComponent<IProps> = (props: IProps) => {
                 label="Amount"
                 margin="normal"
                 variant="outlined"
+                fullWidth={true}
                 required={true}
                 className={props.classes.textField}
             />
@@ -159,7 +157,7 @@ export const component: React.FunctionComponent<IProps> = (props: IProps) => {
                     variant="contained"
                     color="primary"
                     disabled={disableSubmitButton(formState())}
-                    onClick={() => {console.log("Submit")}}
+                    onClick={() => submitTransfer()}
                     className={props.classes.button}
                 >
                     Submit
@@ -172,15 +170,10 @@ export const component: React.FunctionComponent<IProps> = (props: IProps) => {
                     Cancel
                 </Button>
             </div>
-            <div>
-                <p>fromAccount = {fromAccount}</p>
-                <p>toAccount = {toAccount}</p>
-                <p>routingNumber = {routingNumber}</p>
-                <p>date = {date}</p>
-                <p>amount = {amount}</p>
-            </div>
         </form>
     );
 };
 
-export const Form = withStyles(styles)(component);
+const RoutingComponent = withRouter(Component);
+
+export const Form = withStyles(styles)(RoutingComponent);

@@ -15,6 +15,7 @@ require (
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/go-cmp v0.2.0 // indirect
+	github.com/google/uuid v1.1.1 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/mailru/easyjson v0.0.0-20190221075403-6243d8e04c3f // indirect
 	github.com/mongodb/mongo-go-driver v0.3.0
@@ -23,7 +24,7 @@ require (
 	github.com/tidwall/pretty v0.0.0-20180105212114-65a9db5fad51 // indirect
 	github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c // indirect
 	github.com/xdg/stringprep v1.0.0 // indirect
-	golang.org/x/crypto v0.0.0-20190225124518-7f87c0fbb88b // indirect
-	golang.org/x/net v0.0.0-20190227160552-c95aed5357e7
+	golang.org/x/crypto v0.0.0-20190228161510-8dd112bcdc25 // indirect
+	golang.org/x/net v0.0.0-20190301231341-16b79f2e4e95
 	golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6 // indirect
 )

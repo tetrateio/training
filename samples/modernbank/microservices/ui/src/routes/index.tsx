@@ -7,19 +7,28 @@ import {LoginView} from "../views/login";
 import {NotFoundView} from "../views/notfound";
 import {TransferView} from "../views/transfer";
 import {TransactionsView} from "../views/transactions";
+import {RegisterView} from "../views/register";
 
-// Single location for all paths.
 export const AccountsPath = "/accounts";
 export const LoginPath = "/login";
-export const TransferPath = "/transfer";
-export const TransactionsPath = "/transactions";
+export const RegisterPath = "/register";
 
+// Paths that take a parameter.
+export const transferPath = (accountNumber: string) => ("/accounts/" + accountNumber + "/transfer");
+export const transactionsPath = (accountNumber: string) => `/accounts/${accountNumber}/transactions`;
 
-// Convenient Link components to pass as the ButtonBase#component prop to navigation Buttons, e.g.
+// Convenient redirect Link components to pass as the ButtonBase#component prop to navigation Buttons, e.g.
 //     <Button component={AccountsPageLink}>Button text</Button>
 export const AccountsPageLink: React.FunctionComponent<{}> = (props) => <Link to={AccountsPath} {...props}/>;
-export const TransferPageLink: React.FunctionComponent<{}> = (props) => <Link to={TransferPath} {...props}/>;
-export const TransactionsPageLink: React.FunctionComponent<{}> = (props) => <Link to={TransactionsPath} {...props}/>;
+export const RegisterPageLink: React.FunctionComponent<{}> = (props) => <Link to={RegisterPath} {...props}/>;
+export const transactionsPageLink =
+    (accountNumber: string): React.FunctionComponent<{}> =>
+        ((props) => <Link to={transactionsPath(accountNumber)} {...props}/>);
+
+// Link components that take a parameter.
+export const transferPageLink = (accountNumber: string): React.FunctionComponent<{}> => {
+    return (props) => <Link to={transferPath(accountNumber)} {...props}/>;
+};
 
 interface IPrivateRouteProps extends RouteProps {
     component: React.FunctionComponent<any>;
@@ -37,7 +46,7 @@ const PrivateRoute: React.FunctionComponent<IPrivateRouteProps> = ({component: C
     );
 };
 
-// Route-to-component table. Should only be used as the root component in src/index.tsx.
+// Component routing table. Should only be used as the root component in src/index.tsx.
 export const ViewsRouter: React.FunctionComponent<{}> = () => {
     return (
         <BrowserRouter>
@@ -48,21 +57,19 @@ export const ViewsRouter: React.FunctionComponent<{}> = () => {
                     component={AccountsView}
                 />
                 <PrivateRoute
-                    path={TransferPath}
+                    path={"/accounts/:accountNumber/transfer"}
                     component={TransferView}
                 />
                 <PrivateRoute
-                    path={`${TransferPath}/:accountId`}
-                    component={TransferView}
-                />
-                <PrivateRoute
-                    path={TransactionsPath}
+                    path={"/accounts/:accountNumber/transactions"}
                     component={TransactionsView}
                 />
                 <Route path={LoginPath} exact={true} component={LoginView}/>
-                <Route path={"/"} exact={true} component={LoginView}/>
-                <Route component={NotFoundView}/>
+                <Route path={RegisterPath} exact={true} component={RegisterView}/>
+                <Route path="/404" exact={true} component={NotFoundView}/>
+                <PrivateRoute path="*" component={NotFoundView}/>
+                <Route path="*" exact={true} component={LoginView}/>
             </Switch>
         </BrowserRouter>
     );
-}
+};
