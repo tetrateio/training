@@ -4,6 +4,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 import Grid from "@material-ui/core/Grid";
+import {RegisterPageLink} from "../../routes";
 
 const styles = (theme: Theme) => createStyles({
     gridContainer: {
@@ -54,7 +55,9 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => (
             </Typography>
         </Grid>
         <Grid item={true}>
-            <Button variant={"outlined"} className={props.classes.joinNowButton}>
+            <Button
+                component={RegisterPageLink}
+                variant={"outlined"} className={props.classes.joinNowButton}>
                 Join now
             </Button>
         </Grid>

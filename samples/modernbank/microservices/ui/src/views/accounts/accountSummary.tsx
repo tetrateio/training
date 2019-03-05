@@ -8,7 +8,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import {RightPanel} from "../../components/shell/rightPanel";
+import {Account} from "../../api/client";
 
 const styles = (theme: Theme) => createStyles({
     gridContainer: {
@@ -22,40 +22,10 @@ const styles = (theme: Theme) => createStyles({
 });
 
 interface IProps extends WithStyles<typeof styles> {
+    accounts: Account[];
 }
-
-interface IRow {
-    name: string;
-    value: string;
-}
-
-const rows: IRow[] = [
-    {
-        name: "Investments",
-        value: "$5000",
-    },
-    {
-        name: "Debt",
-        value: "$1000",
-    },
-    {
-        name: "Total value",
-        value: "$4000",
-    },
-];
-
-// TODO: need to be consistent with API.
-interface IAccount {
-    number: number;
-    balance: number;
-    owner: string;
-}
-
-
 
 export const component: React.FunctionComponent<IProps> = (props: IProps) => {
-    // const accounts = React.useState();
-
     return (
         <Paper square={true} className={props.classes.paper}>
             <Grid
@@ -78,12 +48,12 @@ export const component: React.FunctionComponent<IProps> = (props: IProps) => {
             </Grid>
             <Table className={props.classes.table}>
                 <TableBody>
-                    {rows.map((row) => (
-                        <TableRow key={row.name}>
+                    {props.accounts.map((account: Account) => (
+                        <TableRow key={account.number}>
                             <TableCell component="th" scope="row">
-                                {row.name}
+                                {`Account ${account.number}`}
                             </TableCell>
-                            <TableCell align="right">{row.value}</TableCell>
+                            <TableCell align="right">{account.balance}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

@@ -48,7 +48,7 @@ const styles = (theme: Theme) => createStyles({
         width: `${contentWidth}px`,
     },
     gridContainer: {
-        height: "100vh",
+        // height: "100vh",
         width: "100%", /* Force the grid to be same size as parent div. */
     },
     header: {
@@ -95,6 +95,6 @@ const component: React.FunctionComponent<IProps> = (props: IProps) => {
             </div>
         </>
     );
-}
+};
 
 export const Shell = withStyles(styles)(component);

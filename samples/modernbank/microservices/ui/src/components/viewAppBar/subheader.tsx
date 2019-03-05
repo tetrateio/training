@@ -10,6 +10,9 @@ const borderBottomWidth = 3;
 const height = 50;
 
 const styles = (theme: Theme) => createStyles({
+    accountBalanceLabel: {
+        textAlign: "right",
+    },
     gridContainer: {
         height: "100%", /* Force the grid to be same size as parent Paper component. */
     },
@@ -20,7 +23,8 @@ const styles = (theme: Theme) => createStyles({
     paper: {
         borderBottom: `${borderBottomWidth}px solid rgb(196,196,196)`,
         height: `${height}px`,
-        padding: "0px 20px",
+        paddingLeft: 4 * theme.spacing.unit,
+        paddingRight: 4 * theme.spacing.unit,
     },
     spacer: {
         width: 2 * theme.spacing.unit,
@@ -28,6 +32,8 @@ const styles = (theme: Theme) => createStyles({
 });
 
 interface IProps extends WithStyles<typeof styles> {
+    accountBalance: number;
+    accountNumber: number;
 }
 
 export const component: React.FunctionComponent<IProps> = (props: IProps) => {
@@ -39,14 +45,21 @@ export const component: React.FunctionComponent<IProps> = (props: IProps) => {
                 justify={"space-between"}
                 className={props.classes.gridContainer}
             >
-                <Grid item={true}>
-                    <div className={props.classes.leftSide}>
-                        <AccountBalance/>
-                        <span className={props.classes.spacer}/>
-                        <Typography variant={"subtitle2"} inline={true}>Checking account</Typography>
-                    </div>
+                <Grid item={true} xs={1}>
+                    <AccountBalance/>
                 </Grid>
-                <Grid item={true}>
+                <Grid item={true} xs={3}>
+                    <Typography variant={"subtitle2"}>Account</Typography>
+                    <Typography variant={"subtitle2"}>{props.accountNumber}</Typography>
+                </Grid>
+                <Grid item={true} xs={6}/>
+                <Grid item={true} xs={2}>
+                    <Typography
+                        variant={"subtitle2"}
+                        className={props.classes.accountBalanceLabel}
+                    >
+                        {`$${props.accountBalance.toFixed(2)}`}
+                    </Typography>
                     <Typography variant={"subtitle2"}>Available balance</Typography>
                 </Grid>
             </Grid>

@@ -8,7 +8,11 @@ import {AccountCircle} from "@material-ui/icons";
 import React from "react";
 import {Logo} from "./logo";
 import Button from "@material-ui/core/Button";
-import {AccountsPageLink} from "../../routes";
+import {AccountsPageLink, LoginPath} from "../../routes";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import {AuthContext} from "../auth/authContext";
+import {RouteComponentProps, withRouter} from "react-router";
 
 const styles = (theme: Theme) => createStyles({
     companyLogoButton: {
@@ -29,38 +33,75 @@ const styles = (theme: Theme) => createStyles({
     },
 });
 
-interface IProps extends WithStyles<typeof styles> {
+interface IProps extends WithStyles<typeof styles>, RouteComponentProps<{}> {
 }
 
-export const component: React.FunctionComponent<IProps> = (props: IProps) => (
-    <Paper square={true} className={props.classes.paper}>
-        <Grid
-            container={true}
-            alignItems={"center"}
-            justify={"space-between"}
-            className={props.classes.gridContainer}
-        >
-            <Grid item={true}>
-                <div>
-                    <Button component={AccountsPageLink} className={props.classes.companyLogoButton}>
-                        <Typography
-                            variant="h4"
-                            inline={true}
-                            className={props.classes.companyText}
-                        >
-                            BridgeNational
-                        </Typography>
-                        <Logo/>
-                    </Button>
-                </div>
-            </Grid>
-            <Grid item={true}>
+export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
+    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    const authContext = React.useContext(AuthContext);
+
+    const handleLogout = () => {
+        setAnchorEl(null);
+        authContext.isAuthenticated = false;
+        props.history.push(LoginPath);
+    };
+
+    const accountIcon = (authContext.isAuthenticated) ? (
+        <>
+            <Button
+                onClick={(e) => {
+                    setAnchorEl(e.currentTarget);
+                }}
+            >
                 <Avatar>
                     <AccountCircle/>
                 </Avatar>
-            </Grid>
-        </Grid>
-    </Paper>
-);
+            </Button>
+            <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={() => setAnchorEl(null)}
+            >
+                <MenuItem
+                    onClick={() => handleLogout()}
+                >
+                    Logout
+                </MenuItem>
+            </Menu>
+        </>
+    ) : (<></>);
 
-export const Header = withStyles(styles)(component);
+    return (
+        <Paper square={true} className={props.classes.paper}>
+            <Grid
+                container={true}
+                alignItems={"center"}
+                justify={"space-between"}
+                className={props.classes.gridContainer}
+            >
+                <Grid item={true}>
+                    <div>
+                        <Button component={AccountsPageLink} className={props.classes.companyLogoButton}>
+                            <Typography
+                                variant="h4"
+                                inline={true}
+                                className={props.classes.companyText}
+                            >
+                                BridgeNational
+                            </Typography>
+                            <Logo/>
+                        </Button>
+                    </div>
+                </Grid>
+                <Grid item={true}>
+                    {accountIcon}
+                </Grid>
+            </Grid>
+        </Paper>
+    );
+};
+
+const RoutingComponent = withRouter(Component);
+
+export const Header = withStyles(styles)(RoutingComponent);

@@ -4,6 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 import {AccountCard} from "../../components/accounts/accountCard";
+import {Account} from "../../api/client";
 
 const styles = (theme: Theme) => createStyles({
     contentPaper: {
@@ -20,6 +21,7 @@ const styles = (theme: Theme) => createStyles({
 });
 
 interface IProps extends WithStyles<typeof styles> {
+    accounts: Account[];
 }
 
 export const component: React.FunctionComponent<IProps> = (props: IProps) => (
@@ -30,16 +32,14 @@ export const component: React.FunctionComponent<IProps> = (props: IProps) => (
             </Typography>
         </Paper>
         <Paper square={true} className={props.classes.contentPaper}>
-            <AccountCard
-                accountName="Checking account"
-                accountNumber={5412}
-                accountBalance={89123}
-            />
-            <AccountCard
-                accountName="Savings account"
-                accountNumber={5413}
-                accountBalance={34130}
-            />
+            {props.accounts.map((account: Account) => (
+                <AccountCard
+                    accountName="Checking account"
+                    accountNumber={account.number}
+                    accountBalance={account.balance}
+                    key={account.number}
+                />
+            ))}
         </Paper>
     </>
 );

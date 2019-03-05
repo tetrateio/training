@@ -10,7 +10,7 @@ const borderTopWidth = 7;
 
 const styles = (theme: Theme) => createStyles({
     gridContainer: {
-        height: "100%", /* Force the grid to be same size as parent Paper component. */
+        height: "100vh",
         paddingLeft: "20px",
         paddingRight: "20px",
         paddingTop: "50px",

@@ -2,10 +2,10 @@ import {createStyles, WithStyles, withStyles} from "@material-ui/core";
 import {Theme} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import React from "react";
 import Paper from "@material-ui/core/Paper";
-import {Search} from "@material-ui/icons";
-import {AccountsPageLink, TransactionsPageLink, TransferPageLink} from "../../routes";
+import React from "react";
+import {RouteComponentProps, withRouter} from "react-router";
+import {AccountsPageLink, transactionsPageLink, transferPageLink} from "../../routes";
 
 const height = 35;
 
@@ -25,16 +25,20 @@ const styles = (theme: Theme) => createStyles({
     },
 });
 
-interface IProps extends WithStyles<typeof styles> {
+interface IUrlParams {
+    accountNumber: string;
 }
 
-export const component: React.FunctionComponent<IProps> = (props: IProps) => {
+interface IProps extends WithStyles<typeof styles>, RouteComponentProps<IUrlParams> {
+}
+
+export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     return (
         <Paper square={true} className={props.classes.paper}>
             <Grid
                 container={true}
-                alignItems={"center"}
-                justify={"space-between"}
+                alignItems="center"
+                justify="space-around"
                 className={props.classes.gridContainer}
             >
                 <Grid item={true}>
@@ -42,35 +46,38 @@ export const component: React.FunctionComponent<IProps> = (props: IProps) => {
                         Accounts
                     </Button>
                 </Grid>
+                {/*<Grid item={true}>*/}
+                    {/*<Button className={props.classes.button}>*/}
+                        {/*Pay bills*/}
+                    {/*</Button>*/}
+                {/*</Grid>*/}
                 <Grid item={true}>
-                    <Button component={TransferPageLink} className={props.classes.button}>
-                        Transfer funds
-                    </Button>
-                </Grid>
-                <Grid item={true}>
-                    <Button className={props.classes.button}>
-                        Pay bills
-                    </Button>
-                </Grid>
-                <Grid item={true}>
-                    <Button className={props.classes.button}>
+                    <Button
+                        component={transferPageLink(props.match.params.accountNumber)}
+                        className={props.classes.button}
+                    >
                         Send money
                     </Button>
                 </Grid>
+                {/*<Grid item={true}>*/}
+                    {/*<Button className={props.classes.button}>*/}
+                        {/*View statements*/}
+                    {/*</Button>*/}
+                {/*</Grid>*/}
                 <Grid item={true}>
-                    <Button className={props.classes.button}>
-                        View statements
+                    <Button
+                        component={transactionsPageLink(props.match.params.accountNumber)}
+                        className={props.classes.button}
+                    >
+                        Transactions
                     </Button>
-                </Grid>
-                <Grid item={true}>
-                    <Button component={TransactionsPageLink} className={props.classes.button}>
-                        Search transactions
-                    </Button>
-                    <Search className={props.classes.searchIcon}/>
+                    {/*<Search className={props.classes.searchIcon}/>*/}
                 </Grid>
             </Grid>
         </Paper>
     );
 };
 
-export const Navbar = withStyles(styles)(component);
+const RoutingComponent = withRouter(Component);
+
+export const Navbar = withStyles(styles)(RoutingComponent);
