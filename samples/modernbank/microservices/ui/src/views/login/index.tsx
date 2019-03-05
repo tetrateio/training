@@ -1,41 +1,21 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
+import Hidden from "@material-ui/core/Hidden";
 import React from "react";
 import {Shell} from "../../components/shell";
 import {InfoPanel} from "./infoPanel";
 import {LoginForm} from "./loginForm";
-import Hidden from "@material-ui/core/Hidden";
 
 const styles = () => createStyles({
     gridContainer: {
         borderTopColor: "rgb(172,37,45)",
         borderTopStyle: "solid",
         borderTopWidth: "0.5vh",
-        height: "100%", /* Force the grid to be same size as parent Paper component. */
+        height: "100%",
         width: "100%",
     },
     mdUpLoginForm: {
         paddingLeft: "2vw",
-    },
-    paper: {
-        backgroundColor: "white",
-        height: "50%",
-        // opacity: 0.5,
-        paddingLeft: "2vw",
-        paddingRight: "2vw",
-        paddingTop: "3vh",
-        width: "100%",
-    },
-    subheader: {
-        backgroundColor: "rgba(172,37,45, 1)",
-    },
-    subheaderText: {
-        color: "white",
-        marginLeft: "30px",
-    },
-    textField: {
-        // marginLeft: theme.spacing.unit,
-        // marginRight: theme.spacing.unit,
     },
 });
 
