@@ -18,6 +18,7 @@ const styles = () => createStyles({
         boxShadow: "none",
         paddingLeft: "2vw",
         paddingRight: "1vw",
+        paddingTop: "4vh",
     },
     fillerPaper: {
         backgroundColor: "rgba(255,255,255,0.95)",
@@ -27,7 +28,11 @@ const styles = () => createStyles({
     fillerPaperGridItem: {
         height: "100%",
     },
-    gridContainer: {
+    innerGridContainer: {
+        flexWrap: "nowrap",
+        height: "100%",
+    },
+    outerGridContainer: {
         flexWrap: "nowrap",
         height: "100%",
     },
@@ -86,7 +91,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
             alignItems={"stretch"}
             direction={"column"}
             justify={"flex-start"}
-            className={props.classes.gridContainer}
+            className={props.classes.outerGridContainer}
         >
             <Grid item={true}>
                 <div className={props.classes.subheader}>
@@ -106,7 +111,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                     <Grid
                         container={true}
                         justify={"space-between"}
-                        className={props.classes.gridContainer}
+                        className={props.classes.innerGridContainer}
                     >
                         <Grid item={true} xs={6}>
                             <Form/>

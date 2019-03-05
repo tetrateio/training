@@ -1,5 +1,4 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,36 +7,26 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import {Newtransaction, Transaction, TransactionsApi} from "../../api/client";
 import {RouteComponentProps, withRouter} from "react-router";
+import {Newtransaction, TransactionsApi} from "../../api/client";
 
-const styles = (theme: Theme) => createStyles({
-    gridContainer: {
-        height: "100%", /* Force the grid to be same size as parent Paper component. */
-    },
+const styles = () => createStyles({
     paper: {
         backgroundColor: "rgba(255,255,255,0.97)",
-        height: "100vh",
-        paddingLeft: 2 * theme.spacing.unit,
-        paddingRight: 2 * theme.spacing.unit,
     },
-    subheader: {
-        backgroundColor: "rgb(172,37,45)",
+    tableHead: {
+        backgroundColor: "rgb(173,187,202)",
     },
-    subheaderText: {
+    tableHeadCell: {
         color: "white",
-        marginLeft: "30px",
     },
-    table: {
-
-    }
 });
 
-interface IUrlParms {
+interface IUrlParams {
     accountNumber: string;
 }
 
-interface IProps extends WithStyles<typeof styles>, RouteComponentProps<IUrlParms> {
+interface IProps extends WithStyles<typeof styles>, RouteComponentProps<IUrlParams> {
 }
 
 export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
@@ -70,15 +59,14 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
 
     return (
         <Paper square={true} className={props.classes.paper}>
-            <Table className={props.classes.table}>
-                <TableHead>
+            <Table>
+                <TableHead className={props.classes.tableHead}>
                     <TableRow>
-                        {/*<TableCell>Date</TableCell>*/}
-                        <TableCell align="left">From</TableCell>
-                        <TableCell align="left">Deposits</TableCell>
-                        <TableCell align="left">To</TableCell>
-                        <TableCell align="left">Withdrawals</TableCell>
-                        <TableCell align="left">Balance</TableCell>
+                        <TableCell className={props.classes.tableHeadCell}>From</TableCell>
+                        <TableCell className={props.classes.tableHeadCell}>Deposits</TableCell>
+                        <TableCell className={props.classes.tableHeadCell}>To</TableCell>
+                        <TableCell className={props.classes.tableHeadCell}>Withdrawals</TableCell>
+                        <TableCell className={props.classes.tableHeadCell}>Balance</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -92,15 +80,15 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                                 <Typography>{transaction.sender}</Typography>
                             </TableCell>
                             <TableCell align="right">{transaction.amount}</TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                            <TableCell align="right"></TableCell>
+                            <TableCell/>
+                            <TableCell/>
+                            <TableCell/>
                         </TableRow>
                     ))}
                     {sentTransactions.map((transaction) => (
                         <TableRow>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
+                            <TableCell/>
+                            <TableCell/>
                             <TableCell
                                 component="th"
                                 scope="row"
@@ -109,7 +97,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                                 <Typography>{transaction.receiver}</Typography>
                             </TableCell>
                             <TableCell align="right">{transaction.amount}</TableCell>
-                            <TableCell align="right"></TableCell>
+                            <TableCell/>
                         </TableRow>
                     ))}
                 </TableBody>

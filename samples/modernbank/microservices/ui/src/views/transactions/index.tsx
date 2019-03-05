@@ -1,22 +1,32 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
 import {Theme} from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
+import {RouteComponentProps, withRouter} from "react-router";
+import {Account, AccountsApi} from "../../api/client";
+import {AuthContext} from "../../components/auth/authContext";
 import {Shell} from "../../components/shell";
 import {Navbar} from "../../components/viewAppBar/navbar";
 import {Subheader} from "../../components/viewAppBar/subheader";
 import {TransactionsTable} from "./table";
-import {Account, AccountsApi} from "../../api/client";
-import {AuthContext} from "../../components/auth/authContext";
-import {RouteComponentProps, withRouter} from "react-router";
 
 const styles = (theme: Theme) => createStyles({
+    fillerPaper: {
+        backgroundColor: "rgba(255,255,255,0.95)",
+        boxShadow: "none",
+        height: "100%",
+    },
+    fillerPaperGridItem: {
+        height: "100%",
+    },
     gridContainer: {
-        height: "100%", /* Force the grid to be same size as parent Paper component. */
+        flexWrap: "nowrap",
+        height: "100%",
     },
     paper: {
         backgroundColor: "rgba(255,255,255,0.97)",
-        height: "100vh",
         paddingLeft: 2 * theme.spacing.unit,
         paddingRight: 2 * theme.spacing.unit,
     },
@@ -70,16 +80,33 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     }, []);
 
     return (
-        <>
-            <div className={props.classes.subheader}>
-                <Typography variant="h6" className={props.classes.subheaderText}>
-                    Account summary / Checking account
-                </Typography>
-            </div>
-            <Navbar/>
-            <Subheader accountBalance={account.balance} accountNumber={account.number}/>
-            <TransactionsTable/>
-        </>
+        <Grid
+            container={true}
+            alignItems={"stretch"}
+            direction={"column"}
+            justify={"flex-start"}
+            className={props.classes.gridContainer}
+        >
+            <Grid item={true}>
+                <div className={props.classes.subheader}>
+                    <Typography variant="h6" className={props.classes.subheaderText}>
+                        Account summary / Transactions
+                    </Typography>
+                </div>
+            </Grid>
+            <Grid item={true}>
+                <Navbar/>
+            </Grid>
+            <Grid item={true}>
+                <Subheader accountBalance={account.balance} accountNumber={account.number}/>
+            </Grid>
+            <Grid item={true}>
+                <TransactionsTable/>
+            </Grid>
+            <Grid item={true} className={props.classes.fillerPaperGridItem}>
+                <Paper square={true} className={props.classes.fillerPaper}/>
+            </Grid>
+        </Grid>
     );
 };
 

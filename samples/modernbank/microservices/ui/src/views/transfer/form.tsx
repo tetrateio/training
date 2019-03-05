@@ -18,9 +18,12 @@ const styles = () => createStyles({
         width: "20vh",
     },
     formControl: {
+        paddingBottom: "1vh",
         width: "100%",
     },
-    textField: {},
+    textField: {
+        paddingBottom: "1vh",
+    },
 });
 
 interface IUrlParams {
@@ -33,8 +36,6 @@ interface IProps extends WithStyles<typeof styles>, RouteComponentProps<IUrlPara
 interface IFormState {
     fromAccount: string;
     toAccount: string;
-    // routingNumber: string;
-    // date: string;
     amount: string;
 }
 
