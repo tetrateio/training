@@ -1,5 +1,4 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -9,7 +8,7 @@ import {AccountsPageLink, transactionsPageLink, transferPageLink} from "../../ro
 
 const height = 35;
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     button: {
         color: "white",
         textTransform: "none", /* Material button text defaults to upper case; disable it. */

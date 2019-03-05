@@ -3,12 +3,12 @@ import {Theme} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     headerText: {
-        paddingBottom: 2 * theme.spacing.unit,
+        paddingBottom: "3vh",
     },
     root: {
-        paddingTop: 4 * theme.spacing.unit,
+        paddingTop: "4vh",
     },
     subheaderText: {
     },

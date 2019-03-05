@@ -12,7 +12,6 @@ import {AccountsPageLink, transferPageLink} from "../../routes";
 const styles = (theme: Theme) => createStyles({
     card: {},
     centerGridItem: {
-        paddingRight: "30vh",
         textAlign: "center",
     },
     gridContainer: {
@@ -22,9 +21,11 @@ const styles = (theme: Theme) => createStyles({
     },
     root: {
         paddingBottom: "1vh",
-        paddingLeft: "2vh",
-        paddingRight: "2vh",
+        paddingLeft: "2vw",
+        paddingRight: "2vw",
         paddingTop: "1vh",
+    },
+    subheaderText: {
     },
 });
 
@@ -50,19 +51,26 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                             justify={"space-between"}
                             className={props.classes.gridContainer}
                         >
-                            <Grid item={true}>
+                            <Grid item={true} xs={1}>
                                 <AccountBalanceWallet/>
                             </Grid>
-                            <Grid item={true} className={props.classes.centerGridItem}>
+                            <Grid item={true} xs={3} className={props.classes.centerGridItem}>
                                 <Typography
                                     variant="subtitle1"
                                     className={props.classes.headerText}
                                 >
                                     {props.accountName}
                                 </Typography>
-                                <Typography variant={"body1"}>{props.accountNumber}</Typography>
+                                <Typography
+                                    variant={"body1"}
+                                    className={props.classes.subheaderText}
+                                >
+                                    {props.accountNumber}
+                                </Typography>
                             </Grid>
-                            <Grid item={true}>
+                            <Grid item={true} xs={4}>
+                            </Grid>
+                            <Grid item={true} xs={2}>
                                 <div>
                                     {"$" + props.accountBalance.toFixed(2)}
                                 </div>

@@ -1,5 +1,4 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
@@ -8,7 +7,7 @@ import React from "react";
 
 const borderTopWidth = 7;
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     gridContainer: {
         height: "100%",
         paddingLeft: "2vw",
@@ -23,6 +22,7 @@ const styles = (theme: Theme) => createStyles({
         borderTop: `${borderTopWidth}px solid rgb(233,121,51)`,
         height: "100%",
         opacity: 0.7,
+        textAlign: "center",
     },
     subheaderText: {
         color: "white",

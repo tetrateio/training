@@ -13,7 +13,7 @@ const styles = () => createStyles({
     },
     headerText: {
         color: "white",
-        fontSize: "3.5vw",
+        fontSize: "3.25vw",
         paddingBottom: "2vw",
         paddingTop: "3vw",
         textAlign: "right",
@@ -27,7 +27,7 @@ const styles = () => createStyles({
     },
     subheaderText: {
         color: "white",
-        fontSize: "1.5vw",
+        fontSize: "1.25vw",
         marginBottom: "3vw",
         textAlign: "right",
     },

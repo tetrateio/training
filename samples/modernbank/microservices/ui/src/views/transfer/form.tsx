@@ -1,5 +1,4 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
@@ -13,22 +12,15 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import {AuthContext} from "../../components/auth/authContext";
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     button: {
-        margin: theme.spacing.unit,
-        width: "120px",
+        margin: "1vh",
+        width: "20vh",
     },
     formControl: {
-        margin: theme.spacing.unit,
-        minWidth: 120,
+        width: "100%",
     },
-    selectEmpty: {
-        marginTop: 2 * theme.spacing.unit,
-    },
-    textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-    },
+    textField: {},
 });
 
 interface IUrlParams {
@@ -54,7 +46,7 @@ function isPositiveInteger(s: string): boolean {
 // Input validation functions.
 function isValidPositiveIntegerInput(input: string): boolean {
     if (input === "") {
-        // Don't invalidate for empty inputs.
+        // Don't invalidate empty inputs.
         return true;
     }
     return isPositiveInteger(input);
@@ -112,25 +104,12 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
             receiver: parseInt(toAccount, 10),
             sender: parseInt(fromAccount, 10),
         });
-        console.log(newTransaction);
+        // TODO: block on await
         props.history.push(AccountsPath);
     };
 
     return (
         <form>
-            {/*<FormControl className={props.classes.formControl}>*/}
-            {/*<InputLabel>From account</InputLabel>*/}
-            {/*<Select*/}
-            {/*value={fromAccount}*/}
-            {/*onChange={fromAccountInputHandler}*/}
-            {/*>*/}
-            {/*{fetchedAccounts.map((accountNumber: number) => (*/}
-            {/*<MenuItem value={accountNumber} key={accountNumber}>*/}
-            {/*{accountNumber}*/}
-            {/*</MenuItem>*/}
-            {/*))}*/}
-            {/*</Select>*/}
-            {/*</FormControl>*/}
             <TextField
                 value={fromAccount}
                 id="from-account-read-only"
@@ -159,46 +138,6 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                         ))}
                 </Select>
             </FormControl>
-            {/*<TextField*/}
-            {/*value={toAccount}*/}
-            {/*onChange={toAccountInputHandler}*/}
-            {/*error={!isValidPositiveIntegerInput(toAccount)}*/}
-            {/*id="to-account-input"*/}
-            {/*label="To account"*/}
-            {/*margin="normal"*/}
-            {/*variant="outlined"*/}
-            {/*fullWidth={true}*/}
-            {/*required={true}*/}
-            {/*className={props.classes.textField}*/}
-            {/*/>*/}
-            {/*<TextField*/}
-            {/*value={routingNumber}*/}
-            {/*onChange={routingNumberInputHandler}*/}
-            {/*error={!isValidPositiveIntegerInput(routingNumber)}*/}
-            {/*id="routing-number-input"*/}
-            {/*label="Routing number"*/}
-            {/*margin="normal"*/}
-            {/*variant="outlined"*/}
-            {/*fullWidth={true}*/}
-            {/*required={true}*/}
-            {/*className={props.classes.textField}*/}
-            {/*/>*/}
-            {/*<TextField*/}
-            {/*value={date}*/}
-            {/*onChange={dateInputHandler}*/}
-            {/*error={!isValidPositiveIntegerInput(date)}*/}
-            {/*id="date-input"*/}
-            {/*label="Date"*/}
-            {/*type="date"*/}
-            {/*defaultValue="2019-01-31"*/}
-            {/*margin="normal"*/}
-            {/*variant="outlined"*/}
-            {/*required={true}*/}
-            {/*className={props.classes.textField}*/}
-            {/*InputLabelProps={{*/}
-            {/*shrink: true,*/}
-            {/*}}*/}
-            {/*/>*/}
             <TextField
                 value={amount}
                 onChange={amountInputHandler}
@@ -207,6 +146,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                 label="Amount"
                 margin="normal"
                 variant="outlined"
+                fullWidth={true}
                 required={true}
                 className={props.classes.textField}
             />
@@ -228,13 +168,6 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                 >
                     Cancel
                 </Button>
-            </div>
-            <div>
-                <p>fromAccount = {fromAccount}</p>
-                <p>toAccount = {toAccount}</p>
-                {/*<p>routingNumber = {routingNumber}</p>*/}
-                {/*<p>date = {date}</p>*/}
-                <p>amount = {amount}</p>
             </div>
         </form>
     );
