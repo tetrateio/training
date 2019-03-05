@@ -1,33 +1,28 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
-import React, {Dispatch, SetStateAction} from "react";
-import {AccountsPageLink} from "../../routes";
+import React from "react";
+import {RouteComponentProps, withRouter} from "react-router";
+import {User, UsersApi} from "../../api/client";
+import {AuthContext} from "../../components/auth/authContext";
+import {AccountsPageLink, AccountsPath} from "../../routes";
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     button: {
-        margin: theme.spacing.unit,
-        width: "120px",
+        margin: "1vw",
+        width: "15vw",
     },
-    formControl: {
-        margin: theme.spacing.unit,
-        minWidth: 120,
-    },
-    selectEmpty: {
-        marginTop: 2 * theme.spacing.unit,
+    buttons: {
+        paddingTop: "2vh",
     },
     textField: {
     },
 });
 
-interface IProps extends WithStyles<typeof styles> {
-}
+const usersApi = new UsersApi({basePath: "http://35.192.59.252"});
 
-const fetchedAccounts: number[] = [
-    1001, 1002, 1003,
-];
+interface IProps extends WithStyles<typeof styles>, RouteComponentProps<{}> {
+}
 
 interface IFormState {
     username: string;
@@ -49,21 +44,41 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     const [email, setEmail] = React.useState<string>("");
     const [password, setPassword] = React.useState<string>("");
     const [passwordConfirmation, setPasswordConfirmation] = React.useState<string>("");
+    const authContext = React.useContext(AuthContext);
+
+    const submitNewUserForm = async () => {
+        const newUser: User = await usersApi.createUser({
+            email,
+            firstName,
+            lastName,
+            password,
+            username,
+        });
+        authContext.isAuthenticated = true;
+        authContext.user = newUser;
+        props.history.push(AccountsPath);
+    };
 
     // Helper method to package all form inputs into a typed object.
     function formState(): IFormState {
         return {
-            username,
+            email,
             firstName,
             lastName,
-            email,
             password,
             passwordConfirmation,
+            username,
         };
     }
 
+    const handleKeyPress = async (e: React.KeyboardEvent) => {
+        if (e.key === "Enter") {
+            await submitNewUserForm();
+        }
+    };
+
     return (
-        <form>
+        <form onKeyPress={handleKeyPress}>
             <TextField
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -116,6 +131,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                 label="Password"
                 margin="normal"
                 variant="outlined"
+                type="password"
                 fullWidth={true}
                 required={true}
                 className={props.classes.textField}
@@ -128,17 +144,17 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                 label="Confirm Password"
                 margin="normal"
                 variant="outlined"
+                type="password"
                 fullWidth={true}
                 required={true}
                 className={props.classes.textField}
             />
-            <Divider/>
-            <div>
+            <div className={props.classes.buttons}>
                 <Button
                     variant="contained"
                     color="primary"
                     disabled={disableSubmitButton(formState())}
-                    onClick={() => {console.log("Submit")}}
+                    onClick={() => submitNewUserForm()}
                     className={props.classes.button}
                 >
                     Submit
@@ -151,15 +167,10 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
                     Cancel
                 </Button>
             </div>
-            <div>
-                <p>fromAccount = {username}</p>
-                <p>toAccount = {firstName}</p>
-                <p>routingNumber = {lastName}</p>
-                <p>date = {email}</p>
-                <p>amount = {password}</p>
-            </div>
         </form>
     );
 };
 
-export const RegisterForm = withStyles(styles)(Component);
+const RoutingAwareComponent = withRouter(Component);
+
+export const RegisterForm = withStyles(styles)(RoutingAwareComponent);

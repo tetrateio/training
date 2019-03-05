@@ -49,6 +49,6 @@ const StyledComponent = withStyles(styles)(Component);
 
 export const LoginView: React.FunctionComponent<IProps> = (props: IProps) => (
     <Shell>
-        <StyledComponent/>
+        <StyledComponent {...props}/>
     </Shell>
 );

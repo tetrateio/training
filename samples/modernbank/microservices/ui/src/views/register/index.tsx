@@ -6,36 +6,12 @@ import {Shell} from "../../components/shell";
 import {RegisterForm} from "./registerForm";
 
 const styles = (theme: Theme) => createStyles({
-    gridContainer: {
-        borderTopColor: "rgb(172,37,45)",
-        borderTopStyle: "solid",
-        borderTopWidth: "0.5vh",
-        height: "100%", /* Force the grid to be same size as parent Paper component. */
-        paddingLeft: "50px",
-        width: "100%",
-    },
     paper: {
-        backgroundColor: "white",
-        // opacity: 0.5,
-        // width: "100%",
-        paddingLeft: 3 * theme.spacing.unit,
-        paddingRight: 3 * theme.spacing.unit,
-        paddingTop: 5 * theme.spacing.unit,
-    },
-    signOnButton: {
-        color: "rgb(233,121,51)",
-        marginTop: 3 * theme.spacing.unit,
-    },
-    subheader: {
-        backgroundColor: "rgba(172,37,45, 1)",
-    },
-    subheaderText: {
-        color: "white",
-        marginLeft: "30px",
-    },
-    textField: {
-        // marginLeft: theme.spacing.unit,
-        // marginRight: theme.spacing.unit,
+        backgroundColor: "rgba(255,255,255,0.97)",
+        paddingBottom: "8vh",
+        paddingLeft: "20vw",
+        paddingRight: "20vw",
+        paddingTop: "5vh",
     },
 });
 
@@ -52,6 +28,6 @@ const StyledComponent = withStyles(styles)(Component);
 
 export const RegisterView: React.FunctionComponent<IProps> = (props: IProps) => (
     <Shell>
-        <StyledComponent/>
+        <StyledComponent {...props}/>
     </Shell>
 );

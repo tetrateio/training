@@ -109,6 +109,6 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     );
 };
 
-const RoutingComponent = withRouter(Component);
+const RoutingAwareComponent = withRouter(Component);
 
-export const LoginForm = withStyles(styles)(RoutingComponent);
+export const LoginForm = withStyles(styles)(RoutingAwareComponent);

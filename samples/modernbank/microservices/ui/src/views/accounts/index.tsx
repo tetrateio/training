@@ -116,6 +116,6 @@ const StyledComponent = withStyles(styles)(Component);
 
 export const AccountsView: React.FunctionComponent<IProps> = (props: IProps) => (
     <Shell showRightPanel={true}>
-        <StyledComponent/>
+        <StyledComponent {...props}/>
     </Shell>
 );
