@@ -22,9 +22,6 @@ const styles = () => createStyles({
         backgroundColor: "rgb(172,235,252)",
         fontSize: "1.5vw",
     },
-    root: {
-        display: "flex",
-    },
     subheaderText: {
         color: "white",
         fontSize: "1.25vw",

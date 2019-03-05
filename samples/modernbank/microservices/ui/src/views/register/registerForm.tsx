@@ -6,6 +6,7 @@ import {RouteComponentProps, withRouter} from "react-router";
 import {User, UsersApi} from "../../api/client";
 import {AuthContext} from "../../components/auth/authContext";
 import {AccountsPageLink, AccountsPath} from "../../routes";
+import {usersApi} from "../../api/client-utils";
 
 const styles = () => createStyles({
     button: {
@@ -15,11 +16,8 @@ const styles = () => createStyles({
     buttons: {
         paddingTop: "2vh",
     },
-    textField: {
-    },
+    textField: {},
 });
-
-const usersApi = new UsersApi({basePath: "http://35.192.59.252"});
 
 interface IProps extends WithStyles<typeof styles>, RouteComponentProps<{}> {
 }
@@ -33,9 +31,9 @@ interface IFormState {
     passwordConfirmation: string;
 }
 
-function disableSubmitButton(s: IFormState): boolean {
+const disableSubmitButton = (s: IFormState): boolean => {
     return !s.username || !s.firstName || !s.lastName || !s.email || !s.password || !s.passwordConfirmation;
-}
+};
 
 export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     const [username, setUsername] = React.useState<string>("");
@@ -44,6 +42,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     const [email, setEmail] = React.useState<string>("");
     const [password, setPassword] = React.useState<string>("");
     const [passwordConfirmation, setPasswordConfirmation] = React.useState<string>("");
+
     const authContext = React.useContext(AuthContext);
 
     const submitNewUserForm = async () => {
@@ -60,16 +59,14 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     };
 
     // Helper method to package all form inputs into a typed object.
-    function formState(): IFormState {
-        return {
-            email,
-            firstName,
-            lastName,
-            password,
-            passwordConfirmation,
-            username,
-        };
-    }
+    const formState = (): IFormState => ({
+        email,
+        firstName,
+        lastName,
+        password,
+        passwordConfirmation,
+        username,
+    });
 
     const handleKeyPress = async (e: React.KeyboardEvent) => {
         if (e.key === "Enter") {

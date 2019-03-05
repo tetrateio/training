@@ -3,7 +3,7 @@ import {User, UsersApi} from "../client";
 // TODO(jiajesse): Figure out what to set this to.
 const basePath = "http://35.192.59.252/v1";
 
-const usersApi = new UsersApi({basePath});
+export const usersApi = new UsersApi({basePath});
 
 export const authenticationCheck = async (username: string, password: string): Promise<User> => {
     const options = {
@@ -12,4 +12,5 @@ export const authenticationCheck = async (username: string, password: string): P
     const user: User = await usersApi.getUserByUserName(username, options);
     return (username === user.username && password === user.password) ? user : null;
 };
+
 

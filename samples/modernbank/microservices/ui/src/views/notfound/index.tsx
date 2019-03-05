@@ -1,5 +1,4 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
@@ -7,7 +6,7 @@ import {MoodBad} from "@material-ui/icons";
 import React from "react";
 import {Shell} from "../../components/shell";
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     gridContainer: {
         height: "100%",
     },
