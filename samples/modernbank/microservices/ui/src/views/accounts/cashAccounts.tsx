@@ -1,20 +1,19 @@
 import {createStyles, WithStyles, withStyles} from "@material-ui/core";
-import {Theme} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-import {AccountCard} from "../../components/accounts/accountCard";
 import {Account} from "../../api/client";
+import {AccountCard} from "../../components/accounts/accountCard";
 
-const styles = (theme: Theme) => createStyles({
+const styles = () => createStyles({
     contentPaper: {
         backgroundColor: "rgba(255,255,255,0.95)",
-        paddingBottom: "10px",
-        paddingTop: "10px",
+        paddingBottom: "2vh",
+        paddingTop: "2vh",
     },
     headerPaper: {
         backgroundColor: "rgb(173,187,202)",
-        paddingLeft: "40px",
+        paddingLeft: "5vh",
     },
     headerText: {
         color: "white",

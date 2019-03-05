@@ -21,7 +21,6 @@ const styles = () => createStyles({
         paddingRight: "2vh",
         paddingTop: "1vh",
     },
-    table: {},
 });
 
 interface IProps extends WithStyles<typeof styles> {
@@ -63,7 +62,7 @@ export const component: React.FunctionComponent<IProps> = (props: IProps) => {
                     </Typography>
                 </Grid>
             </Grid>
-            <Table className={props.classes.table}>
+            <Table>
                 <TableBody>
                     <TableRow key={"credit"}>
                         <TableCell component="th" scope="row">
