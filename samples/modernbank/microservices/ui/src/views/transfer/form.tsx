@@ -60,7 +60,7 @@ function disableSubmitButton(s: IFormState): boolean {
         !isValidPositiveIntegerInput(s.amount);
 }
 
-const accountsApi = new AccountsApi({basePath: "http://35.192.59.252/v1"});
+const accountsApi = new AccountsApi({basePath: "http://35.197.239.230/v1"});
 
 export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     const [toAccount, setToAccount] = React.useState<string>("");
@@ -99,7 +99,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     const amountInputHandler = intFieldInputHandler(setAmount);
 
     const submitTransfer = async () => {
-        const transactionsApi = new TransactionsApi({basePath: "http://35.192.59.252/v1"});
+        const transactionsApi = new TransactionsApi({basePath: "http://35.197.239.230/v1"});
         const newTransaction = await transactionsApi.createTransaction({
             amount: Number(amount),
             receiver: parseInt(toAccount, 10),

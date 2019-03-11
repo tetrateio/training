@@ -3,6 +3,7 @@ microservice:
     port: 8080
     replicaCount: 1
     version: v1
+
 image:
     repository: gcr.io/tetratelabs/modernbank/user
     tag: v1.0.0

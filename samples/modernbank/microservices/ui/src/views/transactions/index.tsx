@@ -37,7 +37,7 @@ interface IUrlParams {
     accountNumber: string;
 }
 
-const accountsApi = new AccountsApi({basePath: "http://35.192.59.252/v1"});
+const accountsApi = new AccountsApi({basePath: "http://35.197.239.230/v1"});
 
 interface IProps extends WithStyles<typeof styles>, RouteComponentProps<IUrlParams> {
 }

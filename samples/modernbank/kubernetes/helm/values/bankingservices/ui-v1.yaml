@@ -1,11 +1,12 @@
 microservice:
-    name: transaction
-    port: 8080
+    name: ui
+    port: 80
     replicaCount: 1
     version: v1
+    args: ["-g", "daemon off;"]
 
 image:
-    repository: gcr.io/tetratelabs/modernbank/transaction
+    repository: gcr.io/tetratelabs/modernbank/ui
     tag: v1.0.0
     pullPolicy: Always
 

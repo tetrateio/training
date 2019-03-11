@@ -1,7 +1,7 @@
 import {AccountsApi, User, UsersApi} from "../client";
 
 // TODO(jiajesse): Figure out what to set this to.
-const basePath = "http://35.192.59.252/v1";
+const basePath = "http://35.197.239.230/v1";
 
 export const usersApi = new UsersApi({basePath});
 export const accountsApi = new AccountsApi({basePath});

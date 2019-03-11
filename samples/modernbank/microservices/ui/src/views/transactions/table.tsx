@@ -37,7 +37,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
 
     const [doFetch, setDoFetch] = React.useState<boolean>(true);
 
-    const transactionsApi = new TransactionsApi({basePath: "http://35.192.59.252/v1"});
+    const transactionsApi = new TransactionsApi({basePath: "http://35.197.239.230/v1"});
 
     const fetchTransactionsReceived = async () => {
         const received: any = await transactionsApi.listTransactionsReceived(accountNumber);

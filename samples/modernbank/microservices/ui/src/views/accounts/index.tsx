@@ -41,7 +41,7 @@ const styles = () => createStyles({
 interface IProps extends WithStyles<typeof styles> {
 }
 
-const accountsApi = new AccountsApi({basePath: "http://35.192.59.252/v1"});
+const accountsApi = new AccountsApi({basePath: "http://35.197.239.230/v1"});
 
 const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     const [accounts, setAccounts] = React.useState<Account[]>([]);
