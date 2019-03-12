@@ -1,0 +1,14 @@
+microservice:
+    name: ui
+    port: 80
+    replicaCount: 1
+    version: v1
+    args: ["-g", "daemon off;"]
+
+image:
+    repository: gcr.io/tetratelabs/modernbank/ui
+    tag: v1.0.0
+    pullPolicy: Always
+
+mongodb:
+    enabled: false
