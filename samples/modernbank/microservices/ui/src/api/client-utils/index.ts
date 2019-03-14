@@ -1,17 +1,16 @@
-import {AccountsApi, User, UsersApi} from "../client";
+import { AccountsApi, User, UsersApi } from '../client';
 
-// TODO(jiajesse): Figure out what to set this to.
-const basePath = "http://35.197.239.230/v1";
+// TODO(dio): probably we can just declare this globally.
+export const usersApi = new UsersApi();
+export const accountsApi = new AccountsApi();
 
-export const usersApi = new UsersApi({basePath});
-export const accountsApi = new AccountsApi({basePath});
-
-export const authenticationCheck = async (username: string, password: string): Promise<User> => {
-    const options = {
-        method: "GET",
-    };
-    const user: User = await usersApi.getUserByUserName(username, options);
-    return (username === user.username && password === user.password) ? user : null;
+export const authenticationCheck = async (
+  username: string,
+  password: string
+): Promise<User> => {
+  const options = {
+    method: 'GET'
+  };
+  const user: User = await usersApi.getUserByUserName(username, options);
+  return username === user.username && password === user.password ? user : null;
 };
-
-

@@ -1,6 +1,5 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import {ViewsRouter} from "./routes";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { ViewsRouter } from './routes';
 
-ReactDOM.render(
-    <ViewsRouter/>, document.querySelector("#root"));
+ReactDOM.render(<ViewsRouter />, document.querySelector('#root'));

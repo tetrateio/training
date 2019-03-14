@@ -1,0 +1,19 @@
+# Copyright (c) Tetrate, Inc 2019 All Rights Reserved.
+
+server {
+  listen 80;
+
+  root /usr/share/nginx/html;
+  index index.html;
+
+  # TODO(dio): use regex to match /v*.
+  location /v1/ {
+      # This needs to be parameterized. e.g. the API_HOST is 35.197.239.230 and the API_PORT is 80.
+      proxy_pass http://${API_HOST}:${API_PORT}/v1/;
+      proxy_http_version 1.1;
+  }
+
+  location / {
+    try_files $uri $uri/ /index.html?/$request_uri;
+  }
+}

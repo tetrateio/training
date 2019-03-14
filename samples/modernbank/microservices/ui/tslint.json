@@ -1,13 +1,10 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended",
-        "tslint-react"
-    ],
-    "jsRules": {},
-    "rules": {
-        "jsx-no-lambda": false,
-        "jsx-no-multiline-js": false
-    },
-    "rulesDirectory": []
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended", "tslint-react"],
+  "jsRules": {},
+  "rules": {
+    "jsx-no-lambda": false,
+    "jsx-no-multiline-js": false
+  },
+  "rulesDirectory": []
 }
