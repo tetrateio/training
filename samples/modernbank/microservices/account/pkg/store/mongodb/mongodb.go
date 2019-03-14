@@ -66,9 +66,6 @@ func (m MongoDB) List(owner string) ([]*model.Account, error) {
 		}
 		accounts = append(accounts, &account)
 	}
-	if len(accounts) == 0 {
-		return accounts, &store.NotFound{}
-	}
 	return accounts, nil
 }
 
@@ -89,7 +86,7 @@ func (m MongoDB) Create(owner string) (*model.Account, error) {
 		return nil, fmt.Errorf("error finding a vacant account number: %v", err)
 	}
 	newAccount := &model.Account{
-		Balance: swag.Float64(0),
+		Balance: swag.Float64(100),
 		Owner:   swag.String(owner),
 		Number:  swag.Int64(newAccountNumber),
 	}

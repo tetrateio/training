@@ -52,26 +52,32 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 	})
 	api.AccountsDeleteAccountHandler = accounts.DeleteAccountHandlerFunc(func(params accounts.DeleteAccountParams) middleware.Responder {
 		if err := accountStore.Delete(params.Owner, params.Number); err != nil {
+			api.Logger("Error deleting account %v for %q: %v", params.Number, params.Owner, err)
 			if _, ok := err.(*store.NotFound); ok {
 				return accounts.NewDeleteAccountNotFound()
 			}
 			return accounts.NewDeleteAccountInternalServerError()
 		}
+		api.Logger("Successfully deleted account %v for %q", params.Number, params.Owner)
 		return accounts.NewDeleteAccountOK()
 	})
 	api.AccountsGetAccountByNumberHandler = accounts.GetAccountByNumberHandlerFunc(func(params accounts.GetAccountByNumberParams) middleware.Responder {
 		res, err := accountStore.Get(params.Owner, params.Number)
 		if err != nil {
 			if _, ok := err.(*store.NotFound); ok {
+				api.Logger("Account %v for %q not found: %v", params.Number, params.Owner, err)
 				return accounts.NewGetAccountByNumberNotFound()
 			}
+			api.Logger("Error retrieving account %v for %q: %v", params.Number, params.Owner, err)
 			return accounts.NewGetAccountByNumberInternalServerError()
 		}
+		api.Logger("Successfully retrieved account %v for %q", params.Number, params.Owner)
 		return accounts.NewGetAccountByNumberOK().WithPayload(res)
 	})
 	api.AccountsListAccountsHandler = accounts.ListAccountsHandlerFunc(func(params accounts.ListAccountsParams) middleware.Responder {
 		res, err := accountStore.List(params.Owner)
 		if err != nil {
+			api.Logger("Error listing accounts for %q: %v", params.Owner, err)
 			if _, ok := err.(*store.NotFound); ok {
 				return accounts.NewListAccountsNotFound()
 			}
@@ -84,6 +90,7 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 
 			}
 		}
+		api.Logger("Successfully listed accounts for %q", params.Owner)
 		return accounts.NewListAccountsOK().WithPayload(res)
 	})
 	api.AccountsChangeBalanceHandler = accounts.ChangeBalanceHandlerFunc(func(params accounts.ChangeBalanceParams) middleware.Responder {
