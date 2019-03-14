@@ -3,8 +3,8 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { User } from '../../api/client';
-import { usersApi } from '../../api/client-utils';
+import { User, Account } from '../../api/client';
+import { usersApi, accountsApi } from '../../api/client-utils';
 import { AuthContext } from '../../components/auth/authContext';
 import { AccountsPageLink, AccountsPath } from '../../routes';
 
@@ -55,16 +55,24 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const authContext = React.useContext(AuthContext);
 
   const submitNewUserForm = async () => {
-    const newUser: User = await usersApi.createUser({
-      email,
-      firstName,
-      lastName,
-      password,
-      username
-    });
-    authContext.isAuthenticated = true;
-    authContext.user = newUser;
-    props.history.push(AccountsPath);
+    try {
+      const newUser: User = await usersApi.createUser({
+        email,
+        firstName,
+        lastName,
+        password,
+        username
+      });
+      const newAccount: Account = await accountsApi.createAccount(username);
+      // TODO(dio): show confirmation that we have created the account.
+
+      authContext.isAuthenticated = true;
+      authContext.user = newUser;
+      props.history.push(AccountsPath);
+    } catch (err) {
+      // TODO(dio): show the error.
+      console.log(err);
+    }
   };
 
   // Helper method to package all form inputs into a typed object.
