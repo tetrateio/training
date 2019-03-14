@@ -101,7 +101,7 @@ func (m *InMemory) Create(owner string) (*model.Account, error) {
 	}
 	newAccountNumber := m.unAssignedAccountNumber()
 	newAccount := &model.Account{
-		Balance: swag.Float64(0),
+		Balance: swag.Float64(100),
 		Owner:   swag.String(owner),
 		Number:  swag.Int64(newAccountNumber),
 	}
