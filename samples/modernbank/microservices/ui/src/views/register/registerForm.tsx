@@ -64,6 +64,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
         username
       });
       const newAccount: Account = await accountsApi.createAccount(username);
+      console.log(newAccount);
       // TODO(dio): show confirmation that we have created the account.
 
       authContext.isAuthenticated = true;

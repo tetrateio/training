@@ -2,12 +2,12 @@
 
 CONTAINER_REGISTRY ?= gcr.io/tetratelabs/modernbank
 NAME ?= ui
-TAG := v1.0.0
+TAG ?= v1.0.0
 
 # The following are for docker run.
 API_HOST ?= training-stag.tetr8labs.net
 API_PORT ?= 80
-HOST_PORT ?=8000
+HOST_PORT ?= 8000
 
 docker-build: build
 	docker build -t $(CONTAINER_REGISTRY)/$(NAME):$(TAG) -f Dockerfile .
