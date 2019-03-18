@@ -4,6 +4,8 @@ put:
   summary: "Change the balance of an account"
   description: "Change the balance of an account"
   operationId: "changeBalance"
+  consumes:
+  - "application/json"
   produces:
   - "application/json"
   parameters:

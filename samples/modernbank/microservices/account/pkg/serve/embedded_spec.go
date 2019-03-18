@@ -33,6 +33,9 @@ func init() {
     "/accounts/{number}/balance/{delta}": {
       "put": {
         "description": "Change the balance of an account",
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "application/json"
         ],
@@ -324,6 +327,9 @@ func init() {
     "/accounts/{number}/balance/{delta}": {
       "put": {
         "description": "Change the balance of an account",
+        "consumes": [
+          "application/json"
+        ],
         "produces": [
           "application/json"
         ],

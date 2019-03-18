@@ -40,7 +40,7 @@ func (a *Client) ChangeBalance(params *ChangeBalanceParams) (*ChangeBalanceOK, e
 		Method:             "PUT",
 		PathPattern:        "/accounts/{number}/balance/{delta}",
 		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{""},
+		ConsumesMediaTypes: []string{"application/json"},
 		Schemes:            []string{"http"},
 		Params:             params,
 		Reader:             &ChangeBalanceReader{formats: a.formats},
