@@ -1,0 +1,9 @@
+post:
+  tags:
+  - "health"
+  summary: "returns 200 to prove the service is alive"
+  description: "returns 200"
+  operationId: "healthCheck"
+  responses:
+    200:
+      description: "OK"

@@ -16,7 +16,9 @@ post:
     201:
       description: "Created"
       schema:
-        $ref: "./definitions/account.yaml"
+        allOf:
+          - $ref: "./definitions/account.yaml"
+          - $ref: "./definitions/version.yaml"
     500:
       description: "Internal server error"
 get:
@@ -37,9 +39,11 @@ get:
     200:
       description: "Success!"
       schema:
-        type: array
-        items:
-          $ref: "./definitions/account.yaml"
+        allOf: 
+          - type: array
+            items:
+              $ref: "./definitions/account.yaml"
+          - $ref: "./definitions/version.yaml"
     404:
       description: "Owner not found"
     500:

@@ -9,6 +9,8 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime"
+
+	model "github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
 )
 
 // DeleteAccountOKCode is the HTTP code returned for type DeleteAccountOK
@@ -19,6 +21,11 @@ const DeleteAccountOKCode int = 200
 swagger:response deleteAccountOK
 */
 type DeleteAccountOK struct {
+
+	/*
+	  In: Body
+	*/
+	Payload model.Version `json:"body,omitempty"`
 }
 
 // NewDeleteAccountOK creates DeleteAccountOK with default headers values
@@ -27,12 +34,26 @@ func NewDeleteAccountOK() *DeleteAccountOK {
 	return &DeleteAccountOK{}
 }
 
+// WithPayload adds the payload to the delete account o k response
+func (o *DeleteAccountOK) WithPayload(payload model.Version) *DeleteAccountOK {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the delete account o k response
+func (o *DeleteAccountOK) SetPayload(payload model.Version) {
+	o.Payload = payload
+}
+
 // WriteResponse to the client
 func (o *DeleteAccountOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
-	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
-
 	rw.WriteHeader(200)
+	payload := o.Payload
+	if err := producer.Produce(rw, payload); err != nil {
+		panic(err) // let the recovery middleware deal with this
+	}
+
 }
 
 // DeleteAccountNotFoundCode is the HTTP code returned for type DeleteAccountNotFound

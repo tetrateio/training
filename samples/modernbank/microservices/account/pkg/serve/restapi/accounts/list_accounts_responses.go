@@ -9,8 +9,6 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime"
-
-	model "github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
 )
 
 // ListAccountsOKCode is the HTTP code returned for type ListAccountsOK
@@ -25,7 +23,7 @@ type ListAccountsOK struct {
 	/*
 	  In: Body
 	*/
-	Payload []*model.Account `json:"body,omitempty"`
+	Payload *ListAccountsOKBody `json:"body,omitempty"`
 }
 
 // NewListAccountsOK creates ListAccountsOK with default headers values
@@ -35,13 +33,13 @@ func NewListAccountsOK() *ListAccountsOK {
 }
 
 // WithPayload adds the payload to the list accounts o k response
-func (o *ListAccountsOK) WithPayload(payload []*model.Account) *ListAccountsOK {
+func (o *ListAccountsOK) WithPayload(payload *ListAccountsOKBody) *ListAccountsOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list accounts o k response
-func (o *ListAccountsOK) SetPayload(payload []*model.Account) {
+func (o *ListAccountsOK) SetPayload(payload *ListAccountsOKBody) {
 	o.Payload = payload
 }
 
@@ -49,15 +47,12 @@ func (o *ListAccountsOK) SetPayload(payload []*model.Account) {
 func (o *ListAccountsOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
 	rw.WriteHeader(200)
-	payload := o.Payload
-	if payload == nil {
-		payload = make([]*model.Account, 0, 50)
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
 	}
-
-	if err := producer.Produce(rw, payload); err != nil {
-		panic(err) // let the recovery middleware deal with this
-	}
-
 }
 
 // ListAccountsNotFoundCode is the HTTP code returned for type ListAccountsNotFound

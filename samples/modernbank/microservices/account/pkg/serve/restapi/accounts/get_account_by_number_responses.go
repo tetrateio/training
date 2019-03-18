@@ -9,8 +9,6 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime"
-
-	model "github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
 )
 
 // GetAccountByNumberOKCode is the HTTP code returned for type GetAccountByNumberOK
@@ -25,7 +23,7 @@ type GetAccountByNumberOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *model.Account `json:"body,omitempty"`
+	Payload *GetAccountByNumberOKBody `json:"body,omitempty"`
 }
 
 // NewGetAccountByNumberOK creates GetAccountByNumberOK with default headers values
@@ -35,13 +33,13 @@ func NewGetAccountByNumberOK() *GetAccountByNumberOK {
 }
 
 // WithPayload adds the payload to the get account by number o k response
-func (o *GetAccountByNumberOK) WithPayload(payload *model.Account) *GetAccountByNumberOK {
+func (o *GetAccountByNumberOK) WithPayload(payload *GetAccountByNumberOKBody) *GetAccountByNumberOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the get account by number o k response
-func (o *GetAccountByNumberOK) SetPayload(payload *model.Account) {
+func (o *GetAccountByNumberOK) SetPayload(payload *GetAccountByNumberOKBody) {
 	o.Payload = payload
 }
 

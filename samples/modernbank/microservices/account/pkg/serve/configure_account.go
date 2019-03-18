@@ -14,6 +14,7 @@ import (
 	middleware "github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/swag"
 
+	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
 	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/serve/restapi"
 	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/serve/restapi/accounts"
 	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/store"
@@ -47,8 +48,9 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 			api.Logger("Error adding new account for %q to store: %v", params.Owner, err)
 			return accounts.NewCreateAccountInternalServerError()
 		}
+		payload := &accounts.CreateAccountCreatedBody{*res, model.Version(*version)}
 		api.Logger("Successfully created account for %q", params.Owner)
-		return accounts.NewCreateAccountCreated().WithPayload(res)
+		return accounts.NewCreateAccountCreated().WithPayload(payload)
 	})
 	api.AccountsDeleteAccountHandler = accounts.DeleteAccountHandlerFunc(func(params accounts.DeleteAccountParams) middleware.Responder {
 		if err := accountStore.Delete(params.Owner, params.Number); err != nil {
@@ -58,8 +60,7 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 			}
 			return accounts.NewDeleteAccountInternalServerError()
 		}
-		api.Logger("Successfully deleted account %v for %q", params.Number, params.Owner)
-		return accounts.NewDeleteAccountOK()
+		return accounts.NewDeleteAccountOK().WithPayload(model.Version(*version))
 	})
 	api.AccountsGetAccountByNumberHandler = accounts.GetAccountByNumberHandlerFunc(func(params accounts.GetAccountByNumberParams) middleware.Responder {
 		res, err := accountStore.Get(params.Owner, params.Number)
@@ -71,8 +72,8 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 			api.Logger("Error retrieving account %v for %q: %v", params.Number, params.Owner, err)
 			return accounts.NewGetAccountByNumberInternalServerError()
 		}
-		api.Logger("Successfully retrieved account %v for %q", params.Number, params.Owner)
-		return accounts.NewGetAccountByNumberOK().WithPayload(res)
+		payload := &accounts.GetAccountByNumberOKBody{*res, model.Version(*version)}
+		return accounts.NewGetAccountByNumberOK().WithPayload(payload)
 	})
 	api.AccountsListAccountsHandler = accounts.ListAccountsHandlerFunc(func(params accounts.ListAccountsParams) middleware.Responder {
 		res, err := accountStore.List(params.Owner)
@@ -83,15 +84,8 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 			}
 			return accounts.NewListAccountsInternalServerError()
 		}
-		if *version == "v2" {
-			for i, account := range res {
-				newBalance := *account.Balance * 1000
-				res[i].Balance = &newBalance
-
-			}
-		}
-		api.Logger("Successfully listed accounts for %q", params.Owner)
-		return accounts.NewListAccountsOK().WithPayload(res)
+		payload := &accounts.ListAccountsOKBody{res, model.Version(*version)}
+		return accounts.NewListAccountsOK().WithPayload(payload)
 	})
 	api.AccountsChangeBalanceHandler = accounts.ChangeBalanceHandlerFunc(func(params accounts.ChangeBalanceParams) middleware.Responder {
 		if err := accountStore.UpdateBalance(params.Number, params.Delta); err != nil {
@@ -103,7 +97,7 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 			return accounts.NewChangeBalanceInternalServerError()
 		}
 		api.Logger("Successfully updated balance on account %v by amount %v", params.Number, params.Delta)
-		return accounts.NewChangeBalanceOK()
+		return accounts.NewChangeBalanceOK().WithPayload(model.Version(*version))
 	})
 
 	api.ServerShutdown = func() {}

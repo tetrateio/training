@@ -8,8 +8,11 @@ package accounts
 import (
 	"fmt"
 	"io"
+	"strconv"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 
@@ -61,7 +64,7 @@ func NewListAccountsOK() *ListAccountsOK {
 Success!
 */
 type ListAccountsOK struct {
-	Payload []*model.Account
+	Payload *ListAccountsOKBody
 }
 
 func (o *ListAccountsOK) Error() string {
@@ -70,8 +73,10 @@ func (o *ListAccountsOK) Error() string {
 
 func (o *ListAccountsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(ListAccountsOKBody)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
@@ -117,5 +122,120 @@ func (o *ListAccountsInternalServerError) Error() string {
 
 func (o *ListAccountsInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	return nil
+}
+
+/*ListAccountsOKBody list accounts o k body
+swagger:model ListAccountsOKBody
+*/
+type ListAccountsOKBody struct {
+	ListAccountsOKBodyAllOf0
+
+	model.Version
+}
+
+// UnmarshalJSON unmarshals this object from a JSON structure
+func (o *ListAccountsOKBody) UnmarshalJSON(raw []byte) error {
+	// ListAccountsOKBodyAO0
+	var listAccountsOKBodyAO0 ListAccountsOKBodyAllOf0
+	if err := swag.ReadJSON(raw, &listAccountsOKBodyAO0); err != nil {
+		return err
+	}
+	o.ListAccountsOKBodyAllOf0 = listAccountsOKBodyAO0
+
+	// ListAccountsOKBodyAO1
+	var listAccountsOKBodyAO1 model.Version
+	if err := swag.ReadJSON(raw, &listAccountsOKBodyAO1); err != nil {
+		return err
+	}
+	o.Version = listAccountsOKBodyAO1
+
+	return nil
+}
+
+// MarshalJSON marshals this object to a JSON structure
+func (o ListAccountsOKBody) MarshalJSON() ([]byte, error) {
+	_parts := make([][]byte, 0, 2)
+
+	listAccountsOKBodyAO0, err := swag.WriteJSON(o.ListAccountsOKBodyAllOf0)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, listAccountsOKBodyAO0)
+
+	listAccountsOKBodyAO1, err := swag.WriteJSON(o.Version)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, listAccountsOKBodyAO1)
+
+	return swag.ConcatJSON(_parts...), nil
+}
+
+// Validate validates this list accounts o k body
+func (o *ListAccountsOKBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	// validation for a type composition with ListAccountsOKBodyAllOf0
+	if err := o.ListAccountsOKBodyAllOf0.Validate(formats); err != nil {
+		res = append(res, err)
+	}
+	// validation for a type composition with model.Version
+	if err := o.Version.Validate(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (o *ListAccountsOKBody) MarshalBinary() ([]byte, error) {
+	if o == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(o)
+}
+
+// UnmarshalBinary interface implementation
+func (o *ListAccountsOKBody) UnmarshalBinary(b []byte) error {
+	var res ListAccountsOKBody
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*o = res
+	return nil
+}
+
+/*ListAccountsOKBodyAllOf0 list accounts o k body all of0
+swagger:model ListAccountsOKBodyAllOf0
+*/
+type ListAccountsOKBodyAllOf0 []*model.Account
+
+// Validate validates this list accounts o k body all of0
+func (o ListAccountsOKBodyAllOf0) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	for i := 0; i < len(o); i++ {
+		if swag.IsZero(o[i]) { // not required
+			continue
+		}
+
+		if o[i] != nil {
+			if err := o[i].Validate(formats); err != nil {
+				if ve, ok := err.(*errors.Validation); ok {
+					return ve.ValidateName(strconv.Itoa(i))
+				}
+				return err
+			}
+		}
+
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }

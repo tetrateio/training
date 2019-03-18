@@ -9,7 +9,9 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 
@@ -54,7 +56,7 @@ func NewCreateAccountCreated() *CreateAccountCreated {
 Created
 */
 type CreateAccountCreated struct {
-	Payload *model.Account
+	Payload *CreateAccountCreatedBody
 }
 
 func (o *CreateAccountCreated) Error() string {
@@ -63,7 +65,7 @@ func (o *CreateAccountCreated) Error() string {
 
 func (o *CreateAccountCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(model.Account)
+	o.Payload = new(CreateAccountCreatedBody)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -91,5 +93,89 @@ func (o *CreateAccountInternalServerError) Error() string {
 
 func (o *CreateAccountInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	return nil
+}
+
+/*CreateAccountCreatedBody create account created body
+swagger:model CreateAccountCreatedBody
+*/
+type CreateAccountCreatedBody struct {
+	model.Account
+
+	model.Version
+}
+
+// UnmarshalJSON unmarshals this object from a JSON structure
+func (o *CreateAccountCreatedBody) UnmarshalJSON(raw []byte) error {
+	// CreateAccountCreatedBodyAO0
+	var createAccountCreatedBodyAO0 model.Account
+	if err := swag.ReadJSON(raw, &createAccountCreatedBodyAO0); err != nil {
+		return err
+	}
+	o.Account = createAccountCreatedBodyAO0
+
+	// CreateAccountCreatedBodyAO1
+	var createAccountCreatedBodyAO1 model.Version
+	if err := swag.ReadJSON(raw, &createAccountCreatedBodyAO1); err != nil {
+		return err
+	}
+	o.Version = createAccountCreatedBodyAO1
+
+	return nil
+}
+
+// MarshalJSON marshals this object to a JSON structure
+func (o CreateAccountCreatedBody) MarshalJSON() ([]byte, error) {
+	_parts := make([][]byte, 0, 2)
+
+	createAccountCreatedBodyAO0, err := swag.WriteJSON(o.Account)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, createAccountCreatedBodyAO0)
+
+	createAccountCreatedBodyAO1, err := swag.WriteJSON(o.Version)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, createAccountCreatedBodyAO1)
+
+	return swag.ConcatJSON(_parts...), nil
+}
+
+// Validate validates this create account created body
+func (o *CreateAccountCreatedBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	// validation for a type composition with model.Account
+	if err := o.Account.Validate(formats); err != nil {
+		res = append(res, err)
+	}
+	// validation for a type composition with model.Version
+	if err := o.Version.Validate(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (o *CreateAccountCreatedBody) MarshalBinary() ([]byte, error) {
+	if o == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(o)
+}
+
+// UnmarshalBinary interface implementation
+func (o *CreateAccountCreatedBody) UnmarshalBinary(b []byte) error {
+	var res CreateAccountCreatedBody
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*o = res
 	return nil
 }

@@ -22,6 +22,8 @@ put:
   responses:
     200:
       description: "OK"
+      schema:
+        $ref: "./definitions/version.yaml"
     404:
       description: "Account not found"
     500:

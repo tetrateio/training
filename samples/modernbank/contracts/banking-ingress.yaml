@@ -194,9 +194,11 @@ paths:
         "200":
           description: Success!
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/account'
+            allOf:
+            - type: array
+              items:
+                $ref: '#/definitions/account'
+            - $ref: '#/definitions/version'
         "404":
           description: Owner not found
         "500":
@@ -219,7 +221,9 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/account'
+            allOf:
+            - $ref: '#/definitions/account'
+            - $ref: '#/definitions/version'
         "500":
           description: Internal server error
   /users/{owner}/accounts/{number}:
@@ -246,7 +250,9 @@ paths:
         "200":
           description: Success!
           schema:
-            $ref: '#/definitions/account'
+            allOf:
+            - $ref: '#/definitions/account'
+            - $ref: '#/definitions/version'
         "404":
           description: Account not found
         "500":
@@ -274,6 +280,8 @@ paths:
       responses:
         "200":
           description: Aaaaand it's gone!
+          schema:
+            $ref: '#/definitions/version'
         "404":
           description: Account not found
         "500":
@@ -425,6 +433,9 @@ definitions:
         type: string
       username:
         type: string
+  version:
+    description: Version of the microservice that is responding
+    type: string
 tags:
 - description: Operations for banking services.
   name: banking

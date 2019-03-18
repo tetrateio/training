@@ -8,7 +8,12 @@ package accounts
 import (
 	"net/http"
 
+	errors "github.com/go-openapi/errors"
 	middleware "github.com/go-openapi/runtime/middleware"
+	strfmt "github.com/go-openapi/strfmt"
+	swag "github.com/go-openapi/swag"
+
+	model "github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
 )
 
 // GetAccountByNumberHandlerFunc turns a function with the right signature into a get account by number handler
@@ -55,4 +60,87 @@ func (o *GetAccountByNumber) ServeHTTP(rw http.ResponseWriter, r *http.Request) 
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
+}
+
+// GetAccountByNumberOKBody get account by number o k body
+// swagger:model GetAccountByNumberOKBody
+type GetAccountByNumberOKBody struct {
+	model.Account
+
+	model.Version
+}
+
+// UnmarshalJSON unmarshals this object from a JSON structure
+func (o *GetAccountByNumberOKBody) UnmarshalJSON(raw []byte) error {
+	// GetAccountByNumberOKBodyAO0
+	var getAccountByNumberOKBodyAO0 model.Account
+	if err := swag.ReadJSON(raw, &getAccountByNumberOKBodyAO0); err != nil {
+		return err
+	}
+	o.Account = getAccountByNumberOKBodyAO0
+
+	// GetAccountByNumberOKBodyAO1
+	var getAccountByNumberOKBodyAO1 model.Version
+	if err := swag.ReadJSON(raw, &getAccountByNumberOKBodyAO1); err != nil {
+		return err
+	}
+	o.Version = getAccountByNumberOKBodyAO1
+
+	return nil
+}
+
+// MarshalJSON marshals this object to a JSON structure
+func (o GetAccountByNumberOKBody) MarshalJSON() ([]byte, error) {
+	_parts := make([][]byte, 0, 2)
+
+	getAccountByNumberOKBodyAO0, err := swag.WriteJSON(o.Account)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, getAccountByNumberOKBodyAO0)
+
+	getAccountByNumberOKBodyAO1, err := swag.WriteJSON(o.Version)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, getAccountByNumberOKBodyAO1)
+
+	return swag.ConcatJSON(_parts...), nil
+}
+
+// Validate validates this get account by number o k body
+func (o *GetAccountByNumberOKBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	// validation for a type composition with model.Account
+	if err := o.Account.Validate(formats); err != nil {
+		res = append(res, err)
+	}
+	// validation for a type composition with model.Version
+	if err := o.Version.Validate(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (o *GetAccountByNumberOKBody) MarshalBinary() ([]byte, error) {
+	if o == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(o)
+}
+
+// UnmarshalBinary interface implementation
+func (o *GetAccountByNumberOKBody) UnmarshalBinary(b []byte) error {
+	var res GetAccountByNumberOKBody
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*o = res
+	return nil
 }
