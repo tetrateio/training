@@ -21,6 +21,10 @@ docker-run:
 		-e API_PORT=$(API_PORT) \
 		$(CONTAINER_REGISTRY)/$(NAME):$(TAG)
 
+docker-run-static-only:
+	docker run --rm -it -p $(HOST_PORT):80 \
+		$(CONTAINER_REGISTRY)/$(NAME):$(TAG)
+
 build:
 	npm run build
 
