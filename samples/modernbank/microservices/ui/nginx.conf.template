@@ -1,0 +1,12 @@
+# Copyright (c) Tetrate, Inc 2019 All Rights Reserved.
+
+server {
+  listen 80;
+
+  root /usr/share/nginx/html;
+  index index.html;
+
+  location / {
+    try_files $uri $uri/ /index.html?/$request_uri;
+  }
+}
