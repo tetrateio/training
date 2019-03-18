@@ -25,7 +25,7 @@ type DeleteAccountOK struct {
 	/*
 	  In: Body
 	*/
-	Payload model.Version `json:"body,omitempty"`
+	Payload *model.Version `json:"body,omitempty"`
 }
 
 // NewDeleteAccountOK creates DeleteAccountOK with default headers values
@@ -35,13 +35,13 @@ func NewDeleteAccountOK() *DeleteAccountOK {
 }
 
 // WithPayload adds the payload to the delete account o k response
-func (o *DeleteAccountOK) WithPayload(payload model.Version) *DeleteAccountOK {
+func (o *DeleteAccountOK) WithPayload(payload *model.Version) *DeleteAccountOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the delete account o k response
-func (o *DeleteAccountOK) SetPayload(payload model.Version) {
+func (o *DeleteAccountOK) SetPayload(payload *model.Version) {
 	o.Payload = payload
 }
 
@@ -49,11 +49,12 @@ func (o *DeleteAccountOK) SetPayload(payload model.Version) {
 func (o *DeleteAccountOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
 	rw.WriteHeader(200)
-	payload := o.Payload
-	if err := producer.Produce(rw, payload); err != nil {
-		panic(err) // let the recovery middleware deal with this
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
 	}
-
 }
 
 // DeleteAccountNotFoundCode is the HTTP code returned for type DeleteAccountNotFound

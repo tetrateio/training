@@ -9,8 +9,6 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime"
-
-	model "github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/model"
 )
 
 // UpdateUserOKCode is the HTTP code returned for type UpdateUserOK
@@ -25,7 +23,7 @@ type UpdateUserOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *model.User `json:"body,omitempty"`
+	Payload *UpdateUserOKBody `json:"body,omitempty"`
 }
 
 // NewUpdateUserOK creates UpdateUserOK with default headers values
@@ -35,13 +33,13 @@ func NewUpdateUserOK() *UpdateUserOK {
 }
 
 // WithPayload adds the payload to the update user o k response
-func (o *UpdateUserOK) WithPayload(payload *model.User) *UpdateUserOK {
+func (o *UpdateUserOK) WithPayload(payload *UpdateUserOKBody) *UpdateUserOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the update user o k response
-func (o *UpdateUserOK) SetPayload(payload *model.User) {
+func (o *UpdateUserOK) SetPayload(payload *UpdateUserOKBody) {
 	o.Payload = payload
 }
 

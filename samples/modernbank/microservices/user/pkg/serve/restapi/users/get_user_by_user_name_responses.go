@@ -9,8 +9,6 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime"
-
-	model "github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/model"
 )
 
 // GetUserByUserNameOKCode is the HTTP code returned for type GetUserByUserNameOK
@@ -25,7 +23,7 @@ type GetUserByUserNameOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *model.User `json:"body,omitempty"`
+	Payload *GetUserByUserNameOKBody `json:"body,omitempty"`
 }
 
 // NewGetUserByUserNameOK creates GetUserByUserNameOK with default headers values
@@ -35,13 +33,13 @@ func NewGetUserByUserNameOK() *GetUserByUserNameOK {
 }
 
 // WithPayload adds the payload to the get user by user name o k response
-func (o *GetUserByUserNameOK) WithPayload(payload *model.User) *GetUserByUserNameOK {
+func (o *GetUserByUserNameOK) WithPayload(payload *GetUserByUserNameOKBody) *GetUserByUserNameOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the get user by user name o k response
-func (o *GetUserByUserNameOK) SetPayload(payload *model.User) {
+func (o *GetUserByUserNameOK) SetPayload(payload *GetUserByUserNameOKBody) {
 	o.Payload = payload
 }
 

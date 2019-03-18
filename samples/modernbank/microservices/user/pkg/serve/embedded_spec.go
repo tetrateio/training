@@ -30,6 +30,21 @@ func init() {
   "host": "users",
   "basePath": "/v1",
   "paths": {
+    "/health": {
+      "post": {
+        "description": "returns 200",
+        "tags": [
+          "health"
+        ],
+        "summary": "returns 200 to prove the service is alive",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/users": {
       "post": {
         "description": "Creates a new user",
@@ -59,7 +74,14 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/user"
+              "allOf": [
+                {
+                  "$ref": "#/definitions/user"
+                },
+                {
+                  "$ref": "#/definitions/version"
+                }
+              ]
             }
           },
           "409": {
@@ -94,7 +116,14 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "$ref": "#/definitions/user"
+              "allOf": [
+                {
+                  "$ref": "#/definitions/user"
+                },
+                {
+                  "$ref": "#/definitions/version"
+                }
+              ]
             }
           },
           "404": {
@@ -140,7 +169,14 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "$ref": "#/definitions/user"
+              "allOf": [
+                {
+                  "$ref": "#/definitions/user"
+                },
+                {
+                  "$ref": "#/definitions/version"
+                }
+              ]
             }
           },
           "404": {
@@ -169,7 +205,10 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "Success!"
+            "description": "Success!",
+            "schema": {
+              "$ref": "#/definitions/version"
+            }
           },
           "404": {
             "description": "User not found"
@@ -205,6 +244,17 @@ func init() {
           "type": "string"
         },
         "username": {
+          "type": "string"
+        }
+      }
+    },
+    "version": {
+      "type": "object",
+      "required": [
+        "version"
+      ],
+      "properties": {
+        "version": {
           "type": "string"
         }
       }
@@ -230,6 +280,21 @@ func init() {
   "host": "users",
   "basePath": "/v1",
   "paths": {
+    "/health": {
+      "post": {
+        "description": "returns 200",
+        "tags": [
+          "health"
+        ],
+        "summary": "returns 200 to prove the service is alive",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/users": {
       "post": {
         "description": "Creates a new user",
@@ -259,7 +324,14 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/user"
+              "allOf": [
+                {
+                  "$ref": "#/definitions/user"
+                },
+                {
+                  "$ref": "#/definitions/version"
+                }
+              ]
             }
           },
           "409": {
@@ -294,7 +366,14 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "$ref": "#/definitions/user"
+              "allOf": [
+                {
+                  "$ref": "#/definitions/user"
+                },
+                {
+                  "$ref": "#/definitions/version"
+                }
+              ]
             }
           },
           "404": {
@@ -340,7 +419,14 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "$ref": "#/definitions/user"
+              "allOf": [
+                {
+                  "$ref": "#/definitions/user"
+                },
+                {
+                  "$ref": "#/definitions/version"
+                }
+              ]
             }
           },
           "404": {
@@ -369,7 +455,10 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "Success!"
+            "description": "Success!",
+            "schema": {
+              "$ref": "#/definitions/version"
+            }
           },
           "404": {
             "description": "User not found"
@@ -405,6 +494,17 @@ func init() {
           "type": "string"
         },
         "username": {
+          "type": "string"
+        }
+      }
+    },
+    "version": {
+      "type": "object",
+      "required": [
+        "version"
+      ],
+      "properties": {
+        "version": {
           "type": "string"
         }
       }

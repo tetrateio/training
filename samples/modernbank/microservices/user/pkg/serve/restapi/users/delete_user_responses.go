@@ -9,6 +9,8 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime"
+
+	model "github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/model"
 )
 
 // DeleteUserOKCode is the HTTP code returned for type DeleteUserOK
@@ -19,6 +21,11 @@ const DeleteUserOKCode int = 200
 swagger:response deleteUserOK
 */
 type DeleteUserOK struct {
+
+	/*
+	  In: Body
+	*/
+	Payload *model.Version `json:"body,omitempty"`
 }
 
 // NewDeleteUserOK creates DeleteUserOK with default headers values
@@ -27,12 +34,27 @@ func NewDeleteUserOK() *DeleteUserOK {
 	return &DeleteUserOK{}
 }
 
+// WithPayload adds the payload to the delete user o k response
+func (o *DeleteUserOK) WithPayload(payload *model.Version) *DeleteUserOK {
+	o.Payload = payload
+	return o
+}
+
+// SetPayload sets the payload to the delete user o k response
+func (o *DeleteUserOK) SetPayload(payload *model.Version) {
+	o.Payload = payload
+}
+
 // WriteResponse to the client
 func (o *DeleteUserOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
-	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
-
 	rw.WriteHeader(200)
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
+	}
 }
 
 // DeleteUserNotFoundCode is the HTTP code returned for type DeleteUserNotFound

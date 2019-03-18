@@ -11,6 +11,7 @@ import (
 
 	strfmt "github.com/go-openapi/strfmt"
 
+	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/client/health"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/client/users"
 )
 
@@ -56,6 +57,8 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *User {
 
 	cli := new(User)
 	cli.Transport = transport
+
+	cli.Health = health.New(transport, formats)
 
 	cli.Users = users.New(transport, formats)
 
@@ -103,6 +106,8 @@ func (cfg *TransportConfig) WithSchemes(schemes []string) *TransportConfig {
 
 // User is a client for user
 type User struct {
+	Health *health.Client
+
 	Users *users.Client
 
 	Transport runtime.ClientTransport
@@ -111,6 +116,8 @@ type User struct {
 // SetTransport changes the transport on the client and all its subresources
 func (c *User) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
+
+	c.Health.SetTransport(transport)
 
 	c.Users.SetTransport(transport)
 

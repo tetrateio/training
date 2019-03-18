@@ -19,6 +19,7 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
+	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/serve/restapi/health"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/serve/restapi/transactions"
 )
 
@@ -41,6 +42,9 @@ func NewTransactionAPI(spec *loads.Document) *TransactionAPI {
 		JSONProducer:        runtime.JSONProducer(),
 		TransactionsCreateTransactionHandler: transactions.CreateTransactionHandlerFunc(func(params transactions.CreateTransactionParams) middleware.Responder {
 			return middleware.NotImplemented("operation TransactionsCreateTransaction has not yet been implemented")
+		}),
+		HealthHealthCheckHandler: health.HealthCheckHandlerFunc(func(params health.HealthCheckParams) middleware.Responder {
+			return middleware.NotImplemented("operation HealthHealthCheck has not yet been implemented")
 		}),
 	}
 }
@@ -75,6 +79,8 @@ type TransactionAPI struct {
 
 	// TransactionsCreateTransactionHandler sets the operation handler for the create transaction operation
 	TransactionsCreateTransactionHandler transactions.CreateTransactionHandler
+	// HealthHealthCheckHandler sets the operation handler for the health check operation
+	HealthHealthCheckHandler health.HealthCheckHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -140,6 +146,10 @@ func (o *TransactionAPI) Validate() error {
 
 	if o.TransactionsCreateTransactionHandler == nil {
 		unregistered = append(unregistered, "transactions.CreateTransactionHandler")
+	}
+
+	if o.HealthHealthCheckHandler == nil {
+		unregistered = append(unregistered, "health.HealthCheckHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -244,6 +254,11 @@ func (o *TransactionAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/transactions"] = transactions.NewCreateTransaction(o.context, o.TransactionsCreateTransactionHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/health"] = health.NewHealthCheck(o.context, o.HealthHealthCheckHandler)
 
 }
 

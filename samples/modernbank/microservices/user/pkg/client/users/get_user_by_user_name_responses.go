@@ -9,7 +9,9 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
+	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 
@@ -61,7 +63,7 @@ func NewGetUserByUserNameOK() *GetUserByUserNameOK {
 Success!
 */
 type GetUserByUserNameOK struct {
-	Payload *model.User
+	Payload *GetUserByUserNameOKBody
 }
 
 func (o *GetUserByUserNameOK) Error() string {
@@ -70,7 +72,7 @@ func (o *GetUserByUserNameOK) Error() string {
 
 func (o *GetUserByUserNameOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(model.User)
+	o.Payload = new(GetUserByUserNameOKBody)
 
 	// response payload
 	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
@@ -119,5 +121,89 @@ func (o *GetUserByUserNameInternalServerError) Error() string {
 
 func (o *GetUserByUserNameInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	return nil
+}
+
+/*GetUserByUserNameOKBody get user by user name o k body
+swagger:model GetUserByUserNameOKBody
+*/
+type GetUserByUserNameOKBody struct {
+	model.User
+
+	model.Version
+}
+
+// UnmarshalJSON unmarshals this object from a JSON structure
+func (o *GetUserByUserNameOKBody) UnmarshalJSON(raw []byte) error {
+	// GetUserByUserNameOKBodyAO0
+	var getUserByUserNameOKBodyAO0 model.User
+	if err := swag.ReadJSON(raw, &getUserByUserNameOKBodyAO0); err != nil {
+		return err
+	}
+	o.User = getUserByUserNameOKBodyAO0
+
+	// GetUserByUserNameOKBodyAO1
+	var getUserByUserNameOKBodyAO1 model.Version
+	if err := swag.ReadJSON(raw, &getUserByUserNameOKBodyAO1); err != nil {
+		return err
+	}
+	o.Version = getUserByUserNameOKBodyAO1
+
+	return nil
+}
+
+// MarshalJSON marshals this object to a JSON structure
+func (o GetUserByUserNameOKBody) MarshalJSON() ([]byte, error) {
+	_parts := make([][]byte, 0, 2)
+
+	getUserByUserNameOKBodyAO0, err := swag.WriteJSON(o.User)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, getUserByUserNameOKBodyAO0)
+
+	getUserByUserNameOKBodyAO1, err := swag.WriteJSON(o.Version)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, getUserByUserNameOKBodyAO1)
+
+	return swag.ConcatJSON(_parts...), nil
+}
+
+// Validate validates this get user by user name o k body
+func (o *GetUserByUserNameOKBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	// validation for a type composition with model.User
+	if err := o.User.Validate(formats); err != nil {
+		res = append(res, err)
+	}
+	// validation for a type composition with model.Version
+	if err := o.Version.Validate(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (o *GetUserByUserNameOKBody) MarshalBinary() ([]byte, error) {
+	if o == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(o)
+}
+
+// UnmarshalBinary interface implementation
+func (o *GetUserByUserNameOKBody) UnmarshalBinary(b []byte) error {
+	var res GetUserByUserNameOKBody
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*o = res
 	return nil
 }

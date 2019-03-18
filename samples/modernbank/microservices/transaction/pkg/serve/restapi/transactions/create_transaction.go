@@ -8,7 +8,12 @@ package transactions
 import (
 	"net/http"
 
+	errors "github.com/go-openapi/errors"
 	middleware "github.com/go-openapi/runtime/middleware"
+	strfmt "github.com/go-openapi/strfmt"
+	swag "github.com/go-openapi/swag"
+
+	model "github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/model"
 )
 
 // CreateTransactionHandlerFunc turns a function with the right signature into a create transaction handler
@@ -57,4 +62,87 @@ func (o *CreateTransaction) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
+}
+
+// CreateTransactionCreatedBody create transaction created body
+// swagger:model CreateTransactionCreatedBody
+type CreateTransactionCreatedBody struct {
+	model.Transaction
+
+	model.Version
+}
+
+// UnmarshalJSON unmarshals this object from a JSON structure
+func (o *CreateTransactionCreatedBody) UnmarshalJSON(raw []byte) error {
+	// CreateTransactionCreatedBodyAO0
+	var createTransactionCreatedBodyAO0 model.Transaction
+	if err := swag.ReadJSON(raw, &createTransactionCreatedBodyAO0); err != nil {
+		return err
+	}
+	o.Transaction = createTransactionCreatedBodyAO0
+
+	// CreateTransactionCreatedBodyAO1
+	var createTransactionCreatedBodyAO1 model.Version
+	if err := swag.ReadJSON(raw, &createTransactionCreatedBodyAO1); err != nil {
+		return err
+	}
+	o.Version = createTransactionCreatedBodyAO1
+
+	return nil
+}
+
+// MarshalJSON marshals this object to a JSON structure
+func (o CreateTransactionCreatedBody) MarshalJSON() ([]byte, error) {
+	_parts := make([][]byte, 0, 2)
+
+	createTransactionCreatedBodyAO0, err := swag.WriteJSON(o.Transaction)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, createTransactionCreatedBodyAO0)
+
+	createTransactionCreatedBodyAO1, err := swag.WriteJSON(o.Version)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, createTransactionCreatedBodyAO1)
+
+	return swag.ConcatJSON(_parts...), nil
+}
+
+// Validate validates this create transaction created body
+func (o *CreateTransactionCreatedBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	// validation for a type composition with model.Transaction
+	if err := o.Transaction.Validate(formats); err != nil {
+		res = append(res, err)
+	}
+	// validation for a type composition with model.Version
+	if err := o.Version.Validate(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (o *CreateTransactionCreatedBody) MarshalBinary() ([]byte, error) {
+	if o == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(o)
+}
+
+// UnmarshalBinary interface implementation
+func (o *CreateTransactionCreatedBody) UnmarshalBinary(b []byte) error {
+	var res CreateTransactionCreatedBody
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*o = res
+	return nil
 }

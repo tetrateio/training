@@ -19,7 +19,9 @@ post:
     201:
       description: "Created"
       schema:
-          $ref: "./definitions/user.yaml"
+        allOf:
+          - $ref: "./definitions/user.yaml"
+          - $ref: "./definitions/version.yaml"
     409:
       description: "User alreadys exists"
     500:

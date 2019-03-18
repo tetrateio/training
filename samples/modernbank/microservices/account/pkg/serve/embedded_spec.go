@@ -75,6 +75,21 @@ func init() {
         }
       }
     },
+    "/health": {
+      "post": {
+        "description": "returns 200",
+        "tags": [
+          "health"
+        ],
+        "summary": "returns 200 to prove the service is alive",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/users/{owner}/accounts": {
       "get": {
         "description": "Lists all accounts for a given customer",
@@ -275,8 +290,15 @@ func init() {
       }
     },
     "version": {
-      "description": "Version of the microservice that is responding",
-      "type": "string"
+      "type": "object",
+      "required": [
+        "version"
+      ],
+      "properties": {
+        "version": {
+          "type": "string"
+        }
+      }
     }
   },
   "tags": [
@@ -344,6 +366,21 @@ func init() {
         }
       }
     },
+    "/health": {
+      "post": {
+        "description": "returns 200",
+        "tags": [
+          "health"
+        ],
+        "summary": "returns 200 to prove the service is alive",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/users/{owner}/accounts": {
       "get": {
         "description": "Lists all accounts for a given customer",
@@ -544,8 +581,15 @@ func init() {
       }
     },
     "version": {
-      "description": "Version of the microservice that is responding",
-      "type": "string"
+      "type": "object",
+      "required": [
+        "version"
+      ],
+      "properties": {
+        "version": {
+          "type": "string"
+        }
+      }
     }
   },
   "tags": [

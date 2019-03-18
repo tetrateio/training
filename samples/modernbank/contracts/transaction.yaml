@@ -9,6 +9,16 @@ info:
 host: transaction
 basePath: /v1
 paths:
+  /health:
+    post:
+      description: returns 200
+      tags:
+      - health
+      summary: returns 200 to prove the service is alive
+      operationId: healthCheck
+      responses:
+        "200":
+          description: OK
   /transactions:
     post:
       description: Sends money from one account to another
@@ -31,7 +41,9 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/transaction'
+            allOf:
+            - $ref: '#/definitions/transaction'
+            - $ref: '#/definitions/version'
         "400":
           description: Nice try! You can't send negative amounts...
         "500":
@@ -76,6 +88,13 @@ definitions:
       properties:
         id:
           type: string
+  version:
+    type: object
+    required:
+    - version
+    properties:
+      version:
+        type: string
 tags:
 - description: Operations about handling transactions
   name: transaction

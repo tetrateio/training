@@ -61,7 +61,7 @@ func NewDeleteAccountOK() *DeleteAccountOK {
 Aaaaand it's gone!
 */
 type DeleteAccountOK struct {
-	Payload model.Version
+	Payload *model.Version
 }
 
 func (o *DeleteAccountOK) Error() string {
@@ -70,8 +70,10 @@ func (o *DeleteAccountOK) Error() string {
 
 func (o *DeleteAccountOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(model.Version)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

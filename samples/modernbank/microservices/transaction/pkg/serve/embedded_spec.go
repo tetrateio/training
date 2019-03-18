@@ -30,6 +30,21 @@ func init() {
   "host": "transaction",
   "basePath": "/v1",
   "paths": {
+    "/health": {
+      "post": {
+        "description": "returns 200",
+        "tags": [
+          "health"
+        ],
+        "summary": "returns 200 to prove the service is alive",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/transactions": {
       "post": {
         "description": "Sends money from one account to another",
@@ -59,7 +74,14 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/transaction"
+              "allOf": [
+                {
+                  "$ref": "#/definitions/transaction"
+                },
+                {
+                  "$ref": "#/definitions/version"
+                }
+              ]
             }
           },
           "400": {
@@ -131,6 +153,17 @@ func init() {
           }
         }
       ]
+    },
+    "version": {
+      "type": "object",
+      "required": [
+        "version"
+      ],
+      "properties": {
+        "version": {
+          "type": "string"
+        }
+      }
     }
   },
   "tags": [
@@ -153,6 +186,21 @@ func init() {
   "host": "transaction",
   "basePath": "/v1",
   "paths": {
+    "/health": {
+      "post": {
+        "description": "returns 200",
+        "tags": [
+          "health"
+        ],
+        "summary": "returns 200 to prove the service is alive",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/transactions": {
       "post": {
         "description": "Sends money from one account to another",
@@ -182,7 +230,14 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/transaction"
+              "allOf": [
+                {
+                  "$ref": "#/definitions/transaction"
+                },
+                {
+                  "$ref": "#/definitions/version"
+                }
+              ]
             }
           },
           "400": {
@@ -254,6 +309,17 @@ func init() {
           }
         }
       ]
+    },
+    "version": {
+      "type": "object",
+      "required": [
+        "version"
+      ],
+      "properties": {
+        "version": {
+          "type": "string"
+        }
+      }
     }
   },
   "tags": [

@@ -13,3 +13,5 @@ schemes:
 paths:
   /transactions:
     $ref: "./paths/transaction/transactions.yaml"
+  /health:
+    $ref: "./paths/shared/health.yaml"

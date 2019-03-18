@@ -19,7 +19,9 @@ post:
     201:
       description: "Created"
       schema:
-        $ref: "./definitions/transaction.yaml"
+        allOf:
+          - $ref: "./definitions/transaction.yaml"
+          - $ref: "./definitions/version.yaml"
     400:
       description: "Nice try! You can't send negative amounts..."
     500:

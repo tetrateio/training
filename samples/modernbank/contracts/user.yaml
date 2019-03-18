@@ -9,6 +9,16 @@ info:
 host: users
 basePath: /v1
 paths:
+  /health:
+    post:
+      description: returns 200
+      tags:
+      - health
+      summary: returns 200 to prove the service is alive
+      operationId: healthCheck
+      responses:
+        "200":
+          description: OK
   /users:
     post:
       description: Creates a new user
@@ -31,7 +41,9 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/user'
+            allOf:
+            - $ref: '#/definitions/user'
+            - $ref: '#/definitions/version'
         "409":
           description: User alreadys exists
         "500":
@@ -54,7 +66,9 @@ paths:
         "200":
           description: Success!
           schema:
-            $ref: '#/definitions/user'
+            allOf:
+            - $ref: '#/definitions/user'
+            - $ref: '#/definitions/version'
         "404":
           description: User not found
         "500":
@@ -85,7 +99,9 @@ paths:
         "200":
           description: Success!
           schema:
-            $ref: '#/definitions/user'
+            allOf:
+            - $ref: '#/definitions/user'
+            - $ref: '#/definitions/version'
         "404":
           description: User not found
         "500":
@@ -105,6 +121,8 @@ paths:
       responses:
         "200":
           description: Success!
+          schema:
+            $ref: '#/definitions/version'
         "404":
           description: User not found
         "500":
@@ -128,6 +146,13 @@ definitions:
       password:
         type: string
       username:
+        type: string
+  version:
+    type: object
+    required:
+    - version
+    properties:
+      version:
         type: string
 tags:
 - description: Operations about users

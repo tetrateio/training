@@ -14,7 +14,9 @@ import (
 	middleware "github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/swag"
 
+	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/model"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/serve/restapi"
+	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/serve/restapi/health"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/serve/restapi/users"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/store"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/store/mongodb"
@@ -23,6 +25,7 @@ import (
 var userStore store.Interface
 
 //go:generate swagger generate server --target ../../../user --name User --spec ../../../../swagger/user.yaml --api-package restapi --model-package pkg/model --server-package pkg/serve
+
 var version *string = flag.String("version", "v1", "the version of service to run. Should match version label used in Istio.")
 
 func configureFlags(api *restapi.UserAPI) {
@@ -51,7 +54,9 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 			return users.NewCreateUserInternalServerError()
 		}
 		api.Logger("Created user %q", *params.Body.Username)
-		return users.NewCreateUserCreated().WithPayload(res)
+		payload := &users.CreateUserCreatedBody{User: *res, Version: model.Version{Version: version}}
+		return users.NewCreateUserCreated().WithPayload(payload)
+
 	})
 	api.UsersDeleteUserHandler = users.DeleteUserHandlerFunc(func(params users.DeleteUserParams) middleware.Responder {
 		if err := userStore.Delete(params.Username); err != nil {
@@ -62,7 +67,7 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 			return users.NewDeleteUserInternalServerError()
 		}
 		api.Logger("Deleted user %q", params.Username)
-		return users.NewDeleteUserOK()
+		return users.NewDeleteUserOK().WithPayload(&model.Version{Version: version})
 	})
 	api.UsersGetUserByUserNameHandler = users.GetUserByUserNameHandlerFunc(func(params users.GetUserByUserNameParams) middleware.Responder {
 		res, err := userStore.Get(params.Username)
@@ -74,7 +79,8 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 			return users.NewGetUserByUserNameInternalServerError()
 		}
 		api.Logger("Retrieved user %q", params.Username)
-		return users.NewGetUserByUserNameOK().WithPayload(res)
+		payload := &users.GetUserByUserNameOKBody{User: *res, Version: model.Version{Version: version}}
+		return users.NewGetUserByUserNameOK().WithPayload(payload)
 	})
 	api.UsersUpdateUserHandler = users.UpdateUserHandlerFunc(func(params users.UpdateUserParams) middleware.Responder {
 		res, err := userStore.Update(params.Username, params.Body)
@@ -86,7 +92,11 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 			return users.NewUpdateUserInternalServerError()
 		}
 		api.Logger("Updated user %q", *params.Body.Username)
-		return users.NewUpdateUserOK().WithPayload(res)
+		payload := &users.UpdateUserOKBody{User: *res, Version: model.Version{Version: version}}
+		return users.NewUpdateUserOK().WithPayload(payload)
+	})
+	api.HealthHealthCheckHandler = health.HealthCheckHandlerFunc(func(_ health.HealthCheckParams) middleware.Responder {
+		return health.NewHealthCheckOK()
 	})
 
 	api.ServerShutdown = func() {}

@@ -14,7 +14,9 @@ import (
 	middleware "github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/swag"
 
+	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/model"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/serve/restapi"
+	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/serve/restapi/health"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/serve/restapi/transactions"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/store"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/store/mongodb"
@@ -48,7 +50,8 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 			return transactions.NewCreateTransactionInternalServerError()
 		}
 		api.Logger("Created transaction %q", *res.ID)
-		return transactions.NewCreateTransactionCreated().WithPayload(res)
+		payload := &transactions.CreateTransactionCreatedBody{Transaction: *res, Version: model.Version{Version: version}}
+		return transactions.NewCreateTransactionCreated().WithPayload(payload)
 	})
 	api.TransactionsGetTransactionReceivedHandler = transactions.GetTransactionReceivedHandlerFunc(func(params transactions.GetTransactionReceivedParams) middleware.Responder {
 		res, err := transactionStore.GetReceived(params.Receiver, params.Transaction)
@@ -60,7 +63,8 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 			return transactions.NewGetTransactionReceivedInternalServerError()
 		}
 		api.Logger("Retrieved transaction %v received by %v", params.Transaction, params.Receiver)
-		return transactions.NewGetTransactionReceivedOK().WithPayload(res)
+		payload := &transactions.GetTransactionReceivedOKBody{Transaction: *res, Version: model.Version{Version: version}}
+		return transactions.NewGetTransactionReceivedOK().WithPayload(payload)
 	})
 	api.TransactionsGetTransactionSentHandler = transactions.GetTransactionSentHandlerFunc(func(params transactions.GetTransactionSentParams) middleware.Responder {
 		res, err := transactionStore.GetSent(params.Sender, params.Transaction)
@@ -72,7 +76,8 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 			return transactions.NewGetTransactionSentInternalServerError()
 		}
 		api.Logger("Retrieved transaction %v sent by %v", params.Transaction, params.Sender)
-		return transactions.NewGetTransactionSentOK().WithPayload(res)
+		payload := &transactions.GetTransactionSentOKBody{Transaction: *res, Version: model.Version{Version: version}}
+		return transactions.NewGetTransactionSentOK().WithPayload(payload)
 	})
 	api.TransactionsListTransactionsReceivedHandler = transactions.ListTransactionsReceivedHandlerFunc(func(params transactions.ListTransactionsReceivedParams) middleware.Responder {
 		res, err := transactionStore.ListReceived(params.Receiver)
@@ -84,7 +89,8 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 			return transactions.NewListTransactionsReceivedInternalServerError()
 		}
 		api.Logger("Retrieved all transactions received by %v", params.Receiver)
-		return transactions.NewListTransactionsReceivedOK().WithPayload(res)
+		payload := &transactions.ListTransactionsReceivedOKBody{ListTransactionsReceivedOKBodyAllOf0: res, Version: model.Version{Version: version}}
+		return transactions.NewListTransactionsReceivedOK().WithPayload(payload)
 	})
 	api.TransactionsListTransactionsSentHandler = transactions.ListTransactionsSentHandlerFunc(func(params transactions.ListTransactionsSentParams) middleware.Responder {
 		res, err := transactionStore.ListSent(params.Sender)
@@ -96,7 +102,11 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 			return transactions.NewListTransactionsSentInternalServerError()
 		}
 		api.Logger("Retrieved all transactions sent by %v", params.Sender)
-		return transactions.NewListTransactionsSentOK().WithPayload(res)
+		payload := &transactions.ListTransactionsSentOKBody{ListTransactionsSentOKBodyAllOf0: res, Version: model.Version{Version: version}}
+		return transactions.NewListTransactionsSentOK().WithPayload(payload)
+	})
+	api.HealthHealthCheckHandler = health.HealthCheckHandlerFunc(func(_ health.HealthCheckParams) middleware.Responder {
+		return health.NewHealthCheckOK()
 	})
 
 	api.ServerShutdown = func() {}

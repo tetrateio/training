@@ -8,7 +8,12 @@ package transactions
 import (
 	"net/http"
 
+	errors "github.com/go-openapi/errors"
 	middleware "github.com/go-openapi/runtime/middleware"
+	strfmt "github.com/go-openapi/strfmt"
+	swag "github.com/go-openapi/swag"
+
+	model "github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/model"
 )
 
 // GetTransactionReceivedHandlerFunc turns a function with the right signature into a get transaction received handler
@@ -57,4 +62,87 @@ func (o *GetTransactionReceived) ServeHTTP(rw http.ResponseWriter, r *http.Reque
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
+}
+
+// GetTransactionReceivedOKBody get transaction received o k body
+// swagger:model GetTransactionReceivedOKBody
+type GetTransactionReceivedOKBody struct {
+	model.Transaction
+
+	model.Version
+}
+
+// UnmarshalJSON unmarshals this object from a JSON structure
+func (o *GetTransactionReceivedOKBody) UnmarshalJSON(raw []byte) error {
+	// GetTransactionReceivedOKBodyAO0
+	var getTransactionReceivedOKBodyAO0 model.Transaction
+	if err := swag.ReadJSON(raw, &getTransactionReceivedOKBodyAO0); err != nil {
+		return err
+	}
+	o.Transaction = getTransactionReceivedOKBodyAO0
+
+	// GetTransactionReceivedOKBodyAO1
+	var getTransactionReceivedOKBodyAO1 model.Version
+	if err := swag.ReadJSON(raw, &getTransactionReceivedOKBodyAO1); err != nil {
+		return err
+	}
+	o.Version = getTransactionReceivedOKBodyAO1
+
+	return nil
+}
+
+// MarshalJSON marshals this object to a JSON structure
+func (o GetTransactionReceivedOKBody) MarshalJSON() ([]byte, error) {
+	_parts := make([][]byte, 0, 2)
+
+	getTransactionReceivedOKBodyAO0, err := swag.WriteJSON(o.Transaction)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, getTransactionReceivedOKBodyAO0)
+
+	getTransactionReceivedOKBodyAO1, err := swag.WriteJSON(o.Version)
+	if err != nil {
+		return nil, err
+	}
+	_parts = append(_parts, getTransactionReceivedOKBodyAO1)
+
+	return swag.ConcatJSON(_parts...), nil
+}
+
+// Validate validates this get transaction received o k body
+func (o *GetTransactionReceivedOKBody) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	// validation for a type composition with model.Transaction
+	if err := o.Transaction.Validate(formats); err != nil {
+		res = append(res, err)
+	}
+	// validation for a type composition with model.Version
+	if err := o.Version.Validate(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (o *GetTransactionReceivedOKBody) MarshalBinary() ([]byte, error) {
+	if o == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(o)
+}
+
+// UnmarshalBinary interface implementation
+func (o *GetTransactionReceivedOKBody) UnmarshalBinary(b []byte) error {
+	var res GetTransactionReceivedOKBody
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*o = res
+	return nil
 }

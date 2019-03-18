@@ -40,6 +40,16 @@ paths:
           description: Account not found
         "500":
           description: Internal server error
+  /health:
+    post:
+      description: returns 200
+      tags:
+      - health
+      summary: returns 200 to prove the service is alive
+      operationId: healthCheck
+      responses:
+        "200":
+          description: OK
   /users/{owner}/accounts:
     get:
       description: Lists all accounts for a given customer
@@ -168,8 +178,12 @@ definitions:
       owner:
         type: string
   version:
-    description: Version of the microservice that is responding
-    type: string
+    type: object
+    required:
+    - version
+    properties:
+      version:
+        type: string
 tags:
 - description: Operations about Accounts
   name: account

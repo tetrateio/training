@@ -9,8 +9,6 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime"
-
-	model "github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/model"
 )
 
 // GetTransactionSentOKCode is the HTTP code returned for type GetTransactionSentOK
@@ -25,7 +23,7 @@ type GetTransactionSentOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *model.Transaction `json:"body,omitempty"`
+	Payload *GetTransactionSentOKBody `json:"body,omitempty"`
 }
 
 // NewGetTransactionSentOK creates GetTransactionSentOK with default headers values
@@ -35,13 +33,13 @@ func NewGetTransactionSentOK() *GetTransactionSentOK {
 }
 
 // WithPayload adds the payload to the get transaction sent o k response
-func (o *GetTransactionSentOK) WithPayload(payload *model.Transaction) *GetTransactionSentOK {
+func (o *GetTransactionSentOK) WithPayload(payload *GetTransactionSentOKBody) *GetTransactionSentOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the get transaction sent o k response
-func (o *GetTransactionSentOK) SetPayload(payload *model.Transaction) {
+func (o *GetTransactionSentOK) SetPayload(payload *GetTransactionSentOKBody) {
 	o.Payload = payload
 }
 

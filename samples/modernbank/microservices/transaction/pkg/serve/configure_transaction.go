@@ -21,6 +21,7 @@ import (
 	translogModel "github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/model"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/model"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/serve/restapi"
+	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/serve/restapi/health"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/serve/restapi/transactions"
 )
 
@@ -78,7 +79,12 @@ func configureAPI(api *restapi.TransactionAPI) http.Handler {
 			log.Printf("failed to create transaction in log from %v to %v for %v: %v", *params.Body.Sender, *params.Body.Receiver, *params.Body.Amount, err)
 			return transactions.NewCreateTransactionInternalServerError()
 		}
-		return transactions.NewCreateTransactionCreated().WithPayload(transLogToTransTransaction(res.Payload))
+		payload := &transactions.CreateTransactionCreatedBody{Transaction: transLogToTransTransaction(&res.Payload.Transaction), Version: model.Version{Version: version}}
+		return transactions.NewCreateTransactionCreated().WithPayload(payload)
+	})
+
+	api.HealthHealthCheckHandler = health.HealthCheckHandlerFunc(func(_ health.HealthCheckParams) middleware.Responder {
+		return health.NewHealthCheckOK()
 	})
 
 	api.ServerShutdown = func() {}
@@ -94,8 +100,8 @@ func transToTransLogNewTransaction(trans *model.Newtransaction) *translogModel.N
 	}
 }
 
-func transLogToTransTransaction(translog *translogModel.Transaction) *model.Transaction {
-	return &model.Transaction{
+func transLogToTransTransaction(translog *translogModel.Transaction) model.Transaction {
+	return model.Transaction{
 		ID:       translog.ID,
 		Amount:   translog.Amount,
 		Sender:   translog.Sender,

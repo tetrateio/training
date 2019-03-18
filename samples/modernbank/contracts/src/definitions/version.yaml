@@ -1,2 +1,8 @@
-description: Version of the microservice that is responding
-type: string
+# Is an object in order to work around issue with go swagger
+# TODO: work out if there's a better way to do this
+type: "object"
+required:
+- version
+properties:
+  version:
+    type: "string"

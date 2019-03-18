@@ -20,6 +20,7 @@ import (
 	"github.com/go-openapi/swag"
 
 	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/serve/restapi/accounts"
+	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/serve/restapi/health"
 )
 
 // NewAccountAPI creates a new Account instance
@@ -50,6 +51,9 @@ func NewAccountAPI(spec *loads.Document) *AccountAPI {
 		}),
 		AccountsGetAccountByNumberHandler: accounts.GetAccountByNumberHandlerFunc(func(params accounts.GetAccountByNumberParams) middleware.Responder {
 			return middleware.NotImplemented("operation AccountsGetAccountByNumber has not yet been implemented")
+		}),
+		HealthHealthCheckHandler: health.HealthCheckHandlerFunc(func(params health.HealthCheckParams) middleware.Responder {
+			return middleware.NotImplemented("operation HealthHealthCheck has not yet been implemented")
 		}),
 		AccountsListAccountsHandler: accounts.ListAccountsHandlerFunc(func(params accounts.ListAccountsParams) middleware.Responder {
 			return middleware.NotImplemented("operation AccountsListAccounts has not yet been implemented")
@@ -93,6 +97,8 @@ type AccountAPI struct {
 	AccountsDeleteAccountHandler accounts.DeleteAccountHandler
 	// AccountsGetAccountByNumberHandler sets the operation handler for the get account by number operation
 	AccountsGetAccountByNumberHandler accounts.GetAccountByNumberHandler
+	// HealthHealthCheckHandler sets the operation handler for the health check operation
+	HealthHealthCheckHandler health.HealthCheckHandler
 	// AccountsListAccountsHandler sets the operation handler for the list accounts operation
 	AccountsListAccountsHandler accounts.ListAccountsHandler
 
@@ -172,6 +178,10 @@ func (o *AccountAPI) Validate() error {
 
 	if o.AccountsGetAccountByNumberHandler == nil {
 		unregistered = append(unregistered, "accounts.GetAccountByNumberHandler")
+	}
+
+	if o.HealthHealthCheckHandler == nil {
+		unregistered = append(unregistered, "health.HealthCheckHandler")
 	}
 
 	if o.AccountsListAccountsHandler == nil {
@@ -295,6 +305,11 @@ func (o *AccountAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/users/{owner}/accounts/{number}"] = accounts.NewGetAccountByNumber(o.context, o.AccountsGetAccountByNumberHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/health"] = health.NewHealthCheck(o.context, o.HealthHealthCheckHandler)
 
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)

@@ -25,7 +25,7 @@ type ChangeBalanceOK struct {
 	/*
 	  In: Body
 	*/
-	Payload model.Version `json:"body,omitempty"`
+	Payload *model.Version `json:"body,omitempty"`
 }
 
 // NewChangeBalanceOK creates ChangeBalanceOK with default headers values
@@ -35,13 +35,13 @@ func NewChangeBalanceOK() *ChangeBalanceOK {
 }
 
 // WithPayload adds the payload to the change balance o k response
-func (o *ChangeBalanceOK) WithPayload(payload model.Version) *ChangeBalanceOK {
+func (o *ChangeBalanceOK) WithPayload(payload *model.Version) *ChangeBalanceOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the change balance o k response
-func (o *ChangeBalanceOK) SetPayload(payload model.Version) {
+func (o *ChangeBalanceOK) SetPayload(payload *model.Version) {
 	o.Payload = payload
 }
 
@@ -49,11 +49,12 @@ func (o *ChangeBalanceOK) SetPayload(payload model.Version) {
 func (o *ChangeBalanceOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
 	rw.WriteHeader(200)
-	payload := o.Payload
-	if err := producer.Produce(rw, payload); err != nil {
-		panic(err) // let the recovery middleware deal with this
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
 	}
-
 }
 
 // ChangeBalanceNotFoundCode is the HTTP code returned for type ChangeBalanceNotFound
