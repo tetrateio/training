@@ -27,11 +27,9 @@ paths:
         "200":
           description: Success!
           schema:
-            allOf:
-            - type: array
-              items:
-                $ref: '#/definitions/transaction'
-            - $ref: '#/definitions/version'
+            type: array
+            items:
+              $ref: '#/definitions/transaction'
         "404":
           description: No transactions found
         "500":
@@ -61,9 +59,7 @@ paths:
         "200":
           description: Success!
           schema:
-            allOf:
-            - $ref: '#/definitions/transaction'
-            - $ref: '#/definitions/version'
+            $ref: '#/definitions/transaction'
         "404":
           description: Transaction not found
         "500":
@@ -88,11 +84,9 @@ paths:
         "200":
           description: Success!
           schema:
-            allOf:
-            - type: array
-              items:
-                $ref: '#/definitions/transaction'
-            - $ref: '#/definitions/version'
+            type: array
+            items:
+              $ref: '#/definitions/transaction'
         "404":
           description: No transactions found
         "500":
@@ -122,9 +116,7 @@ paths:
         "200":
           description: Success!
           schema:
-            allOf:
-            - $ref: '#/definitions/transaction'
-            - $ref: '#/definitions/version'
+            $ref: '#/definitions/transaction'
         "404":
           description: Transaction not found
         "500":
@@ -151,9 +143,7 @@ paths:
         "201":
           description: Created
           schema:
-            allOf:
-            - $ref: '#/definitions/transaction'
-            - $ref: '#/definitions/version'
+            $ref: '#/definitions/transaction'
         "400":
           description: Nice try! You can't send negative amounts...
         "500":
@@ -180,9 +170,7 @@ paths:
         "201":
           description: Created
           schema:
-            allOf:
-            - $ref: '#/definitions/user'
-            - $ref: '#/definitions/version'
+            $ref: '#/definitions/user'
         "409":
           description: User alreadys exists
         "500":
@@ -206,11 +194,9 @@ paths:
         "200":
           description: Success!
           schema:
-            allOf:
-            - type: array
-              items:
-                $ref: '#/definitions/account'
-            - $ref: '#/definitions/version'
+            type: array
+            items:
+              $ref: '#/definitions/account'
         "404":
           description: Owner not found
         "500":
@@ -233,9 +219,7 @@ paths:
         "201":
           description: Created
           schema:
-            allOf:
-            - $ref: '#/definitions/account'
-            - $ref: '#/definitions/version'
+            $ref: '#/definitions/account'
         "500":
           description: Internal server error
   /users/{owner}/accounts/{number}:
@@ -262,9 +246,7 @@ paths:
         "200":
           description: Success!
           schema:
-            allOf:
-            - $ref: '#/definitions/account'
-            - $ref: '#/definitions/version'
+            $ref: '#/definitions/account'
         "404":
           description: Account not found
         "500":
@@ -292,8 +274,6 @@ paths:
       responses:
         "200":
           description: Aaaaand it's gone!
-          schema:
-            $ref: '#/definitions/version'
         "404":
           description: Account not found
         "500":
@@ -316,9 +296,7 @@ paths:
         "200":
           description: Success!
           schema:
-            allOf:
-            - $ref: '#/definitions/user'
-            - $ref: '#/definitions/version'
+            $ref: '#/definitions/user'
         "404":
           description: User not found
         "500":
@@ -349,9 +327,7 @@ paths:
         "200":
           description: Success!
           schema:
-            allOf:
-            - $ref: '#/definitions/user'
-            - $ref: '#/definitions/version'
+            $ref: '#/definitions/user'
         "404":
           description: User not found
         "500":
@@ -371,8 +347,6 @@ paths:
       responses:
         "200":
           description: Success!
-          schema:
-            $ref: '#/definitions/version'
         "404":
           description: User not found
         "500":
@@ -450,13 +424,6 @@ definitions:
       password:
         type: string
       username:
-        type: string
-  version:
-    type: object
-    required:
-    - version
-    properties:
-      version:
         type: string
 tags:
 - description: Operations for banking services.

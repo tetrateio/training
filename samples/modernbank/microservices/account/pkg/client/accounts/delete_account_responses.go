@@ -7,13 +7,10 @@ package accounts
 
 import (
 	"fmt"
-	"io"
 
 	"github.com/go-openapi/runtime"
 
 	strfmt "github.com/go-openapi/strfmt"
-
-	model "github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
 )
 
 // DeleteAccountReader is a Reader for the DeleteAccount structure.
@@ -61,21 +58,13 @@ func NewDeleteAccountOK() *DeleteAccountOK {
 Aaaaand it's gone!
 */
 type DeleteAccountOK struct {
-	Payload *model.Version
 }
 
 func (o *DeleteAccountOK) Error() string {
-	return fmt.Sprintf("[DELETE /users/{owner}/accounts/{number}][%d] deleteAccountOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /users/{owner}/accounts/{number}][%d] deleteAccountOK ", 200)
 }
 
 func (o *DeleteAccountOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(model.Version)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
 
 	return nil
 }

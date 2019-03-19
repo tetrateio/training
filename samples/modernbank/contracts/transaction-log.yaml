@@ -29,11 +29,9 @@ paths:
         "200":
           description: Success!
           schema:
-            allOf:
-            - type: array
-              items:
-                $ref: '#/definitions/transaction'
-            - $ref: '#/definitions/version'
+            type: array
+            items:
+              $ref: '#/definitions/transaction'
         "404":
           description: No transactions found
         "500":
@@ -63,9 +61,7 @@ paths:
         "200":
           description: Success!
           schema:
-            allOf:
-            - $ref: '#/definitions/transaction'
-            - $ref: '#/definitions/version'
+            $ref: '#/definitions/transaction'
         "404":
           description: Transaction not found
         "500":
@@ -90,11 +86,9 @@ paths:
         "200":
           description: Success!
           schema:
-            allOf:
-            - type: array
-              items:
-                $ref: '#/definitions/transaction'
-            - $ref: '#/definitions/version'
+            type: array
+            items:
+              $ref: '#/definitions/transaction'
         "404":
           description: No transactions found
         "500":
@@ -124,9 +118,7 @@ paths:
         "200":
           description: Success!
           schema:
-            allOf:
-            - $ref: '#/definitions/transaction'
-            - $ref: '#/definitions/version'
+            $ref: '#/definitions/transaction'
         "404":
           description: Transaction not found
         "500":
@@ -163,9 +155,7 @@ paths:
         "201":
           description: Created
           schema:
-            allOf:
-            - $ref: '#/definitions/transaction'
-            - $ref: '#/definitions/version'
+            $ref: '#/definitions/transaction'
         "400":
           description: Nice try! You can't send negative amounts...
         "500":
@@ -210,13 +200,6 @@ definitions:
       properties:
         id:
           type: string
-  version:
-    type: object
-    required:
-    - version
-    properties:
-      version:
-        type: string
 tags:
 - description: Operations about transactions
   name: transaction-log

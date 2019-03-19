@@ -9,8 +9,6 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime"
-
-	model "github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
 )
 
 // ChangeBalanceOKCode is the HTTP code returned for type ChangeBalanceOK
@@ -21,11 +19,6 @@ const ChangeBalanceOKCode int = 200
 swagger:response changeBalanceOK
 */
 type ChangeBalanceOK struct {
-
-	/*
-	  In: Body
-	*/
-	Payload *model.Version `json:"body,omitempty"`
 }
 
 // NewChangeBalanceOK creates ChangeBalanceOK with default headers values
@@ -34,27 +27,12 @@ func NewChangeBalanceOK() *ChangeBalanceOK {
 	return &ChangeBalanceOK{}
 }
 
-// WithPayload adds the payload to the change balance o k response
-func (o *ChangeBalanceOK) WithPayload(payload *model.Version) *ChangeBalanceOK {
-	o.Payload = payload
-	return o
-}
-
-// SetPayload sets the payload to the change balance o k response
-func (o *ChangeBalanceOK) SetPayload(payload *model.Version) {
-	o.Payload = payload
-}
-
 // WriteResponse to the client
 func (o *ChangeBalanceOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
 	rw.WriteHeader(200)
-	if o.Payload != nil {
-		payload := o.Payload
-		if err := producer.Produce(rw, payload); err != nil {
-			panic(err) // let the recovery middleware deal with this
-		}
-	}
 }
 
 // ChangeBalanceNotFoundCode is the HTTP code returned for type ChangeBalanceNotFound

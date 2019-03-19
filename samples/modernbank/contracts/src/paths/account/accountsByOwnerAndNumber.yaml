@@ -22,9 +22,7 @@ get:
     200:
       description: "Success!"
       schema:
-        allOf:
-          - $ref: "./definitions/account.yaml"
-          - $ref: "./definitions/version.yaml"
+        $ref: "./definitions/account.yaml"
     404:
       description: "Account not found"
     500:
@@ -52,8 +50,6 @@ delete:
   responses:
     200:
       description: "Aaaaand it's gone!"
-      schema:
-        $ref: "./definitions/version.yaml"
     404:
       description: "Account not found"
     500:

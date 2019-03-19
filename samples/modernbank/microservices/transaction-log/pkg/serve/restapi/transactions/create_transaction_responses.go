@@ -9,6 +9,8 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime"
+
+	model "github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/model"
 )
 
 // CreateTransactionCreatedCode is the HTTP code returned for type CreateTransactionCreated
@@ -23,7 +25,7 @@ type CreateTransactionCreated struct {
 	/*
 	  In: Body
 	*/
-	Payload *CreateTransactionCreatedBody `json:"body,omitempty"`
+	Payload *model.Transaction `json:"body,omitempty"`
 }
 
 // NewCreateTransactionCreated creates CreateTransactionCreated with default headers values
@@ -33,13 +35,13 @@ func NewCreateTransactionCreated() *CreateTransactionCreated {
 }
 
 // WithPayload adds the payload to the create transaction created response
-func (o *CreateTransactionCreated) WithPayload(payload *CreateTransactionCreatedBody) *CreateTransactionCreated {
+func (o *CreateTransactionCreated) WithPayload(payload *model.Transaction) *CreateTransactionCreated {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create transaction created response
-func (o *CreateTransactionCreated) SetPayload(payload *CreateTransactionCreatedBody) {
+func (o *CreateTransactionCreated) SetPayload(payload *model.Transaction) {
 	o.Payload = payload
 }
 

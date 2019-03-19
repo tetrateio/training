@@ -9,6 +9,8 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime"
+
+	model "github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
 )
 
 // CreateAccountCreatedCode is the HTTP code returned for type CreateAccountCreated
@@ -23,7 +25,7 @@ type CreateAccountCreated struct {
 	/*
 	  In: Body
 	*/
-	Payload *CreateAccountCreatedBody `json:"body,omitempty"`
+	Payload *model.Account `json:"body,omitempty"`
 }
 
 // NewCreateAccountCreated creates CreateAccountCreated with default headers values
@@ -33,13 +35,13 @@ func NewCreateAccountCreated() *CreateAccountCreated {
 }
 
 // WithPayload adds the payload to the create account created response
-func (o *CreateAccountCreated) WithPayload(payload *CreateAccountCreatedBody) *CreateAccountCreated {
+func (o *CreateAccountCreated) WithPayload(payload *model.Account) *CreateAccountCreated {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the create account created response
-func (o *CreateAccountCreated) SetPayload(payload *CreateAccountCreatedBody) {
+func (o *CreateAccountCreated) SetPayload(payload *model.Account) {
 	o.Payload = payload
 }
 

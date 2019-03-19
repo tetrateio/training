@@ -74,14 +74,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/user"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/user"
             }
           },
           "409": {
@@ -116,14 +109,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/user"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/user"
             }
           },
           "404": {
@@ -169,14 +155,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/user"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/user"
             }
           },
           "404": {
@@ -205,10 +184,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "Success!",
-            "schema": {
-              "$ref": "#/definitions/version"
-            }
+            "description": "Success!"
           },
           "404": {
             "description": "User not found"
@@ -244,17 +220,6 @@ func init() {
           "type": "string"
         },
         "username": {
-          "type": "string"
-        }
-      }
-    },
-    "version": {
-      "type": "object",
-      "required": [
-        "version"
-      ],
-      "properties": {
-        "version": {
           "type": "string"
         }
       }
@@ -324,14 +289,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/user"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/user"
             }
           },
           "409": {
@@ -366,14 +324,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/user"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/user"
             }
           },
           "404": {
@@ -419,14 +370,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/user"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/user"
             }
           },
           "404": {
@@ -455,10 +399,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "Success!",
-            "schema": {
-              "$ref": "#/definitions/version"
-            }
+            "description": "Success!"
           },
           "404": {
             "description": "User not found"
@@ -494,17 +435,6 @@ func init() {
           "type": "string"
         },
         "username": {
-          "type": "string"
-        }
-      }
-    },
-    "version": {
-      "type": "object",
-      "required": [
-        "version"
-      ],
-      "properties": {
-        "version": {
           "type": "string"
         }
       }

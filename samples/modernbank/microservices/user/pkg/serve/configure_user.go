@@ -14,7 +14,6 @@ import (
 	middleware "github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/swag"
 
-	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/model"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/serve/restapi"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/serve/restapi/health"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/serve/restapi/users"
@@ -54,8 +53,7 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 			return users.NewCreateUserInternalServerError()
 		}
 		api.Logger("Created user %q", *params.Body.Username)
-		payload := &users.CreateUserCreatedBody{User: *res, Version: model.Version{Version: version}}
-		return users.NewCreateUserCreated().WithPayload(payload)
+		return users.NewCreateUserCreated().WithPayload(res)
 
 	})
 	api.UsersDeleteUserHandler = users.DeleteUserHandlerFunc(func(params users.DeleteUserParams) middleware.Responder {
@@ -67,7 +65,7 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 			return users.NewDeleteUserInternalServerError()
 		}
 		api.Logger("Deleted user %q", params.Username)
-		return users.NewDeleteUserOK().WithPayload(&model.Version{Version: version})
+		return users.NewDeleteUserOK()
 	})
 	api.UsersGetUserByUserNameHandler = users.GetUserByUserNameHandlerFunc(func(params users.GetUserByUserNameParams) middleware.Responder {
 		res, err := userStore.Get(params.Username)
@@ -79,8 +77,7 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 			return users.NewGetUserByUserNameInternalServerError()
 		}
 		api.Logger("Retrieved user %q", params.Username)
-		payload := &users.GetUserByUserNameOKBody{User: *res, Version: model.Version{Version: version}}
-		return users.NewGetUserByUserNameOK().WithPayload(payload)
+		return users.NewGetUserByUserNameOK().WithPayload(res)
 	})
 	api.UsersUpdateUserHandler = users.UpdateUserHandlerFunc(func(params users.UpdateUserParams) middleware.Responder {
 		res, err := userStore.Update(params.Username, params.Body)
@@ -92,8 +89,7 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 			return users.NewUpdateUserInternalServerError()
 		}
 		api.Logger("Updated user %q", *params.Body.Username)
-		payload := &users.UpdateUserOKBody{User: *res, Version: model.Version{Version: version}}
-		return users.NewUpdateUserOK().WithPayload(payload)
+		return users.NewUpdateUserOK().WithPayload(res)
 	})
 	api.HealthHealthCheckHandler = health.HealthCheckHandlerFunc(func(_ health.HealthCheckParams) middleware.Responder {
 		return health.NewHealthCheckOK()

@@ -24,8 +24,8 @@ require (
 	github.com/tidwall/pretty v0.0.0-20180105212114-65a9db5fad51 // indirect
 	github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c // indirect
 	github.com/xdg/stringprep v1.0.0 // indirect
-	go.mongodb.org/mongo-driver v1.0.0 // indirect
+	go.mongodb.org/mongo-driver v1.0.0
 	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a // indirect
-	golang.org/x/net v0.0.0-20190313220215-9f648a60d977
+	golang.org/x/net v0.0.0-20190318221613-d196dffd7c2b
 	golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6 // indirect
 )

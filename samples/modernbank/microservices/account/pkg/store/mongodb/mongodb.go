@@ -8,8 +8,9 @@ import (
 	"time"
 
 	"github.com/go-openapi/swag"
-	"github.com/mongodb/mongo-go-driver/bson"
-	"github.com/mongodb/mongo-go-driver/mongo"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
 	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/store"
@@ -31,7 +32,7 @@ var (
 
 func NewMongoDB() MongoDB {
 	rand.Seed(time.Now().UnixNano())
-	client, _ := mongo.NewClient(defaultAddress)
+	client, _ := mongo.NewClient(options.Client().ApplyURI(defaultAddress))
 	// Keep retrying every 5 seconds until the mongo backend is up or 6 minutes have passed.
 	for i := 1; i < 360; i += 5 {
 		time.Sleep(5 * time.Second)

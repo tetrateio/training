@@ -74,14 +74,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/transaction"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/transaction"
             }
           },
           "400": {
@@ -153,17 +146,6 @@ func init() {
           }
         }
       ]
-    },
-    "version": {
-      "type": "object",
-      "required": [
-        "version"
-      ],
-      "properties": {
-        "version": {
-          "type": "string"
-        }
-      }
     }
   },
   "tags": [
@@ -230,14 +212,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/transaction"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/transaction"
             }
           },
           "400": {
@@ -309,17 +284,6 @@ func init() {
           }
         }
       ]
-    },
-    "version": {
-      "type": "object",
-      "required": [
-        "version"
-      ],
-      "properties": {
-        "version": {
-          "type": "string"
-        }
-      }
     }
   },
   "tags": [

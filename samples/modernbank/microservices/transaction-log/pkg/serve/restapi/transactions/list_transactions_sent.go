@@ -7,14 +7,8 @@ package transactions
 
 import (
 	"net/http"
-	"strconv"
 
-	errors "github.com/go-openapi/errors"
 	middleware "github.com/go-openapi/runtime/middleware"
-	strfmt "github.com/go-openapi/strfmt"
-	swag "github.com/go-openapi/swag"
-
-	model "github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/model"
 )
 
 // ListTransactionsSentHandlerFunc turns a function with the right signature into a list transactions sent handler
@@ -63,117 +57,4 @@ func (o *ListTransactionsSent) ServeHTTP(rw http.ResponseWriter, r *http.Request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
-}
-
-// ListTransactionsSentOKBody list transactions sent o k body
-// swagger:model ListTransactionsSentOKBody
-type ListTransactionsSentOKBody struct {
-	ListTransactionsSentOKBodyAllOf0
-
-	model.Version
-}
-
-// UnmarshalJSON unmarshals this object from a JSON structure
-func (o *ListTransactionsSentOKBody) UnmarshalJSON(raw []byte) error {
-	// ListTransactionsSentOKBodyAO0
-	var listTransactionsSentOKBodyAO0 ListTransactionsSentOKBodyAllOf0
-	if err := swag.ReadJSON(raw, &listTransactionsSentOKBodyAO0); err != nil {
-		return err
-	}
-	o.ListTransactionsSentOKBodyAllOf0 = listTransactionsSentOKBodyAO0
-
-	// ListTransactionsSentOKBodyAO1
-	var listTransactionsSentOKBodyAO1 model.Version
-	if err := swag.ReadJSON(raw, &listTransactionsSentOKBodyAO1); err != nil {
-		return err
-	}
-	o.Version = listTransactionsSentOKBodyAO1
-
-	return nil
-}
-
-// MarshalJSON marshals this object to a JSON structure
-func (o ListTransactionsSentOKBody) MarshalJSON() ([]byte, error) {
-	_parts := make([][]byte, 0, 2)
-
-	listTransactionsSentOKBodyAO0, err := swag.WriteJSON(o.ListTransactionsSentOKBodyAllOf0)
-	if err != nil {
-		return nil, err
-	}
-	_parts = append(_parts, listTransactionsSentOKBodyAO0)
-
-	listTransactionsSentOKBodyAO1, err := swag.WriteJSON(o.Version)
-	if err != nil {
-		return nil, err
-	}
-	_parts = append(_parts, listTransactionsSentOKBodyAO1)
-
-	return swag.ConcatJSON(_parts...), nil
-}
-
-// Validate validates this list transactions sent o k body
-func (o *ListTransactionsSentOKBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	// validation for a type composition with ListTransactionsSentOKBodyAllOf0
-	if err := o.ListTransactionsSentOKBodyAllOf0.Validate(formats); err != nil {
-		res = append(res, err)
-	}
-	// validation for a type composition with model.Version
-	if err := o.Version.Validate(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *ListTransactionsSentOKBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *ListTransactionsSentOKBody) UnmarshalBinary(b []byte) error {
-	var res ListTransactionsSentOKBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
-	return nil
-}
-
-// ListTransactionsSentOKBodyAllOf0 list transactions sent o k body all of0
-// swagger:model ListTransactionsSentOKBodyAllOf0
-type ListTransactionsSentOKBodyAllOf0 []*model.Transaction
-
-// Validate validates this list transactions sent o k body all of0
-func (o ListTransactionsSentOKBodyAllOf0) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	for i := 0; i < len(o); i++ {
-		if swag.IsZero(o[i]) { // not required
-			continue
-		}
-
-		if o[i] != nil {
-			if err := o[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName(strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
 }

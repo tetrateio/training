@@ -7,13 +7,10 @@ package users
 
 import (
 	"fmt"
-	"io"
 
 	"github.com/go-openapi/runtime"
 
 	strfmt "github.com/go-openapi/strfmt"
-
-	model "github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/model"
 )
 
 // DeleteUserReader is a Reader for the DeleteUser structure.
@@ -61,21 +58,13 @@ func NewDeleteUserOK() *DeleteUserOK {
 Success!
 */
 type DeleteUserOK struct {
-	Payload *model.Version
 }
 
 func (o *DeleteUserOK) Error() string {
-	return fmt.Sprintf("[DELETE /users/{username}][%d] deleteUserOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[DELETE /users/{username}][%d] deleteUserOK ", 200)
 }
 
 func (o *DeleteUserOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(model.Version)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
 
 	return nil
 }

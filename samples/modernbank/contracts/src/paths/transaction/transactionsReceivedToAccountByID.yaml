@@ -22,9 +22,7 @@ get:
     200:
       description: "Success!"
       schema:
-        allOf:
-          - $ref: "./definitions/transaction.yaml"
-          - $ref: "./definitions/version.yaml"
+        $ref: "./definitions/transaction.yaml"
     404:
       description: "Transaction not found"
     500:

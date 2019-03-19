@@ -17,11 +17,9 @@ get:
     200:
       description: "Success!"
       schema:
-        allOf:
-          - type: array
-            items:
-              $ref: "./definitions/transaction.yaml"
-          - $ref: "./definitions/version.yaml"
+        type: array
+        items:
+          $ref: "./definitions/transaction.yaml"
     404:
       description: "No transactions found"
     500:

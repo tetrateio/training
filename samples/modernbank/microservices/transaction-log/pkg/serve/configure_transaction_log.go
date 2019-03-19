@@ -14,7 +14,6 @@ import (
 	middleware "github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/swag"
 
-	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/model"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/serve/restapi"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/serve/restapi/health"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/serve/restapi/transactions"
@@ -50,8 +49,7 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 			return transactions.NewCreateTransactionInternalServerError()
 		}
 		api.Logger("Created transaction %q", *res.ID)
-		payload := &transactions.CreateTransactionCreatedBody{Transaction: *res, Version: model.Version{Version: version}}
-		return transactions.NewCreateTransactionCreated().WithPayload(payload)
+		return transactions.NewCreateTransactionCreated().WithPayload(res)
 	})
 	api.TransactionsGetTransactionReceivedHandler = transactions.GetTransactionReceivedHandlerFunc(func(params transactions.GetTransactionReceivedParams) middleware.Responder {
 		res, err := transactionStore.GetReceived(params.Receiver, params.Transaction)
@@ -63,8 +61,7 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 			return transactions.NewGetTransactionReceivedInternalServerError()
 		}
 		api.Logger("Retrieved transaction %v received by %v", params.Transaction, params.Receiver)
-		payload := &transactions.GetTransactionReceivedOKBody{Transaction: *res, Version: model.Version{Version: version}}
-		return transactions.NewGetTransactionReceivedOK().WithPayload(payload)
+		return transactions.NewGetTransactionReceivedOK().WithPayload(res)
 	})
 	api.TransactionsGetTransactionSentHandler = transactions.GetTransactionSentHandlerFunc(func(params transactions.GetTransactionSentParams) middleware.Responder {
 		res, err := transactionStore.GetSent(params.Sender, params.Transaction)
@@ -76,8 +73,7 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 			return transactions.NewGetTransactionSentInternalServerError()
 		}
 		api.Logger("Retrieved transaction %v sent by %v", params.Transaction, params.Sender)
-		payload := &transactions.GetTransactionSentOKBody{Transaction: *res, Version: model.Version{Version: version}}
-		return transactions.NewGetTransactionSentOK().WithPayload(payload)
+		return transactions.NewGetTransactionSentOK().WithPayload(res)
 	})
 	api.TransactionsListTransactionsReceivedHandler = transactions.ListTransactionsReceivedHandlerFunc(func(params transactions.ListTransactionsReceivedParams) middleware.Responder {
 		res, err := transactionStore.ListReceived(params.Receiver)
@@ -89,8 +85,7 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 			return transactions.NewListTransactionsReceivedInternalServerError()
 		}
 		api.Logger("Retrieved all transactions received by %v", params.Receiver)
-		payload := &transactions.ListTransactionsReceivedOKBody{ListTransactionsReceivedOKBodyAllOf0: res, Version: model.Version{Version: version}}
-		return transactions.NewListTransactionsReceivedOK().WithPayload(payload)
+		return transactions.NewListTransactionsReceivedOK().WithPayload(res)
 	})
 	api.TransactionsListTransactionsSentHandler = transactions.ListTransactionsSentHandlerFunc(func(params transactions.ListTransactionsSentParams) middleware.Responder {
 		res, err := transactionStore.ListSent(params.Sender)
@@ -102,8 +97,7 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 			return transactions.NewListTransactionsSentInternalServerError()
 		}
 		api.Logger("Retrieved all transactions sent by %v", params.Sender)
-		payload := &transactions.ListTransactionsSentOKBody{ListTransactionsSentOKBodyAllOf0: res, Version: model.Version{Version: version}}
-		return transactions.NewListTransactionsSentOK().WithPayload(payload)
+		return transactions.NewListTransactionsSentOK().WithPayload(res)
 	})
 	api.HealthHealthCheckHandler = health.HealthCheckHandlerFunc(func(_ health.HealthCheckParams) middleware.Responder {
 		return health.NewHealthCheckOK()

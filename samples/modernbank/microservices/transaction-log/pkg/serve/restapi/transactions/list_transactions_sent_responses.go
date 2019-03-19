@@ -9,6 +9,8 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime"
+
+	model "github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/model"
 )
 
 // ListTransactionsSentOKCode is the HTTP code returned for type ListTransactionsSentOK
@@ -23,7 +25,7 @@ type ListTransactionsSentOK struct {
 	/*
 	  In: Body
 	*/
-	Payload *ListTransactionsSentOKBody `json:"body,omitempty"`
+	Payload []*model.Transaction `json:"body,omitempty"`
 }
 
 // NewListTransactionsSentOK creates ListTransactionsSentOK with default headers values
@@ -33,13 +35,13 @@ func NewListTransactionsSentOK() *ListTransactionsSentOK {
 }
 
 // WithPayload adds the payload to the list transactions sent o k response
-func (o *ListTransactionsSentOK) WithPayload(payload *ListTransactionsSentOKBody) *ListTransactionsSentOK {
+func (o *ListTransactionsSentOK) WithPayload(payload []*model.Transaction) *ListTransactionsSentOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the list transactions sent o k response
-func (o *ListTransactionsSentOK) SetPayload(payload *ListTransactionsSentOKBody) {
+func (o *ListTransactionsSentOK) SetPayload(payload []*model.Transaction) {
 	o.Payload = payload
 }
 
@@ -47,12 +49,15 @@ func (o *ListTransactionsSentOK) SetPayload(payload *ListTransactionsSentOKBody)
 func (o *ListTransactionsSentOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
 	rw.WriteHeader(200)
-	if o.Payload != nil {
-		payload := o.Payload
-		if err := producer.Produce(rw, payload); err != nil {
-			panic(err) // let the recovery middleware deal with this
-		}
+	payload := o.Payload
+	if payload == nil {
+		payload = make([]*model.Transaction, 0, 50)
 	}
+
+	if err := producer.Produce(rw, payload); err != nil {
+		panic(err) // let the recovery middleware deal with this
+	}
+
 }
 
 // ListTransactionsSentNotFoundCode is the HTTP code returned for type ListTransactionsSentNotFound

@@ -7,13 +7,10 @@ package accounts
 
 import (
 	"fmt"
-	"io"
 
 	"github.com/go-openapi/runtime"
 
 	strfmt "github.com/go-openapi/strfmt"
-
-	model "github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
 )
 
 // ChangeBalanceReader is a Reader for the ChangeBalance structure.
@@ -61,21 +58,13 @@ func NewChangeBalanceOK() *ChangeBalanceOK {
 OK
 */
 type ChangeBalanceOK struct {
-	Payload *model.Version
 }
 
 func (o *ChangeBalanceOK) Error() string {
-	return fmt.Sprintf("[PUT /accounts/{number}/balance/{delta}][%d] changeBalanceOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[PUT /accounts/{number}/balance/{delta}][%d] changeBalanceOK ", 200)
 }
 
 func (o *ChangeBalanceOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
-	o.Payload = new(model.Version)
-
-	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
-		return err
-	}
 
 	return nil
 }

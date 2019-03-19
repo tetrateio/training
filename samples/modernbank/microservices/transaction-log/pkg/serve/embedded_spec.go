@@ -55,17 +55,10 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/transaction"
-                  }
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/transaction"
+              }
             }
           },
           "404": {
@@ -109,14 +102,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/transaction"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/transaction"
             }
           },
           "404": {
@@ -153,17 +139,10 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/transaction"
-                  }
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/transaction"
+              }
             }
           },
           "404": {
@@ -207,14 +186,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/transaction"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/transaction"
             }
           },
           "404": {
@@ -270,14 +242,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/transaction"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/transaction"
             }
           },
           "400": {
@@ -349,17 +314,6 @@ func init() {
           }
         }
       ]
-    },
-    "version": {
-      "type": "object",
-      "required": [
-        "version"
-      ],
-      "properties": {
-        "version": {
-          "type": "string"
-        }
-      }
     }
   },
   "tags": [
@@ -407,17 +361,10 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/transaction"
-                  }
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/transaction"
+              }
             }
           },
           "404": {
@@ -461,14 +408,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/transaction"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/transaction"
             }
           },
           "404": {
@@ -505,17 +445,10 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/transaction"
-                  }
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/transaction"
+              }
             }
           },
           "404": {
@@ -559,14 +492,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/transaction"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/transaction"
             }
           },
           "404": {
@@ -622,14 +548,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/transaction"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/transaction"
             }
           },
           "400": {
@@ -701,17 +620,6 @@ func init() {
           }
         }
       ]
-    },
-    "version": {
-      "type": "object",
-      "required": [
-        "version"
-      ],
-      "properties": {
-        "version": {
-          "type": "string"
-        }
-      }
     }
   },
   "tags": [

@@ -6,8 +6,6 @@ put:
   operationId: "changeBalance"
   consumes:
   - "application/json"
-  produces:
-  - "application/json"
   parameters:
   - in: "path"
     name: "number"
@@ -24,8 +22,6 @@ put:
   responses:
     200:
       description: "OK"
-      schema:
-        $ref: "./definitions/version.yaml"
     404:
       description: "Account not found"
     500:

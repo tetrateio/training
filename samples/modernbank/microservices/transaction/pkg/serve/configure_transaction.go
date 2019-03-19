@@ -79,8 +79,7 @@ func configureAPI(api *restapi.TransactionAPI) http.Handler {
 			log.Printf("failed to create transaction in log from %v to %v for %v: %v", *params.Body.Sender, *params.Body.Receiver, *params.Body.Amount, err)
 			return transactions.NewCreateTransactionInternalServerError()
 		}
-		payload := &transactions.CreateTransactionCreatedBody{Transaction: transLogToTransTransaction(&res.Payload.Transaction), Version: model.Version{Version: version}}
-		return transactions.NewCreateTransactionCreated().WithPayload(payload)
+		return transactions.NewCreateTransactionCreated().WithPayload(transLogToTransTransaction(res.Payload))
 	})
 
 	api.HealthHealthCheckHandler = health.HealthCheckHandlerFunc(func(_ health.HealthCheckParams) middleware.Responder {
@@ -100,8 +99,8 @@ func transToTransLogNewTransaction(trans *model.Newtransaction) *translogModel.N
 	}
 }
 
-func transLogToTransTransaction(translog *translogModel.Transaction) model.Transaction {
-	return model.Transaction{
+func transLogToTransTransaction(translog *translogModel.Transaction) *model.Transaction {
+	return &model.Transaction{
 		ID:       translog.ID,
 		Amount:   translog.Amount,
 		Sender:   translog.Sender,

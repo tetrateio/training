@@ -16,9 +16,7 @@ get:
     200:
       description: "Success!"
       schema:
-        allOf:
-          - $ref: "./definitions/user.yaml"
-          - $ref: "./definitions/version.yaml"
+        $ref: "./definitions/user.yaml"
     404:
       description: "User not found"
     500:
@@ -49,9 +47,7 @@ put:
     200:
       description: "Success!"
       schema:
-        allOf:
-          - $ref: "./definitions/user.yaml"
-          - $ref: "./definitions/version.yaml"    
+        $ref: "./definitions/user.yaml"    
     404:
       description: "User not found"
     500:
@@ -71,8 +67,6 @@ delete:
   responses:
     200:
       description: "Success!"
-      schema:
-        $ref: "./definitions/version.yaml" 
     404:
       description: "User not found"
     500:

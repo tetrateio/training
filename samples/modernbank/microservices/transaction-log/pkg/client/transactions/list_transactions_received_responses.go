@@ -8,11 +8,8 @@ package transactions
 import (
 	"fmt"
 	"io"
-	"strconv"
 
-	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
-	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 
@@ -64,7 +61,7 @@ func NewListTransactionsReceivedOK() *ListTransactionsReceivedOK {
 Success!
 */
 type ListTransactionsReceivedOK struct {
-	Payload *ListTransactionsReceivedOKBody
+	Payload []*model.Transaction
 }
 
 func (o *ListTransactionsReceivedOK) Error() string {
@@ -73,10 +70,8 @@ func (o *ListTransactionsReceivedOK) Error() string {
 
 func (o *ListTransactionsReceivedOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	o.Payload = new(ListTransactionsReceivedOKBody)
-
 	// response payload
-	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 
@@ -122,120 +117,5 @@ func (o *ListTransactionsReceivedInternalServerError) Error() string {
 
 func (o *ListTransactionsReceivedInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
-	return nil
-}
-
-/*ListTransactionsReceivedOKBody list transactions received o k body
-swagger:model ListTransactionsReceivedOKBody
-*/
-type ListTransactionsReceivedOKBody struct {
-	ListTransactionsReceivedOKBodyAllOf0
-
-	model.Version
-}
-
-// UnmarshalJSON unmarshals this object from a JSON structure
-func (o *ListTransactionsReceivedOKBody) UnmarshalJSON(raw []byte) error {
-	// ListTransactionsReceivedOKBodyAO0
-	var listTransactionsReceivedOKBodyAO0 ListTransactionsReceivedOKBodyAllOf0
-	if err := swag.ReadJSON(raw, &listTransactionsReceivedOKBodyAO0); err != nil {
-		return err
-	}
-	o.ListTransactionsReceivedOKBodyAllOf0 = listTransactionsReceivedOKBodyAO0
-
-	// ListTransactionsReceivedOKBodyAO1
-	var listTransactionsReceivedOKBodyAO1 model.Version
-	if err := swag.ReadJSON(raw, &listTransactionsReceivedOKBodyAO1); err != nil {
-		return err
-	}
-	o.Version = listTransactionsReceivedOKBodyAO1
-
-	return nil
-}
-
-// MarshalJSON marshals this object to a JSON structure
-func (o ListTransactionsReceivedOKBody) MarshalJSON() ([]byte, error) {
-	_parts := make([][]byte, 0, 2)
-
-	listTransactionsReceivedOKBodyAO0, err := swag.WriteJSON(o.ListTransactionsReceivedOKBodyAllOf0)
-	if err != nil {
-		return nil, err
-	}
-	_parts = append(_parts, listTransactionsReceivedOKBodyAO0)
-
-	listTransactionsReceivedOKBodyAO1, err := swag.WriteJSON(o.Version)
-	if err != nil {
-		return nil, err
-	}
-	_parts = append(_parts, listTransactionsReceivedOKBodyAO1)
-
-	return swag.ConcatJSON(_parts...), nil
-}
-
-// Validate validates this list transactions received o k body
-func (o *ListTransactionsReceivedOKBody) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	// validation for a type composition with ListTransactionsReceivedOKBodyAllOf0
-	if err := o.ListTransactionsReceivedOKBodyAllOf0.Validate(formats); err != nil {
-		res = append(res, err)
-	}
-	// validation for a type composition with model.Version
-	if err := o.Version.Validate(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *ListTransactionsReceivedOKBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *ListTransactionsReceivedOKBody) UnmarshalBinary(b []byte) error {
-	var res ListTransactionsReceivedOKBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
-	return nil
-}
-
-/*ListTransactionsReceivedOKBodyAllOf0 list transactions received o k body all of0
-swagger:model ListTransactionsReceivedOKBodyAllOf0
-*/
-type ListTransactionsReceivedOKBodyAllOf0 []*model.Transaction
-
-// Validate validates this list transactions received o k body all of0
-func (o ListTransactionsReceivedOKBodyAllOf0) Validate(formats strfmt.Registry) error {
-	var res []error
-
-	for i := 0; i < len(o); i++ {
-		if swag.IsZero(o[i]) { // not required
-			continue
-		}
-
-		if o[i] != nil {
-			if err := o[i].Validate(formats); err != nil {
-				if ve, ok := err.(*errors.Validation); ok {
-					return ve.ValidateName(strconv.Itoa(i))
-				}
-				return err
-			}
-		}
-
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
 	return nil
 }

@@ -64,10 +64,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/version"
-            }
+            "description": "OK"
           },
           "404": {
             "description": "Account not found"
@@ -117,17 +114,10 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/account"
-                  }
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/account"
+              }
             }
           },
           "404": {
@@ -161,14 +151,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/account"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/account"
             }
           },
           "500": {
@@ -208,14 +191,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/account"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/account"
             }
           },
           "404": {
@@ -255,10 +231,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "Aaaaand it's gone!",
-            "schema": {
-              "$ref": "#/definitions/version"
-            }
+            "description": "Aaaaand it's gone!"
           },
           "404": {
             "description": "Account not found"
@@ -288,17 +261,6 @@ func init() {
           "format": "int64"
         },
         "owner": {
-          "type": "string"
-        }
-      }
-    },
-    "version": {
-      "type": "object",
-      "required": [
-        "version"
-      ],
-      "properties": {
-        "version": {
           "type": "string"
         }
       }
@@ -358,10 +320,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/version"
-            }
+            "description": "OK"
           },
           "404": {
             "description": "Account not found"
@@ -411,17 +370,10 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/account"
-                  }
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/account"
+              }
             }
           },
           "404": {
@@ -455,14 +407,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/account"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/account"
             }
           },
           "500": {
@@ -502,14 +447,7 @@ func init() {
           "200": {
             "description": "Success!",
             "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/account"
-                },
-                {
-                  "$ref": "#/definitions/version"
-                }
-              ]
+              "$ref": "#/definitions/account"
             }
           },
           "404": {
@@ -549,10 +487,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "Aaaaand it's gone!",
-            "schema": {
-              "$ref": "#/definitions/version"
-            }
+            "description": "Aaaaand it's gone!"
           },
           "404": {
             "description": "Account not found"
@@ -582,17 +517,6 @@ func init() {
           "format": "int64"
         },
         "owner": {
-          "type": "string"
-        }
-      }
-    },
-    "version": {
-      "type": "object",
-      "required": [
-        "version"
-      ],
-      "properties": {
-        "version": {
           "type": "string"
         }
       }
