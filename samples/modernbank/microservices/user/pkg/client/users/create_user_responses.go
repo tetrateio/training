@@ -61,6 +61,10 @@ func NewCreateUserCreated() *CreateUserCreated {
 Created
 */
 type CreateUserCreated struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
+
 	Payload *model.User
 }
 
@@ -69,6 +73,9 @@ func (o *CreateUserCreated) Error() string {
 }
 
 func (o *CreateUserCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	o.Payload = new(model.User)
 
@@ -90,6 +97,9 @@ func NewCreateUserConflict() *CreateUserConflict {
 User alreadys exists
 */
 type CreateUserConflict struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *CreateUserConflict) Error() string {
@@ -97,6 +107,9 @@ func (o *CreateUserConflict) Error() string {
 }
 
 func (o *CreateUserConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }
@@ -111,6 +124,9 @@ func NewCreateUserInternalServerError() *CreateUserInternalServerError {
 Internal server error
 */
 type CreateUserInternalServerError struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *CreateUserInternalServerError) Error() string {
@@ -118,6 +134,9 @@ func (o *CreateUserInternalServerError) Error() string {
 }
 
 func (o *CreateUserInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }

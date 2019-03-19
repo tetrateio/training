@@ -61,6 +61,10 @@ func NewUpdateUserOK() *UpdateUserOK {
 Success!
 */
 type UpdateUserOK struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
+
 	Payload *model.User
 }
 
@@ -69,6 +73,9 @@ func (o *UpdateUserOK) Error() string {
 }
 
 func (o *UpdateUserOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	o.Payload = new(model.User)
 
@@ -90,6 +97,9 @@ func NewUpdateUserNotFound() *UpdateUserNotFound {
 User not found
 */
 type UpdateUserNotFound struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *UpdateUserNotFound) Error() string {
@@ -97,6 +107,9 @@ func (o *UpdateUserNotFound) Error() string {
 }
 
 func (o *UpdateUserNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }
@@ -111,6 +124,9 @@ func NewUpdateUserInternalServerError() *UpdateUserInternalServerError {
 Internal server error
 */
 type UpdateUserInternalServerError struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *UpdateUserInternalServerError) Error() string {
@@ -118,6 +134,9 @@ func (o *UpdateUserInternalServerError) Error() string {
 }
 
 func (o *UpdateUserInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }

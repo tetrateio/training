@@ -32,10 +32,22 @@ paths:
             type: array
             items:
               $ref: '#/definitions/transaction'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: No transactions found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /account/{receiver}/received/{transaction}:
     get:
       description: Get a specific transaction received by a given account
@@ -62,10 +74,22 @@ paths:
           description: Success!
           schema:
             $ref: '#/definitions/transaction'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: Transaction not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /account/{sender}/sent:
     get:
       description: Lists all transactions sent from a given account
@@ -89,10 +113,22 @@ paths:
             type: array
             items:
               $ref: '#/definitions/transaction'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: No transactions found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /account/{sender}/sent/{transaction}:
     get:
       description: Get a specific transaction sent from a given account
@@ -119,10 +155,36 @@ paths:
           description: Success!
           schema:
             $ref: '#/definitions/transaction'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: Transaction not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
+  /health:
+    post:
+      description: returns 200
+      tags:
+      - health
+      summary: returns 200 to prove the service is alive
+      operationId: healthCheck
+      responses:
+        "200":
+          description: OK
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /transactions:
     post:
       description: Sends money from one account to another
@@ -146,10 +208,22 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/transaction'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "400":
           description: Nice try! You can't send negative amounts...
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
 definitions:
   newtransaction:
     type: object

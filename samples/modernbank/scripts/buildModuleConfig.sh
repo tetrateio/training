@@ -2,6 +2,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 DEMO_APP_DIR=${DIR}/../../../modules/installation/app
+TRAFFIC_MAN_DIR=${DIR}/../../../modules/traffic-management
 
 TENANT=$1
 
@@ -15,12 +16,12 @@ do
     if [[ ${SERVICE_NAME} != *"-v2"* ]]
     then
         # Only want normal app for base install, v1 only.
-        helm template --name ${SERVICE_NAME} ${DIR}/../kubernetes/helm/microservice -f $VALUES_YAML > ${DEMO_APP_DIR}/short/config/${SERVICE_NAME}.yaml
+        helm template --name ${SERVICE_NAME} ${DIR}/../kubernetes/helm/microservice -f $VALUES_YAML > ${DEMO_APP_DIR}/config/${SERVICE_NAME}.yaml
     fi
 done
 
 # Default Istio Gateway
-cp ${DIR}/../networking/${TENANT}/gateway.yaml ${DEMO_APP_DIR}/short/config/gateway.yaml
+cp ${DIR}/../networking/${TENANT}/gateway.yaml ${TRAFFIC_MAN_DIR}/ingress/config/gateway.yaml
 
 # Ingress Swagger/API Contract
-cat ${DIR}/../contracts/banking-ingress.yaml | yq . > ${DEMO_APP_DIR}/short/swagger/ingress.json
+cat ${DIR}/../contracts/banking-ingress.yaml | yq . > ${DEMO_APP_DIR}/swagger/ingress.json

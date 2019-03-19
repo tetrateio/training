@@ -21,6 +21,7 @@ import (
 	translogModel "github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/model"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/model"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/serve/restapi"
+	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/serve/restapi/health"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/serve/restapi/transactions"
 )
 
@@ -55,7 +56,7 @@ func configureAPI(api *restapi.TransactionAPI) http.Handler {
 		// Can't send negative monies!
 		if *params.Body.Amount < 0 {
 			api.Logger("Receveived transaction for negative amount")
-			return transactions.NewCreateTransactionBadRequest()
+			return transactions.NewCreateTransactionBadRequest().WithVersion(*version)
 		}
 
 		// Move the monies
@@ -63,12 +64,12 @@ func configureAPI(api *restapi.TransactionAPI) http.Handler {
 		sendingParams := accountsClientResources.NewChangeBalanceParams().WithNumber(*params.Body.Sender).WithDelta(*params.Body.Amount * -1)
 		if _, err := accounts.ChangeBalance(sendingParams); err != nil {
 			api.Logger("Error updating sender balance: %v", err)
-			return transactions.NewCreateTransactionInternalServerError()
+			return transactions.NewCreateTransactionInternalServerError().WithVersion(*version)
 		}
 		receivingParams := accountsClientResources.NewChangeBalanceParams().WithNumber(*params.Body.Receiver).WithDelta(*params.Body.Amount)
 		if _, err := accounts.ChangeBalance(receivingParams); err != nil {
 			api.Logger("Error updating receiver balance: %v", err)
-			return transactions.NewCreateTransactionInternalServerError()
+			return transactions.NewCreateTransactionInternalServerError().WithVersion(*version)
 		}
 
 		// Add to transaction-log
@@ -76,9 +77,13 @@ func configureAPI(api *restapi.TransactionAPI) http.Handler {
 		res, err := translog.CreateTransaction(translogParams)
 		if err != nil {
 			log.Printf("failed to create transaction in log from %v to %v for %v: %v", *params.Body.Sender, *params.Body.Receiver, *params.Body.Amount, err)
-			return transactions.NewCreateTransactionInternalServerError()
+			return transactions.NewCreateTransactionInternalServerError().WithVersion(*version)
 		}
-		return transactions.NewCreateTransactionCreated().WithPayload(transLogToTransTransaction(res.Payload))
+		return transactions.NewCreateTransactionCreated().WithPayload(transLogToTransTransaction(res.Payload)).WithVersion(*version)
+	})
+
+	api.HealthHealthCheckHandler = health.HealthCheckHandlerFunc(func(_ health.HealthCheckParams) middleware.Responder {
+		return health.NewHealthCheckOK().WithVersion(*version)
 	})
 
 	api.ServerShutdown = func() {}

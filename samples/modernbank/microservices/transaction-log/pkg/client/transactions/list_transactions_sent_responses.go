@@ -61,6 +61,10 @@ func NewListTransactionsSentOK() *ListTransactionsSentOK {
 Success!
 */
 type ListTransactionsSentOK struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
+
 	Payload []*model.Transaction
 }
 
@@ -69,6 +73,9 @@ func (o *ListTransactionsSentOK) Error() string {
 }
 
 func (o *ListTransactionsSentOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
@@ -88,6 +95,9 @@ func NewListTransactionsSentNotFound() *ListTransactionsSentNotFound {
 No transactions found
 */
 type ListTransactionsSentNotFound struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *ListTransactionsSentNotFound) Error() string {
@@ -95,6 +105,9 @@ func (o *ListTransactionsSentNotFound) Error() string {
 }
 
 func (o *ListTransactionsSentNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }
@@ -109,6 +122,9 @@ func NewListTransactionsSentInternalServerError() *ListTransactionsSentInternalS
 Internal server error
 */
 type ListTransactionsSentInternalServerError struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *ListTransactionsSentInternalServerError) Error() string {
@@ -116,6 +132,9 @@ func (o *ListTransactionsSentInternalServerError) Error() string {
 }
 
 func (o *ListTransactionsSentInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }

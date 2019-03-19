@@ -58,6 +58,9 @@ func NewDeleteAccountOK() *DeleteAccountOK {
 Aaaaand it's gone!
 */
 type DeleteAccountOK struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *DeleteAccountOK) Error() string {
@@ -65,6 +68,9 @@ func (o *DeleteAccountOK) Error() string {
 }
 
 func (o *DeleteAccountOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }
@@ -79,6 +85,9 @@ func NewDeleteAccountNotFound() *DeleteAccountNotFound {
 Account not found
 */
 type DeleteAccountNotFound struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *DeleteAccountNotFound) Error() string {
@@ -86,6 +95,9 @@ func (o *DeleteAccountNotFound) Error() string {
 }
 
 func (o *DeleteAccountNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }
@@ -100,6 +112,9 @@ func NewDeleteAccountInternalServerError() *DeleteAccountInternalServerError {
 Internal server error
 */
 type DeleteAccountInternalServerError struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *DeleteAccountInternalServerError) Error() string {
@@ -107,6 +122,9 @@ func (o *DeleteAccountInternalServerError) Error() string {
 }
 
 func (o *DeleteAccountInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }

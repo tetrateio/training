@@ -21,6 +21,10 @@ const GetUserByUserNameOKCode int = 200
 swagger:response getUserByUserNameOK
 */
 type GetUserByUserNameOK struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 
 	/*
 	  In: Body
@@ -32,6 +36,17 @@ type GetUserByUserNameOK struct {
 func NewGetUserByUserNameOK() *GetUserByUserNameOK {
 
 	return &GetUserByUserNameOK{}
+}
+
+// WithVersion adds the version to the get user by user name o k response
+func (o *GetUserByUserNameOK) WithVersion(version string) *GetUserByUserNameOK {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the get user by user name o k response
+func (o *GetUserByUserNameOK) SetVersion(version string) {
+	o.Version = version
 }
 
 // WithPayload adds the payload to the get user by user name o k response
@@ -47,6 +62,13 @@ func (o *GetUserByUserNameOK) SetPayload(payload *model.User) {
 
 // WriteResponse to the client
 func (o *GetUserByUserNameOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.WriteHeader(200)
 	if o.Payload != nil {
@@ -65,6 +87,10 @@ const GetUserByUserNameNotFoundCode int = 404
 swagger:response getUserByUserNameNotFound
 */
 type GetUserByUserNameNotFound struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewGetUserByUserNameNotFound creates GetUserByUserNameNotFound with default headers values
@@ -73,8 +99,26 @@ func NewGetUserByUserNameNotFound() *GetUserByUserNameNotFound {
 	return &GetUserByUserNameNotFound{}
 }
 
+// WithVersion adds the version to the get user by user name not found response
+func (o *GetUserByUserNameNotFound) WithVersion(version string) *GetUserByUserNameNotFound {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the get user by user name not found response
+func (o *GetUserByUserNameNotFound) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *GetUserByUserNameNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
@@ -89,6 +133,10 @@ const GetUserByUserNameInternalServerErrorCode int = 500
 swagger:response getUserByUserNameInternalServerError
 */
 type GetUserByUserNameInternalServerError struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewGetUserByUserNameInternalServerError creates GetUserByUserNameInternalServerError with default headers values
@@ -97,8 +145,26 @@ func NewGetUserByUserNameInternalServerError() *GetUserByUserNameInternalServerE
 	return &GetUserByUserNameInternalServerError{}
 }
 
+// WithVersion adds the version to the get user by user name internal server error response
+func (o *GetUserByUserNameInternalServerError) WithVersion(version string) *GetUserByUserNameInternalServerError {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the get user by user name internal server error response
+func (o *GetUserByUserNameInternalServerError) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *GetUserByUserNameInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 

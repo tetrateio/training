@@ -17,10 +17,22 @@ get:
       description: "Success!"
       schema:
         $ref: "./definitions/user.yaml"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     404:
       description: "User not found"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     500:
       description: "Internal server error"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
 put:
   tags:
   - "users"
@@ -47,11 +59,23 @@ put:
     200:
       description: "Success!"
       schema:
-        $ref: "./definitions/user.yaml"         
+        $ref: "./definitions/user.yaml"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded    
     404:
       description: "User not found"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     500:
       description: "Internal server error"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
 delete:
   tags:
   - "users"
@@ -67,7 +91,19 @@ delete:
   responses:
     200:
       description: "Success!"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     404:
       description: "User not found"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     500:
       description: "Internal server error"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded

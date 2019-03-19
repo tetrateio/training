@@ -9,6 +9,20 @@ info:
 host: users
 basePath: /v1
 paths:
+  /health:
+    post:
+      description: returns 200
+      tags:
+      - health
+      summary: returns 200 to prove the service is alive
+      operationId: healthCheck
+      responses:
+        "200":
+          description: OK
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /users:
     post:
       description: Creates a new user
@@ -32,10 +46,22 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/user'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "409":
           description: User alreadys exists
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /users/{username}:
     get:
       produces:
@@ -55,10 +81,22 @@ paths:
           description: Success!
           schema:
             $ref: '#/definitions/user'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: User not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
     put:
       description: Update user by username.
       consumes:
@@ -86,10 +124,22 @@ paths:
           description: Success!
           schema:
             $ref: '#/definitions/user'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: User not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
     delete:
       description: Delete user by username.
       tags:
@@ -105,10 +155,22 @@ paths:
       responses:
         "200":
           description: Success!
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: User not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
 definitions:
   user:
     type: object

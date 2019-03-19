@@ -11,6 +11,7 @@ import (
 
 	strfmt "github.com/go-openapi/strfmt"
 
+	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/client/health"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/client/transactions"
 )
 
@@ -56,6 +57,8 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *Transactio
 
 	cli := new(TransactionLog)
 	cli.Transport = transport
+
+	cli.Health = health.New(transport, formats)
 
 	cli.Transactions = transactions.New(transport, formats)
 
@@ -103,6 +106,8 @@ func (cfg *TransportConfig) WithSchemes(schemes []string) *TransportConfig {
 
 // TransactionLog is a client for transaction log
 type TransactionLog struct {
+	Health *health.Client
+
 	Transactions *transactions.Client
 
 	Transport runtime.ClientTransport
@@ -111,6 +116,8 @@ type TransactionLog struct {
 // SetTransport changes the transport on the client and all its subresources
 func (c *TransactionLog) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
+
+	c.Health.SetTransport(transport)
 
 	c.Transactions.SetTransport(transport)
 

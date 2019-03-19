@@ -19,6 +19,7 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
+	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/serve/restapi/health"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/serve/restapi/transactions"
 )
 
@@ -47,6 +48,9 @@ func NewTransactionLogAPI(spec *loads.Document) *TransactionLogAPI {
 		}),
 		TransactionsGetTransactionSentHandler: transactions.GetTransactionSentHandlerFunc(func(params transactions.GetTransactionSentParams) middleware.Responder {
 			return middleware.NotImplemented("operation TransactionsGetTransactionSent has not yet been implemented")
+		}),
+		HealthHealthCheckHandler: health.HealthCheckHandlerFunc(func(params health.HealthCheckParams) middleware.Responder {
+			return middleware.NotImplemented("operation HealthHealthCheck has not yet been implemented")
 		}),
 		TransactionsListTransactionsReceivedHandler: transactions.ListTransactionsReceivedHandlerFunc(func(params transactions.ListTransactionsReceivedParams) middleware.Responder {
 			return middleware.NotImplemented("operation TransactionsListTransactionsReceived has not yet been implemented")
@@ -91,6 +95,8 @@ type TransactionLogAPI struct {
 	TransactionsGetTransactionReceivedHandler transactions.GetTransactionReceivedHandler
 	// TransactionsGetTransactionSentHandler sets the operation handler for the get transaction sent operation
 	TransactionsGetTransactionSentHandler transactions.GetTransactionSentHandler
+	// HealthHealthCheckHandler sets the operation handler for the health check operation
+	HealthHealthCheckHandler health.HealthCheckHandler
 	// TransactionsListTransactionsReceivedHandler sets the operation handler for the list transactions received operation
 	TransactionsListTransactionsReceivedHandler transactions.ListTransactionsReceivedHandler
 	// TransactionsListTransactionsSentHandler sets the operation handler for the list transactions sent operation
@@ -168,6 +174,10 @@ func (o *TransactionLogAPI) Validate() error {
 
 	if o.TransactionsGetTransactionSentHandler == nil {
 		unregistered = append(unregistered, "transactions.GetTransactionSentHandler")
+	}
+
+	if o.HealthHealthCheckHandler == nil {
+		unregistered = append(unregistered, "health.HealthCheckHandler")
 	}
 
 	if o.TransactionsListTransactionsReceivedHandler == nil {
@@ -290,6 +300,11 @@ func (o *TransactionLogAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/account/{sender}/sent/{transaction}"] = transactions.NewGetTransactionSent(o.context, o.TransactionsGetTransactionSentHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/health"] = health.NewHealthCheck(o.context, o.HealthHealthCheckHandler)
 
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)

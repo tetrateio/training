@@ -19,8 +19,20 @@ post:
     201:
       description: "Created"
       schema:
-          $ref: "./definitions/user.yaml"
+        $ref: "./definitions/user.yaml"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     409:
       description: "User alreadys exists"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     500:
       description: "Internal server error"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded

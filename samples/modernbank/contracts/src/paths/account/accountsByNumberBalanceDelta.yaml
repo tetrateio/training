@@ -4,7 +4,7 @@ put:
   summary: "Change the balance of an account"
   description: "Change the balance of an account"
   operationId: "changeBalance"
-  produces:
+  consumes:
   - "application/json"
   parameters:
   - in: "path"
@@ -22,7 +22,19 @@ put:
   responses:
     200:
       description: "OK"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     404:
       description: "Account not found"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     500:
       description: "Internal server error"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded

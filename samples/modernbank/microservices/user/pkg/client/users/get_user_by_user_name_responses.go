@@ -61,6 +61,10 @@ func NewGetUserByUserNameOK() *GetUserByUserNameOK {
 Success!
 */
 type GetUserByUserNameOK struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
+
 	Payload *model.User
 }
 
@@ -69,6 +73,9 @@ func (o *GetUserByUserNameOK) Error() string {
 }
 
 func (o *GetUserByUserNameOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	o.Payload = new(model.User)
 
@@ -90,6 +97,9 @@ func NewGetUserByUserNameNotFound() *GetUserByUserNameNotFound {
 User not found
 */
 type GetUserByUserNameNotFound struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *GetUserByUserNameNotFound) Error() string {
@@ -97,6 +107,9 @@ func (o *GetUserByUserNameNotFound) Error() string {
 }
 
 func (o *GetUserByUserNameNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }
@@ -111,6 +124,9 @@ func NewGetUserByUserNameInternalServerError() *GetUserByUserNameInternalServerE
 Internal server error
 */
 type GetUserByUserNameInternalServerError struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *GetUserByUserNameInternalServerError) Error() string {
@@ -118,6 +134,9 @@ func (o *GetUserByUserNameInternalServerError) Error() string {
 }
 
 func (o *GetUserByUserNameInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }

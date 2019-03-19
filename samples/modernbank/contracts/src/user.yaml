@@ -15,3 +15,5 @@ paths:
     $ref: "./paths/user/users.yaml"
   /users/{username}:
     $ref: "./paths/user/usersByUsername.yaml"
+  /health:
+    $ref: "./paths/shared/health.yaml"

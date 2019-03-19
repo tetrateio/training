@@ -59,13 +59,31 @@ func init() {
               "items": {
                 "$ref": "#/definitions/transaction"
               }
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "No transactions found"
+            "description": "No transactions found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -103,13 +121,31 @@ func init() {
             "description": "Success!",
             "schema": {
               "$ref": "#/definitions/transaction"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "Transaction not found"
+            "description": "Transaction not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -143,13 +179,31 @@ func init() {
               "items": {
                 "$ref": "#/definitions/transaction"
               }
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "No transactions found"
+            "description": "No transactions found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -187,13 +241,52 @@ func init() {
             "description": "Success!",
             "schema": {
               "$ref": "#/definitions/transaction"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "Transaction not found"
+            "description": "Transaction not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "post": {
+        "description": "returns 200",
+        "tags": [
+          "health"
+        ],
+        "summary": "returns 200 to prove the service is alive",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -228,13 +321,31 @@ func init() {
             "description": "Created",
             "schema": {
               "$ref": "#/definitions/transaction"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "400": {
-            "description": "Nice try! You can't send negative amounts..."
+            "description": "Nice try! You can't send negative amounts...",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -350,13 +461,31 @@ func init() {
               "items": {
                 "$ref": "#/definitions/transaction"
               }
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "No transactions found"
+            "description": "No transactions found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -394,13 +523,31 @@ func init() {
             "description": "Success!",
             "schema": {
               "$ref": "#/definitions/transaction"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "Transaction not found"
+            "description": "Transaction not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -434,13 +581,31 @@ func init() {
               "items": {
                 "$ref": "#/definitions/transaction"
               }
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "No transactions found"
+            "description": "No transactions found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -478,13 +643,52 @@ func init() {
             "description": "Success!",
             "schema": {
               "$ref": "#/definitions/transaction"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "Transaction not found"
+            "description": "Transaction not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "post": {
+        "description": "returns 200",
+        "tags": [
+          "health"
+        ],
+        "summary": "returns 200 to prove the service is alive",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -519,13 +723,31 @@ func init() {
             "description": "Created",
             "schema": {
               "$ref": "#/definitions/transaction"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "400": {
-            "description": "Nice try! You can't send negative amounts..."
+            "description": "Nice try! You can't send negative amounts...",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }

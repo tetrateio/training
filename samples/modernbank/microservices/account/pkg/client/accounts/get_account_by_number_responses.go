@@ -61,6 +61,10 @@ func NewGetAccountByNumberOK() *GetAccountByNumberOK {
 Success!
 */
 type GetAccountByNumberOK struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
+
 	Payload *model.Account
 }
 
@@ -69,6 +73,9 @@ func (o *GetAccountByNumberOK) Error() string {
 }
 
 func (o *GetAccountByNumberOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	o.Payload = new(model.Account)
 
@@ -90,6 +97,9 @@ func NewGetAccountByNumberNotFound() *GetAccountByNumberNotFound {
 Account not found
 */
 type GetAccountByNumberNotFound struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *GetAccountByNumberNotFound) Error() string {
@@ -97,6 +107,9 @@ func (o *GetAccountByNumberNotFound) Error() string {
 }
 
 func (o *GetAccountByNumberNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }
@@ -111,6 +124,9 @@ func NewGetAccountByNumberInternalServerError() *GetAccountByNumberInternalServe
 Internal server error
 */
 type GetAccountByNumberInternalServerError struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *GetAccountByNumberInternalServerError) Error() string {
@@ -118,6 +134,9 @@ func (o *GetAccountByNumberInternalServerError) Error() string {
 }
 
 func (o *GetAccountByNumberInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }

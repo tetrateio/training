@@ -30,6 +30,27 @@ func init() {
   "host": "transaction",
   "basePath": "/v1",
   "paths": {
+    "/health": {
+      "post": {
+        "description": "returns 200",
+        "tags": [
+          "health"
+        ],
+        "summary": "returns 200 to prove the service is alive",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          }
+        }
+      }
+    },
     "/transactions": {
       "post": {
         "description": "Sends money from one account to another",
@@ -60,13 +81,31 @@ func init() {
             "description": "Created",
             "schema": {
               "$ref": "#/definitions/transaction"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "400": {
-            "description": "Nice try! You can't send negative amounts..."
+            "description": "Nice try! You can't send negative amounts...",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -153,6 +192,27 @@ func init() {
   "host": "transaction",
   "basePath": "/v1",
   "paths": {
+    "/health": {
+      "post": {
+        "description": "returns 200",
+        "tags": [
+          "health"
+        ],
+        "summary": "returns 200 to prove the service is alive",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          }
+        }
+      }
+    },
     "/transactions": {
       "post": {
         "description": "Sends money from one account to another",
@@ -183,13 +243,31 @@ func init() {
             "description": "Created",
             "schema": {
               "$ref": "#/definitions/transaction"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "400": {
-            "description": "Nice try! You can't send negative amounts..."
+            "description": "Nice try! You can't send negative amounts...",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }

@@ -21,6 +21,10 @@ const ListAccountsOKCode int = 200
 swagger:response listAccountsOK
 */
 type ListAccountsOK struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 
 	/*
 	  In: Body
@@ -32,6 +36,17 @@ type ListAccountsOK struct {
 func NewListAccountsOK() *ListAccountsOK {
 
 	return &ListAccountsOK{}
+}
+
+// WithVersion adds the version to the list accounts o k response
+func (o *ListAccountsOK) WithVersion(version string) *ListAccountsOK {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the list accounts o k response
+func (o *ListAccountsOK) SetVersion(version string) {
+	o.Version = version
 }
 
 // WithPayload adds the payload to the list accounts o k response
@@ -47,6 +62,13 @@ func (o *ListAccountsOK) SetPayload(payload []*model.Account) {
 
 // WriteResponse to the client
 func (o *ListAccountsOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.WriteHeader(200)
 	payload := o.Payload
@@ -68,6 +90,10 @@ const ListAccountsNotFoundCode int = 404
 swagger:response listAccountsNotFound
 */
 type ListAccountsNotFound struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewListAccountsNotFound creates ListAccountsNotFound with default headers values
@@ -76,8 +102,26 @@ func NewListAccountsNotFound() *ListAccountsNotFound {
 	return &ListAccountsNotFound{}
 }
 
+// WithVersion adds the version to the list accounts not found response
+func (o *ListAccountsNotFound) WithVersion(version string) *ListAccountsNotFound {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the list accounts not found response
+func (o *ListAccountsNotFound) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *ListAccountsNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
@@ -92,6 +136,10 @@ const ListAccountsInternalServerErrorCode int = 500
 swagger:response listAccountsInternalServerError
 */
 type ListAccountsInternalServerError struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewListAccountsInternalServerError creates ListAccountsInternalServerError with default headers values
@@ -100,8 +148,26 @@ func NewListAccountsInternalServerError() *ListAccountsInternalServerError {
 	return &ListAccountsInternalServerError{}
 }
 
+// WithVersion adds the version to the list accounts internal server error response
+func (o *ListAccountsInternalServerError) WithVersion(version string) *ListAccountsInternalServerError {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the list accounts internal server error response
+func (o *ListAccountsInternalServerError) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *ListAccountsInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 

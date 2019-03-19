@@ -19,6 +19,10 @@ const DeleteUserOKCode int = 200
 swagger:response deleteUserOK
 */
 type DeleteUserOK struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewDeleteUserOK creates DeleteUserOK with default headers values
@@ -27,8 +31,26 @@ func NewDeleteUserOK() *DeleteUserOK {
 	return &DeleteUserOK{}
 }
 
+// WithVersion adds the version to the delete user o k response
+func (o *DeleteUserOK) WithVersion(version string) *DeleteUserOK {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the delete user o k response
+func (o *DeleteUserOK) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *DeleteUserOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
@@ -43,6 +65,10 @@ const DeleteUserNotFoundCode int = 404
 swagger:response deleteUserNotFound
 */
 type DeleteUserNotFound struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewDeleteUserNotFound creates DeleteUserNotFound with default headers values
@@ -51,8 +77,26 @@ func NewDeleteUserNotFound() *DeleteUserNotFound {
 	return &DeleteUserNotFound{}
 }
 
+// WithVersion adds the version to the delete user not found response
+func (o *DeleteUserNotFound) WithVersion(version string) *DeleteUserNotFound {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the delete user not found response
+func (o *DeleteUserNotFound) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *DeleteUserNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
@@ -67,6 +111,10 @@ const DeleteUserInternalServerErrorCode int = 500
 swagger:response deleteUserInternalServerError
 */
 type DeleteUserInternalServerError struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewDeleteUserInternalServerError creates DeleteUserInternalServerError with default headers values
@@ -75,8 +123,26 @@ func NewDeleteUserInternalServerError() *DeleteUserInternalServerError {
 	return &DeleteUserInternalServerError{}
 }
 
+// WithVersion adds the version to the delete user internal server error response
+func (o *DeleteUserInternalServerError) WithVersion(version string) *DeleteUserInternalServerError {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the delete user internal server error response
+func (o *DeleteUserInternalServerError) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *DeleteUserInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 

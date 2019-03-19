@@ -30,6 +30,27 @@ func init() {
   "host": "users",
   "basePath": "/v1",
   "paths": {
+    "/health": {
+      "post": {
+        "description": "returns 200",
+        "tags": [
+          "health"
+        ],
+        "summary": "returns 200 to prove the service is alive",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          }
+        }
+      }
+    },
     "/users": {
       "post": {
         "description": "Creates a new user",
@@ -60,13 +81,31 @@ func init() {
             "description": "Created",
             "schema": {
               "$ref": "#/definitions/user"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "409": {
-            "description": "User alreadys exists"
+            "description": "User alreadys exists",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -95,13 +134,31 @@ func init() {
             "description": "Success!",
             "schema": {
               "$ref": "#/definitions/user"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "User not found"
+            "description": "User not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       },
@@ -141,13 +198,31 @@ func init() {
             "description": "Success!",
             "schema": {
               "$ref": "#/definitions/user"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "User not found"
+            "description": "User not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       },
@@ -169,13 +244,31 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "Success!"
+            "description": "Success!",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "404": {
-            "description": "User not found"
+            "description": "User not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -230,6 +323,27 @@ func init() {
   "host": "users",
   "basePath": "/v1",
   "paths": {
+    "/health": {
+      "post": {
+        "description": "returns 200",
+        "tags": [
+          "health"
+        ],
+        "summary": "returns 200 to prove the service is alive",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          }
+        }
+      }
+    },
     "/users": {
       "post": {
         "description": "Creates a new user",
@@ -260,13 +374,31 @@ func init() {
             "description": "Created",
             "schema": {
               "$ref": "#/definitions/user"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "409": {
-            "description": "User alreadys exists"
+            "description": "User alreadys exists",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -295,13 +427,31 @@ func init() {
             "description": "Success!",
             "schema": {
               "$ref": "#/definitions/user"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "User not found"
+            "description": "User not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       },
@@ -341,13 +491,31 @@ func init() {
             "description": "Success!",
             "schema": {
               "$ref": "#/definitions/user"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "User not found"
+            "description": "User not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       },
@@ -369,13 +537,31 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "Success!"
+            "description": "Success!",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "404": {
-            "description": "User not found"
+            "description": "User not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }

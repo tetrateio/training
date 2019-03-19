@@ -17,8 +17,16 @@ post:
       description: "Created"
       schema:
         $ref: "./definitions/account.yaml"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     500:
       description: "Internal server error"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
 get:
   tags:
   - "accounts"
@@ -40,7 +48,19 @@ get:
         type: array
         items:
           $ref: "./definitions/account.yaml"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     404:
       description: "Owner not found"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     500:
       description: "Internal server error"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded

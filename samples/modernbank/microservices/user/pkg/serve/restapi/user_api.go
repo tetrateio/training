@@ -19,6 +19,7 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
+	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/serve/restapi/health"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/serve/restapi/users"
 )
 
@@ -47,6 +48,9 @@ func NewUserAPI(spec *loads.Document) *UserAPI {
 		}),
 		UsersGetUserByUserNameHandler: users.GetUserByUserNameHandlerFunc(func(params users.GetUserByUserNameParams) middleware.Responder {
 			return middleware.NotImplemented("operation UsersGetUserByUserName has not yet been implemented")
+		}),
+		HealthHealthCheckHandler: health.HealthCheckHandlerFunc(func(params health.HealthCheckParams) middleware.Responder {
+			return middleware.NotImplemented("operation HealthHealthCheck has not yet been implemented")
 		}),
 		UsersUpdateUserHandler: users.UpdateUserHandlerFunc(func(params users.UpdateUserParams) middleware.Responder {
 			return middleware.NotImplemented("operation UsersUpdateUser has not yet been implemented")
@@ -88,6 +92,8 @@ type UserAPI struct {
 	UsersDeleteUserHandler users.DeleteUserHandler
 	// UsersGetUserByUserNameHandler sets the operation handler for the get user by user name operation
 	UsersGetUserByUserNameHandler users.GetUserByUserNameHandler
+	// HealthHealthCheckHandler sets the operation handler for the health check operation
+	HealthHealthCheckHandler health.HealthCheckHandler
 	// UsersUpdateUserHandler sets the operation handler for the update user operation
 	UsersUpdateUserHandler users.UpdateUserHandler
 
@@ -163,6 +169,10 @@ func (o *UserAPI) Validate() error {
 
 	if o.UsersGetUserByUserNameHandler == nil {
 		unregistered = append(unregistered, "users.GetUserByUserNameHandler")
+	}
+
+	if o.HealthHealthCheckHandler == nil {
+		unregistered = append(unregistered, "health.HealthCheckHandler")
 	}
 
 	if o.UsersUpdateUserHandler == nil {
@@ -281,6 +291,11 @@ func (o *UserAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/users/{username}"] = users.NewGetUserByUserName(o.context, o.UsersGetUserByUserNameHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/health"] = health.NewHealthCheck(o.context, o.HealthHealthCheckHandler)
 
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)

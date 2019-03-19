@@ -15,6 +15,7 @@ import (
 	"github.com/go-openapi/swag"
 
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/serve/restapi"
+	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/serve/restapi/health"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/serve/restapi/transactions"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/store"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/store/mongodb"
@@ -45,58 +46,61 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 		res, err := transactionStore.Create(params.Body)
 		if err != nil {
 			api.Logger("Unable to create transaction: %v", err)
-			return transactions.NewCreateTransactionInternalServerError()
+			return transactions.NewCreateTransactionInternalServerError().WithVersion(*version)
 		}
 		api.Logger("Created transaction %q", *res.ID)
-		return transactions.NewCreateTransactionCreated().WithPayload(res)
+		return transactions.NewCreateTransactionCreated().WithPayload(res).WithVersion(*version)
 	})
 	api.TransactionsGetTransactionReceivedHandler = transactions.GetTransactionReceivedHandlerFunc(func(params transactions.GetTransactionReceivedParams) middleware.Responder {
 		res, err := transactionStore.GetReceived(params.Receiver, params.Transaction)
 		if err != nil {
 			if _, ok := err.(*store.NotFound); ok {
-				return transactions.NewGetTransactionReceivedNotFound()
+				return transactions.NewGetTransactionReceivedNotFound().WithVersion(*version)
 			}
 			api.Logger("Unable to retrieve transaction %v received by %v: %v", params.Transaction, params.Receiver, err)
-			return transactions.NewGetTransactionReceivedInternalServerError()
+			return transactions.NewGetTransactionReceivedInternalServerError().WithVersion(*version)
 		}
 		api.Logger("Retrieved transaction %v received by %v", params.Transaction, params.Receiver)
-		return transactions.NewGetTransactionReceivedOK().WithPayload(res)
+		return transactions.NewGetTransactionReceivedOK().WithPayload(res).WithVersion(*version)
 	})
 	api.TransactionsGetTransactionSentHandler = transactions.GetTransactionSentHandlerFunc(func(params transactions.GetTransactionSentParams) middleware.Responder {
 		res, err := transactionStore.GetSent(params.Sender, params.Transaction)
 		if err != nil {
 			if _, ok := err.(*store.NotFound); ok {
-				return transactions.NewGetTransactionSentNotFound()
+				return transactions.NewGetTransactionSentNotFound().WithVersion(*version)
 			}
 			api.Logger("Unable to retrieve transaction %v sent by %v: %v", params.Transaction, params.Sender, err)
-			return transactions.NewGetTransactionSentInternalServerError()
+			return transactions.NewGetTransactionSentInternalServerError().WithVersion(*version)
 		}
 		api.Logger("Retrieved transaction %v sent by %v", params.Transaction, params.Sender)
-		return transactions.NewGetTransactionSentOK().WithPayload(res)
+		return transactions.NewGetTransactionSentOK().WithPayload(res).WithVersion(*version)
 	})
 	api.TransactionsListTransactionsReceivedHandler = transactions.ListTransactionsReceivedHandlerFunc(func(params transactions.ListTransactionsReceivedParams) middleware.Responder {
 		res, err := transactionStore.ListReceived(params.Receiver)
 		if err != nil {
 			if _, ok := err.(*store.NotFound); ok {
-				return transactions.NewListTransactionsReceivedNotFound()
+				return transactions.NewListTransactionsReceivedNotFound().WithVersion(*version)
 			}
 			api.Logger("Unable to list transactions received by %v: %v", params.Receiver, err)
-			return transactions.NewListTransactionsReceivedInternalServerError()
+			return transactions.NewListTransactionsReceivedInternalServerError().WithVersion(*version)
 		}
 		api.Logger("Retrieved all transactions received by %v", params.Receiver)
-		return transactions.NewListTransactionsReceivedOK().WithPayload(res)
+		return transactions.NewListTransactionsReceivedOK().WithPayload(res).WithVersion(*version)
 	})
 	api.TransactionsListTransactionsSentHandler = transactions.ListTransactionsSentHandlerFunc(func(params transactions.ListTransactionsSentParams) middleware.Responder {
 		res, err := transactionStore.ListSent(params.Sender)
 		if err != nil {
 			if _, ok := err.(*store.NotFound); ok {
-				return transactions.NewListTransactionsSentNotFound()
+				return transactions.NewListTransactionsSentNotFound().WithVersion(*version)
 			}
 			api.Logger("Unable to list transactions sent by %v: %v", params.Sender, err)
-			return transactions.NewListTransactionsSentInternalServerError()
+			return transactions.NewListTransactionsSentInternalServerError().WithVersion(*version)
 		}
 		api.Logger("Retrieved all transactions sent by %v", params.Sender)
-		return transactions.NewListTransactionsSentOK().WithPayload(res)
+		return transactions.NewListTransactionsSentOK().WithPayload(res).WithVersion(*version)
+	})
+	api.HealthHealthCheckHandler = health.HealthCheckHandlerFunc(func(_ health.HealthCheckParams) middleware.Responder {
+		return health.NewHealthCheckOK().WithVersion(*version)
 	})
 
 	api.ServerShutdown = func() {}

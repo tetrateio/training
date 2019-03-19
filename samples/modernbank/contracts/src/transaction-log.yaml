@@ -21,3 +21,5 @@ paths:
     $ref: "./paths/transaction/transactionsSentFromAccountByID.yaml"
   /account/{receiver}/received/{transaction}:
     $ref: "./paths/transaction/transactionsReceivedToAccountByID.yaml"
+  /health:
+    $ref: "./paths/shared/health.yaml"

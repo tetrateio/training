@@ -12,6 +12,7 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 
 	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/client/accounts"
+	"github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/client/health"
 )
 
 // Default account HTTP client.
@@ -59,6 +60,8 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *Account {
 
 	cli.Accounts = accounts.New(transport, formats)
 
+	cli.Health = health.New(transport, formats)
+
 	return cli
 }
 
@@ -105,6 +108,8 @@ func (cfg *TransportConfig) WithSchemes(schemes []string) *TransportConfig {
 type Account struct {
 	Accounts *accounts.Client
 
+	Health *health.Client
+
 	Transport runtime.ClientTransport
 }
 
@@ -113,5 +118,7 @@ func (c *Account) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
 
 	c.Accounts.SetTransport(transport)
+
+	c.Health.SetTransport(transport)
 
 }

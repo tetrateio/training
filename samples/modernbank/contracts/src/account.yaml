@@ -17,3 +17,5 @@ paths:
     $ref: "./paths/account/accountsByOwner.yaml"
   /users/{owner}/accounts/{number}:
     $ref: "./paths/account/accountsByOwnerAndNumber.yaml"
+  /health:
+    $ref: "./paths/shared/health.yaml"

@@ -33,7 +33,7 @@ func init() {
     "/accounts/{number}/balance/{delta}": {
       "put": {
         "description": "Change the balance of an account",
-        "produces": [
+        "consumes": [
           "application/json"
         ],
         "tags": [
@@ -61,13 +61,52 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "404": {
-            "description": "Account not found"
+            "description": "Account not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "post": {
+        "description": "returns 200",
+        "tags": [
+          "health"
+        ],
+        "summary": "returns 200 to prove the service is alive",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -100,13 +139,31 @@ func init() {
               "items": {
                 "$ref": "#/definitions/account"
               }
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "Owner not found"
+            "description": "Owner not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       },
@@ -134,10 +191,22 @@ func init() {
             "description": "Created",
             "schema": {
               "$ref": "#/definitions/account"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -174,13 +243,31 @@ func init() {
             "description": "Success!",
             "schema": {
               "$ref": "#/definitions/account"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "Account not found"
+            "description": "Account not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       },
@@ -213,13 +300,31 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "Aaaaand it's gone!"
+            "description": "Aaaaand it's gone!",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "404": {
-            "description": "Account not found"
+            "description": "Account not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -271,7 +376,7 @@ func init() {
     "/accounts/{number}/balance/{delta}": {
       "put": {
         "description": "Change the balance of an account",
-        "produces": [
+        "consumes": [
           "application/json"
         ],
         "tags": [
@@ -299,13 +404,52 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "404": {
-            "description": "Account not found"
+            "description": "Account not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "post": {
+        "description": "returns 200",
+        "tags": [
+          "health"
+        ],
+        "summary": "returns 200 to prove the service is alive",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -338,13 +482,31 @@ func init() {
               "items": {
                 "$ref": "#/definitions/account"
               }
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "Owner not found"
+            "description": "Owner not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       },
@@ -372,10 +534,22 @@ func init() {
             "description": "Created",
             "schema": {
               "$ref": "#/definitions/account"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -412,13 +586,31 @@ func init() {
             "description": "Success!",
             "schema": {
               "$ref": "#/definitions/account"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "404": {
-            "description": "Account not found"
+            "description": "Account not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       },
@@ -451,13 +643,31 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "Aaaaand it's gone!"
+            "description": "Aaaaand it's gone!",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "404": {
-            "description": "Account not found"
+            "description": "Account not found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
