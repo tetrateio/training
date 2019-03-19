@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { Account, AccountsApi } from '../../api/client';
+import { Account } from '../../api/client';
 import { AuthContext } from '../../components/auth/authContext';
 import { Shell } from '../../components/shell';
 import { Navbar } from '../../components/viewAppBar/navbar';
@@ -77,9 +77,8 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   // }, []);
 
   const fetchAccounts = async () => {
-    const resp: Account[] = await accountsApi.listAccounts(
-      authContext.user!.username
-    );
+    const owner = authContext.user!.username;
+    const resp: Account[] = await accountsApi.listAccounts({ owner });
     const acc = resp.find(a => a.number === accountNumber);
     setAccount(acc);
   };

@@ -66,9 +66,9 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   // }, []);
 
   const fetchAccounts = async () => {
-    const resp: Account[] = await accountsApi.listAccounts(
-      authContext.user!.username
-    );
+    const resp: Account[] = await accountsApi.listAccounts({
+      owner: authContext.user!.username
+    });
     const acc = resp.find(a => a.number === accountNumber);
     setAccount(acc);
   };

@@ -77,9 +77,8 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
 
   const [accounts, setAccounts] = React.useState<Account[]>([]);
   const fetchAccounts = async () => {
-    const resp: Account[] = await accountsApi.listAccounts(
-      authContext.user!.username
-    );
+    const owner = authContext.user!.username;
+    const resp: Account[] = await accountsApi.listAccounts({ owner });
     setAccounts(resp);
   };
 
@@ -111,11 +110,14 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const submitTransfer = async () => {
     const transactionsApi = new TransactionsApi();
     const newTransaction = await transactionsApi.createTransaction({
-      amount: Number(amount),
-      receiver: parseInt(toAccount, 10),
-      sender: parseInt(fromAccount, 10)
+      body: {
+        amount: Number(amount),
+        receiver: parseInt(toAccount, 10),
+        sender: parseInt(fromAccount, 10)
+      }
     });
-    // TODO: block on await
+
+    console.log(newTransaction);
     props.history.push(AccountsPath);
   };
 

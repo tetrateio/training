@@ -8,9 +8,6 @@ export const authenticationCheck = async (
   username: string,
   password: string
 ): Promise<User> => {
-  const options = {
-    method: 'GET'
-  };
-  const user: User = await usersApi.getUserByUserName(username, options);
+  const user: User = await usersApi.getUserByUserName({ username });
   return username === user.username && password === user.password ? user : null;
 };

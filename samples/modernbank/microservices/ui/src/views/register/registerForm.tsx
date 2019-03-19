@@ -57,13 +57,11 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const submitNewUserForm = async () => {
     try {
       const newUser: User = await usersApi.createUser({
-        email,
-        firstName,
-        lastName,
-        password,
-        username
+        body: { email, firstName, lastName, password, username }
       });
-      const newAccount: Account = await accountsApi.createAccount(username);
+      const newAccount: Account = await accountsApi.createAccount({
+        owner: username
+      });
       console.log(newAccount);
       // TODO(dio): show confirmation that we have created the account.
 

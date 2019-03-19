@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
+
 import { Account, AccountsApi } from '../../api/client';
 import { AuthContext } from '../../components/auth/authContext';
 import { Shell } from '../../components/shell';
@@ -48,10 +49,12 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const authContext = React.useContext(AuthContext);
 
   const fetchAccounts = async () => {
-    const resp: Account[] = await accountsApi.listAccounts(
-      authContext.user!.username
-    );
-    setAccounts(resp);
+    const owner = authContext.user!.username;
+    const resp = await accountsApi.listAccountsRaw({ owner });
+    if (resp.raw.headers.has('version')) {
+      console.log(resp.raw.headers.get('version'));
+    }
+    setAccounts(await resp.value());
   };
 
   React.useEffect(() => {
