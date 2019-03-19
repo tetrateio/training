@@ -21,6 +21,10 @@ const CreateAccountCreatedCode int = 201
 swagger:response createAccountCreated
 */
 type CreateAccountCreated struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 
 	/*
 	  In: Body
@@ -32,6 +36,17 @@ type CreateAccountCreated struct {
 func NewCreateAccountCreated() *CreateAccountCreated {
 
 	return &CreateAccountCreated{}
+}
+
+// WithVersion adds the version to the create account created response
+func (o *CreateAccountCreated) WithVersion(version string) *CreateAccountCreated {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the create account created response
+func (o *CreateAccountCreated) SetVersion(version string) {
+	o.Version = version
 }
 
 // WithPayload adds the payload to the create account created response
@@ -47,6 +62,13 @@ func (o *CreateAccountCreated) SetPayload(payload *model.Account) {
 
 // WriteResponse to the client
 func (o *CreateAccountCreated) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.WriteHeader(201)
 	if o.Payload != nil {
@@ -65,6 +87,10 @@ const CreateAccountInternalServerErrorCode int = 500
 swagger:response createAccountInternalServerError
 */
 type CreateAccountInternalServerError struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewCreateAccountInternalServerError creates CreateAccountInternalServerError with default headers values
@@ -73,8 +99,26 @@ func NewCreateAccountInternalServerError() *CreateAccountInternalServerError {
 	return &CreateAccountInternalServerError{}
 }
 
+// WithVersion adds the version to the create account internal server error response
+func (o *CreateAccountInternalServerError) WithVersion(version string) *CreateAccountInternalServerError {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the create account internal server error response
+func (o *CreateAccountInternalServerError) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *CreateAccountInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 

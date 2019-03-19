@@ -30,10 +30,22 @@ paths:
             type: array
             items:
               $ref: '#/definitions/transaction'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: No transactions found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /account/{receiver}/received/{transaction}:
     get:
       description: Get a specific transaction received by a given account
@@ -60,10 +72,22 @@ paths:
           description: Success!
           schema:
             $ref: '#/definitions/transaction'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: Transaction not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /account/{sender}/sent:
     get:
       description: Lists all transactions sent from a given account
@@ -87,10 +111,22 @@ paths:
             type: array
             items:
               $ref: '#/definitions/transaction'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: No transactions found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /account/{sender}/sent/{transaction}:
     get:
       description: Get a specific transaction sent from a given account
@@ -117,10 +153,22 @@ paths:
           description: Success!
           schema:
             $ref: '#/definitions/transaction'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: Transaction not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /transactions:
     post:
       description: Sends money from one account to another
@@ -144,10 +192,22 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/transaction'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "400":
           description: Nice try! You can't send negative amounts...
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /users:
     post:
       description: Creates a new user
@@ -171,10 +231,22 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/user'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "409":
           description: User alreadys exists
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /users/{owner}/accounts:
     get:
       description: Lists all accounts for a given customer
@@ -197,10 +269,22 @@ paths:
             type: array
             items:
               $ref: '#/definitions/account'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: Owner not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
     post:
       description: Creates a new account for a given customer
       produces:
@@ -220,8 +304,16 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/account'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /users/{owner}/accounts/{number}:
     get:
       produces:
@@ -247,10 +339,22 @@ paths:
           description: Success!
           schema:
             $ref: '#/definitions/account'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: Account not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
     delete:
       description: Delete account by account number.
       produces:
@@ -274,10 +378,22 @@ paths:
       responses:
         "200":
           description: Aaaaand it's gone!
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: Account not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /users/{username}:
     get:
       produces:
@@ -297,10 +413,22 @@ paths:
           description: Success!
           schema:
             $ref: '#/definitions/user'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: User not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
     put:
       description: Update user by username.
       consumes:
@@ -328,10 +456,22 @@ paths:
           description: Success!
           schema:
             $ref: '#/definitions/user'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: User not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
     delete:
       description: Delete user by username.
       tags:
@@ -347,10 +487,22 @@ paths:
       responses:
         "200":
           description: Success!
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: User not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
 definitions:
   account:
     type: object

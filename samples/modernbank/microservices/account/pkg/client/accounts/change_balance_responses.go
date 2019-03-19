@@ -58,6 +58,9 @@ func NewChangeBalanceOK() *ChangeBalanceOK {
 OK
 */
 type ChangeBalanceOK struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *ChangeBalanceOK) Error() string {
@@ -65,6 +68,9 @@ func (o *ChangeBalanceOK) Error() string {
 }
 
 func (o *ChangeBalanceOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }
@@ -79,6 +85,9 @@ func NewChangeBalanceNotFound() *ChangeBalanceNotFound {
 Account not found
 */
 type ChangeBalanceNotFound struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *ChangeBalanceNotFound) Error() string {
@@ -86,6 +95,9 @@ func (o *ChangeBalanceNotFound) Error() string {
 }
 
 func (o *ChangeBalanceNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }
@@ -100,6 +112,9 @@ func NewChangeBalanceInternalServerError() *ChangeBalanceInternalServerError {
 Internal server error
 */
 type ChangeBalanceInternalServerError struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *ChangeBalanceInternalServerError) Error() string {
@@ -107,6 +122,9 @@ func (o *ChangeBalanceInternalServerError) Error() string {
 }
 
 func (o *ChangeBalanceInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }

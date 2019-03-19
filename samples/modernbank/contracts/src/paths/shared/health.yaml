@@ -7,3 +7,7 @@ post:
   responses:
     200:
       description: "OK"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded

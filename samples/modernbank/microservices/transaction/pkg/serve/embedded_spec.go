@@ -40,7 +40,13 @@ func init() {
         "operationId": "healthCheck",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -75,13 +81,31 @@ func init() {
             "description": "Created",
             "schema": {
               "$ref": "#/definitions/transaction"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "400": {
-            "description": "Nice try! You can't send negative amounts..."
+            "description": "Nice try! You can't send negative amounts...",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -178,7 +202,13 @@ func init() {
         "operationId": "healthCheck",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }
@@ -213,13 +243,31 @@ func init() {
             "description": "Created",
             "schema": {
               "$ref": "#/definitions/transaction"
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
             }
           },
           "400": {
-            "description": "Nice try! You can't send negative amounts..."
+            "description": "Nice try! You can't send negative amounts...",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
           }
         }
       }

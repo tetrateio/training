@@ -21,6 +21,10 @@ const GetTransactionReceivedOKCode int = 200
 swagger:response getTransactionReceivedOK
 */
 type GetTransactionReceivedOK struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 
 	/*
 	  In: Body
@@ -32,6 +36,17 @@ type GetTransactionReceivedOK struct {
 func NewGetTransactionReceivedOK() *GetTransactionReceivedOK {
 
 	return &GetTransactionReceivedOK{}
+}
+
+// WithVersion adds the version to the get transaction received o k response
+func (o *GetTransactionReceivedOK) WithVersion(version string) *GetTransactionReceivedOK {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the get transaction received o k response
+func (o *GetTransactionReceivedOK) SetVersion(version string) {
+	o.Version = version
 }
 
 // WithPayload adds the payload to the get transaction received o k response
@@ -47,6 +62,13 @@ func (o *GetTransactionReceivedOK) SetPayload(payload *model.Transaction) {
 
 // WriteResponse to the client
 func (o *GetTransactionReceivedOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.WriteHeader(200)
 	if o.Payload != nil {
@@ -65,6 +87,10 @@ const GetTransactionReceivedNotFoundCode int = 404
 swagger:response getTransactionReceivedNotFound
 */
 type GetTransactionReceivedNotFound struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewGetTransactionReceivedNotFound creates GetTransactionReceivedNotFound with default headers values
@@ -73,8 +99,26 @@ func NewGetTransactionReceivedNotFound() *GetTransactionReceivedNotFound {
 	return &GetTransactionReceivedNotFound{}
 }
 
+// WithVersion adds the version to the get transaction received not found response
+func (o *GetTransactionReceivedNotFound) WithVersion(version string) *GetTransactionReceivedNotFound {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the get transaction received not found response
+func (o *GetTransactionReceivedNotFound) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *GetTransactionReceivedNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
@@ -89,6 +133,10 @@ const GetTransactionReceivedInternalServerErrorCode int = 500
 swagger:response getTransactionReceivedInternalServerError
 */
 type GetTransactionReceivedInternalServerError struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewGetTransactionReceivedInternalServerError creates GetTransactionReceivedInternalServerError with default headers values
@@ -97,8 +145,26 @@ func NewGetTransactionReceivedInternalServerError() *GetTransactionReceivedInter
 	return &GetTransactionReceivedInternalServerError{}
 }
 
+// WithVersion adds the version to the get transaction received internal server error response
+func (o *GetTransactionReceivedInternalServerError) WithVersion(version string) *GetTransactionReceivedInternalServerError {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the get transaction received internal server error response
+func (o *GetTransactionReceivedInternalServerError) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *GetTransactionReceivedInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 

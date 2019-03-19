@@ -61,6 +61,10 @@ func NewCreateTransactionCreated() *CreateTransactionCreated {
 Created
 */
 type CreateTransactionCreated struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
+
 	Payload *model.Transaction
 }
 
@@ -69,6 +73,9 @@ func (o *CreateTransactionCreated) Error() string {
 }
 
 func (o *CreateTransactionCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	o.Payload = new(model.Transaction)
 
@@ -90,6 +97,9 @@ func NewCreateTransactionBadRequest() *CreateTransactionBadRequest {
 Nice try! You can't send negative amounts...
 */
 type CreateTransactionBadRequest struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *CreateTransactionBadRequest) Error() string {
@@ -97,6 +107,9 @@ func (o *CreateTransactionBadRequest) Error() string {
 }
 
 func (o *CreateTransactionBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }
@@ -111,6 +124,9 @@ func NewCreateTransactionInternalServerError() *CreateTransactionInternalServerE
 Internal server error
 */
 type CreateTransactionInternalServerError struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *CreateTransactionInternalServerError) Error() string {
@@ -118,6 +134,9 @@ func (o *CreateTransactionInternalServerError) Error() string {
 }
 
 func (o *CreateTransactionInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }

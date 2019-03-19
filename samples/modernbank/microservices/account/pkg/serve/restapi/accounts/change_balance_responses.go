@@ -19,6 +19,10 @@ const ChangeBalanceOKCode int = 200
 swagger:response changeBalanceOK
 */
 type ChangeBalanceOK struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewChangeBalanceOK creates ChangeBalanceOK with default headers values
@@ -27,8 +31,26 @@ func NewChangeBalanceOK() *ChangeBalanceOK {
 	return &ChangeBalanceOK{}
 }
 
+// WithVersion adds the version to the change balance o k response
+func (o *ChangeBalanceOK) WithVersion(version string) *ChangeBalanceOK {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the change balance o k response
+func (o *ChangeBalanceOK) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *ChangeBalanceOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
@@ -43,6 +65,10 @@ const ChangeBalanceNotFoundCode int = 404
 swagger:response changeBalanceNotFound
 */
 type ChangeBalanceNotFound struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewChangeBalanceNotFound creates ChangeBalanceNotFound with default headers values
@@ -51,8 +77,26 @@ func NewChangeBalanceNotFound() *ChangeBalanceNotFound {
 	return &ChangeBalanceNotFound{}
 }
 
+// WithVersion adds the version to the change balance not found response
+func (o *ChangeBalanceNotFound) WithVersion(version string) *ChangeBalanceNotFound {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the change balance not found response
+func (o *ChangeBalanceNotFound) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *ChangeBalanceNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
@@ -67,6 +111,10 @@ const ChangeBalanceInternalServerErrorCode int = 500
 swagger:response changeBalanceInternalServerError
 */
 type ChangeBalanceInternalServerError struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewChangeBalanceInternalServerError creates ChangeBalanceInternalServerError with default headers values
@@ -75,8 +123,26 @@ func NewChangeBalanceInternalServerError() *ChangeBalanceInternalServerError {
 	return &ChangeBalanceInternalServerError{}
 }
 
+// WithVersion adds the version to the change balance internal server error response
+func (o *ChangeBalanceInternalServerError) WithVersion(version string) *ChangeBalanceInternalServerError {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the change balance internal server error response
+func (o *ChangeBalanceInternalServerError) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *ChangeBalanceInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 

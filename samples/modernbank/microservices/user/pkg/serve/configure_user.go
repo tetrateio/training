@@ -48,51 +48,51 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 		if err != nil {
 			api.Logger("Error creating user %q: %v", *params.Body.Username, err)
 			if _, ok := err.(*store.Conflict); ok {
-				return users.NewCreateUserConflict()
+				return users.NewCreateUserConflict().WithVersion(*version)
 			}
-			return users.NewCreateUserInternalServerError()
+			return users.NewCreateUserInternalServerError().WithVersion(*version)
 		}
 		api.Logger("Created user %q", *params.Body.Username)
-		return users.NewCreateUserCreated().WithPayload(res)
+		return users.NewCreateUserCreated().WithPayload(res).WithVersion(*version)
 
 	})
 	api.UsersDeleteUserHandler = users.DeleteUserHandlerFunc(func(params users.DeleteUserParams) middleware.Responder {
 		if err := userStore.Delete(params.Username); err != nil {
 			api.Logger("Error deleting user %q: %v", params.Username, err)
 			if _, ok := err.(*store.NotFound); ok {
-				return users.NewDeleteUserNotFound()
+				return users.NewDeleteUserNotFound().WithVersion(*version)
 			}
-			return users.NewDeleteUserInternalServerError()
+			return users.NewDeleteUserInternalServerError().WithVersion(*version)
 		}
 		api.Logger("Deleted user %q", params.Username)
-		return users.NewDeleteUserOK()
+		return users.NewDeleteUserOK().WithVersion(*version)
 	})
 	api.UsersGetUserByUserNameHandler = users.GetUserByUserNameHandlerFunc(func(params users.GetUserByUserNameParams) middleware.Responder {
 		res, err := userStore.Get(params.Username)
 		if err != nil {
 			api.Logger("Error retrieving user %q: %v", params.Username, err)
 			if _, ok := err.(*store.NotFound); ok {
-				return users.NewGetUserByUserNameNotFound()
+				return users.NewGetUserByUserNameNotFound().WithVersion(*version)
 			}
-			return users.NewGetUserByUserNameInternalServerError()
+			return users.NewGetUserByUserNameInternalServerError().WithVersion(*version)
 		}
 		api.Logger("Retrieved user %q", params.Username)
-		return users.NewGetUserByUserNameOK().WithPayload(res)
+		return users.NewGetUserByUserNameOK().WithPayload(res).WithVersion(*version)
 	})
 	api.UsersUpdateUserHandler = users.UpdateUserHandlerFunc(func(params users.UpdateUserParams) middleware.Responder {
 		res, err := userStore.Update(params.Username, params.Body)
 		if err != nil {
 			api.Logger("Error updating user %q: %v", *params.Body.Username, err)
 			if _, ok := err.(*store.NotFound); ok {
-				return users.NewUpdateUserNotFound()
+				return users.NewUpdateUserNotFound().WithVersion(*version)
 			}
-			return users.NewUpdateUserInternalServerError()
+			return users.NewUpdateUserInternalServerError().WithVersion(*version)
 		}
 		api.Logger("Updated user %q", *params.Body.Username)
-		return users.NewUpdateUserOK().WithPayload(res)
+		return users.NewUpdateUserOK().WithPayload(res).WithVersion(*version)
 	})
 	api.HealthHealthCheckHandler = health.HealthCheckHandlerFunc(func(_ health.HealthCheckParams) middleware.Responder {
-		return health.NewHealthCheckOK()
+		return health.NewHealthCheckOK().WithVersion(*version)
 	})
 
 	api.ServerShutdown = func() {}

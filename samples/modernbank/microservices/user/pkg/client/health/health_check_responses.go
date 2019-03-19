@@ -44,6 +44,9 @@ func NewHealthCheckOK() *HealthCheckOK {
 OK
 */
 type HealthCheckOK struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *HealthCheckOK) Error() string {
@@ -51,6 +54,9 @@ func (o *HealthCheckOK) Error() string {
 }
 
 func (o *HealthCheckOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }

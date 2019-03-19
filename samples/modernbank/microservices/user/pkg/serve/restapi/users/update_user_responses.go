@@ -21,6 +21,10 @@ const UpdateUserOKCode int = 200
 swagger:response updateUserOK
 */
 type UpdateUserOK struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 
 	/*
 	  In: Body
@@ -32,6 +36,17 @@ type UpdateUserOK struct {
 func NewUpdateUserOK() *UpdateUserOK {
 
 	return &UpdateUserOK{}
+}
+
+// WithVersion adds the version to the update user o k response
+func (o *UpdateUserOK) WithVersion(version string) *UpdateUserOK {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the update user o k response
+func (o *UpdateUserOK) SetVersion(version string) {
+	o.Version = version
 }
 
 // WithPayload adds the payload to the update user o k response
@@ -47,6 +62,13 @@ func (o *UpdateUserOK) SetPayload(payload *model.User) {
 
 // WriteResponse to the client
 func (o *UpdateUserOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.WriteHeader(200)
 	if o.Payload != nil {
@@ -65,6 +87,10 @@ const UpdateUserNotFoundCode int = 404
 swagger:response updateUserNotFound
 */
 type UpdateUserNotFound struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewUpdateUserNotFound creates UpdateUserNotFound with default headers values
@@ -73,8 +99,26 @@ func NewUpdateUserNotFound() *UpdateUserNotFound {
 	return &UpdateUserNotFound{}
 }
 
+// WithVersion adds the version to the update user not found response
+func (o *UpdateUserNotFound) WithVersion(version string) *UpdateUserNotFound {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the update user not found response
+func (o *UpdateUserNotFound) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *UpdateUserNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
@@ -89,6 +133,10 @@ const UpdateUserInternalServerErrorCode int = 500
 swagger:response updateUserInternalServerError
 */
 type UpdateUserInternalServerError struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewUpdateUserInternalServerError creates UpdateUserInternalServerError with default headers values
@@ -97,8 +145,26 @@ func NewUpdateUserInternalServerError() *UpdateUserInternalServerError {
 	return &UpdateUserInternalServerError{}
 }
 
+// WithVersion adds the version to the update user internal server error response
+func (o *UpdateUserInternalServerError) WithVersion(version string) *UpdateUserInternalServerError {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the update user internal server error response
+func (o *UpdateUserInternalServerError) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *UpdateUserInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 

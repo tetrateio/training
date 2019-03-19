@@ -19,6 +19,10 @@ const DeleteAccountOKCode int = 200
 swagger:response deleteAccountOK
 */
 type DeleteAccountOK struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewDeleteAccountOK creates DeleteAccountOK with default headers values
@@ -27,8 +31,26 @@ func NewDeleteAccountOK() *DeleteAccountOK {
 	return &DeleteAccountOK{}
 }
 
+// WithVersion adds the version to the delete account o k response
+func (o *DeleteAccountOK) WithVersion(version string) *DeleteAccountOK {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the delete account o k response
+func (o *DeleteAccountOK) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *DeleteAccountOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
@@ -43,6 +65,10 @@ const DeleteAccountNotFoundCode int = 404
 swagger:response deleteAccountNotFound
 */
 type DeleteAccountNotFound struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewDeleteAccountNotFound creates DeleteAccountNotFound with default headers values
@@ -51,8 +77,26 @@ func NewDeleteAccountNotFound() *DeleteAccountNotFound {
 	return &DeleteAccountNotFound{}
 }
 
+// WithVersion adds the version to the delete account not found response
+func (o *DeleteAccountNotFound) WithVersion(version string) *DeleteAccountNotFound {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the delete account not found response
+func (o *DeleteAccountNotFound) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *DeleteAccountNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
@@ -67,6 +111,10 @@ const DeleteAccountInternalServerErrorCode int = 500
 swagger:response deleteAccountInternalServerError
 */
 type DeleteAccountInternalServerError struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewDeleteAccountInternalServerError creates DeleteAccountInternalServerError with default headers values
@@ -75,8 +123,26 @@ func NewDeleteAccountInternalServerError() *DeleteAccountInternalServerError {
 	return &DeleteAccountInternalServerError{}
 }
 
+// WithVersion adds the version to the delete account internal server error response
+func (o *DeleteAccountInternalServerError) WithVersion(version string) *DeleteAccountInternalServerError {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the delete account internal server error response
+func (o *DeleteAccountInternalServerError) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *DeleteAccountInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 

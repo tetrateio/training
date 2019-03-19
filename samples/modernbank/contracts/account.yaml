@@ -14,8 +14,6 @@ paths:
       description: Change the balance of an account
       consumes:
       - application/json
-      produces:
-      - application/json
       tags:
       - accounts
       summary: Change the balance of an account
@@ -36,10 +34,22 @@ paths:
       responses:
         "200":
           description: OK
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: Account not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /health:
     post:
       description: returns 200
@@ -50,6 +60,10 @@ paths:
       responses:
         "200":
           description: OK
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /users/{owner}/accounts:
     get:
       description: Lists all accounts for a given customer
@@ -72,10 +86,22 @@ paths:
             type: array
             items:
               $ref: '#/definitions/account'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: Owner not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
     post:
       description: Creates a new account for a given customer
       produces:
@@ -95,8 +121,16 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/account'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /users/{owner}/accounts/{number}:
     get:
       produces:
@@ -122,10 +156,22 @@ paths:
           description: Success!
           schema:
             $ref: '#/definitions/account'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: Account not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
     delete:
       description: Delete account by account number.
       produces:
@@ -149,10 +195,22 @@ paths:
       responses:
         "200":
           description: Aaaaand it's gone!
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "404":
           description: Account not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
 definitions:
   account:
     type: object

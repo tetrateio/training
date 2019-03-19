@@ -54,6 +54,10 @@ func NewCreateAccountCreated() *CreateAccountCreated {
 Created
 */
 type CreateAccountCreated struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
+
 	Payload *model.Account
 }
 
@@ -62,6 +66,9 @@ func (o *CreateAccountCreated) Error() string {
 }
 
 func (o *CreateAccountCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	o.Payload = new(model.Account)
 
@@ -83,6 +90,9 @@ func NewCreateAccountInternalServerError() *CreateAccountInternalServerError {
 Internal server error
 */
 type CreateAccountInternalServerError struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *CreateAccountInternalServerError) Error() string {
@@ -90,6 +100,9 @@ func (o *CreateAccountInternalServerError) Error() string {
 }
 
 func (o *CreateAccountInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }

@@ -22,7 +22,19 @@ put:
   responses:
     200:
       description: "OK"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     404:
       description: "Account not found"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     500:
       description: "Internal server error"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded

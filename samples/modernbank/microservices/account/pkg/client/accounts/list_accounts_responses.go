@@ -61,6 +61,10 @@ func NewListAccountsOK() *ListAccountsOK {
 Success!
 */
 type ListAccountsOK struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
+
 	Payload []*model.Account
 }
 
@@ -69,6 +73,9 @@ func (o *ListAccountsOK) Error() string {
 }
 
 func (o *ListAccountsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	// response payload
 	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
@@ -88,6 +95,9 @@ func NewListAccountsNotFound() *ListAccountsNotFound {
 Owner not found
 */
 type ListAccountsNotFound struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *ListAccountsNotFound) Error() string {
@@ -95,6 +105,9 @@ func (o *ListAccountsNotFound) Error() string {
 }
 
 func (o *ListAccountsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }
@@ -109,6 +122,9 @@ func NewListAccountsInternalServerError() *ListAccountsInternalServerError {
 Internal server error
 */
 type ListAccountsInternalServerError struct {
+	/*Version of the microservice that responded
+	 */
+	Version string
 }
 
 func (o *ListAccountsInternalServerError) Error() string {
@@ -116,6 +132,9 @@ func (o *ListAccountsInternalServerError) Error() string {
 }
 
 func (o *ListAccountsInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
+
+	// response header version
+	o.Version = response.GetHeader("version")
 
 	return nil
 }

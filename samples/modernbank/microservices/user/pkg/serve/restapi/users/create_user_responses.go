@@ -21,6 +21,10 @@ const CreateUserCreatedCode int = 201
 swagger:response createUserCreated
 */
 type CreateUserCreated struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 
 	/*
 	  In: Body
@@ -32,6 +36,17 @@ type CreateUserCreated struct {
 func NewCreateUserCreated() *CreateUserCreated {
 
 	return &CreateUserCreated{}
+}
+
+// WithVersion adds the version to the create user created response
+func (o *CreateUserCreated) WithVersion(version string) *CreateUserCreated {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the create user created response
+func (o *CreateUserCreated) SetVersion(version string) {
+	o.Version = version
 }
 
 // WithPayload adds the payload to the create user created response
@@ -47,6 +62,13 @@ func (o *CreateUserCreated) SetPayload(payload *model.User) {
 
 // WriteResponse to the client
 func (o *CreateUserCreated) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.WriteHeader(201)
 	if o.Payload != nil {
@@ -65,6 +87,10 @@ const CreateUserConflictCode int = 409
 swagger:response createUserConflict
 */
 type CreateUserConflict struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewCreateUserConflict creates CreateUserConflict with default headers values
@@ -73,8 +99,26 @@ func NewCreateUserConflict() *CreateUserConflict {
 	return &CreateUserConflict{}
 }
 
+// WithVersion adds the version to the create user conflict response
+func (o *CreateUserConflict) WithVersion(version string) *CreateUserConflict {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the create user conflict response
+func (o *CreateUserConflict) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *CreateUserConflict) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
@@ -89,6 +133,10 @@ const CreateUserInternalServerErrorCode int = 500
 swagger:response createUserInternalServerError
 */
 type CreateUserInternalServerError struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewCreateUserInternalServerError creates CreateUserInternalServerError with default headers values
@@ -97,8 +145,26 @@ func NewCreateUserInternalServerError() *CreateUserInternalServerError {
 	return &CreateUserInternalServerError{}
 }
 
+// WithVersion adds the version to the create user internal server error response
+func (o *CreateUserInternalServerError) WithVersion(version string) *CreateUserInternalServerError {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the create user internal server error response
+func (o *CreateUserInternalServerError) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *CreateUserInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 

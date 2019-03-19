@@ -21,6 +21,10 @@ const GetAccountByNumberOKCode int = 200
 swagger:response getAccountByNumberOK
 */
 type GetAccountByNumberOK struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 
 	/*
 	  In: Body
@@ -32,6 +36,17 @@ type GetAccountByNumberOK struct {
 func NewGetAccountByNumberOK() *GetAccountByNumberOK {
 
 	return &GetAccountByNumberOK{}
+}
+
+// WithVersion adds the version to the get account by number o k response
+func (o *GetAccountByNumberOK) WithVersion(version string) *GetAccountByNumberOK {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the get account by number o k response
+func (o *GetAccountByNumberOK) SetVersion(version string) {
+	o.Version = version
 }
 
 // WithPayload adds the payload to the get account by number o k response
@@ -47,6 +62,13 @@ func (o *GetAccountByNumberOK) SetPayload(payload *model.Account) {
 
 // WriteResponse to the client
 func (o *GetAccountByNumberOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.WriteHeader(200)
 	if o.Payload != nil {
@@ -65,6 +87,10 @@ const GetAccountByNumberNotFoundCode int = 404
 swagger:response getAccountByNumberNotFound
 */
 type GetAccountByNumberNotFound struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewGetAccountByNumberNotFound creates GetAccountByNumberNotFound with default headers values
@@ -73,8 +99,26 @@ func NewGetAccountByNumberNotFound() *GetAccountByNumberNotFound {
 	return &GetAccountByNumberNotFound{}
 }
 
+// WithVersion adds the version to the get account by number not found response
+func (o *GetAccountByNumberNotFound) WithVersion(version string) *GetAccountByNumberNotFound {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the get account by number not found response
+func (o *GetAccountByNumberNotFound) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *GetAccountByNumberNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
@@ -89,6 +133,10 @@ const GetAccountByNumberInternalServerErrorCode int = 500
 swagger:response getAccountByNumberInternalServerError
 */
 type GetAccountByNumberInternalServerError struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewGetAccountByNumberInternalServerError creates GetAccountByNumberInternalServerError with default headers values
@@ -97,8 +145,26 @@ func NewGetAccountByNumberInternalServerError() *GetAccountByNumberInternalServe
 	return &GetAccountByNumberInternalServerError{}
 }
 
+// WithVersion adds the version to the get account by number internal server error response
+func (o *GetAccountByNumberInternalServerError) WithVersion(version string) *GetAccountByNumberInternalServerError {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the get account by number internal server error response
+func (o *GetAccountByNumberInternalServerError) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *GetAccountByNumberInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 

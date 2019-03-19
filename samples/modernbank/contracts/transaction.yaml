@@ -19,6 +19,10 @@ paths:
       responses:
         "200":
           description: OK
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /transactions:
     post:
       description: Sends money from one account to another
@@ -42,10 +46,22 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/transaction'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "400":
           description: Nice try! You can't send negative amounts...
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
         "500":
           description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
 definitions:
   newtransaction:
     type: object

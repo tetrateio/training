@@ -21,6 +21,10 @@ const ListTransactionsReceivedOKCode int = 200
 swagger:response listTransactionsReceivedOK
 */
 type ListTransactionsReceivedOK struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 
 	/*
 	  In: Body
@@ -32,6 +36,17 @@ type ListTransactionsReceivedOK struct {
 func NewListTransactionsReceivedOK() *ListTransactionsReceivedOK {
 
 	return &ListTransactionsReceivedOK{}
+}
+
+// WithVersion adds the version to the list transactions received o k response
+func (o *ListTransactionsReceivedOK) WithVersion(version string) *ListTransactionsReceivedOK {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the list transactions received o k response
+func (o *ListTransactionsReceivedOK) SetVersion(version string) {
+	o.Version = version
 }
 
 // WithPayload adds the payload to the list transactions received o k response
@@ -47,6 +62,13 @@ func (o *ListTransactionsReceivedOK) SetPayload(payload []*model.Transaction) {
 
 // WriteResponse to the client
 func (o *ListTransactionsReceivedOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.WriteHeader(200)
 	payload := o.Payload
@@ -68,6 +90,10 @@ const ListTransactionsReceivedNotFoundCode int = 404
 swagger:response listTransactionsReceivedNotFound
 */
 type ListTransactionsReceivedNotFound struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewListTransactionsReceivedNotFound creates ListTransactionsReceivedNotFound with default headers values
@@ -76,8 +102,26 @@ func NewListTransactionsReceivedNotFound() *ListTransactionsReceivedNotFound {
 	return &ListTransactionsReceivedNotFound{}
 }
 
+// WithVersion adds the version to the list transactions received not found response
+func (o *ListTransactionsReceivedNotFound) WithVersion(version string) *ListTransactionsReceivedNotFound {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the list transactions received not found response
+func (o *ListTransactionsReceivedNotFound) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *ListTransactionsReceivedNotFound) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 
@@ -92,6 +136,10 @@ const ListTransactionsReceivedInternalServerErrorCode int = 500
 swagger:response listTransactionsReceivedInternalServerError
 */
 type ListTransactionsReceivedInternalServerError struct {
+	/*Version of the microservice that responded
+
+	 */
+	Version string `json:"version"`
 }
 
 // NewListTransactionsReceivedInternalServerError creates ListTransactionsReceivedInternalServerError with default headers values
@@ -100,8 +148,26 @@ func NewListTransactionsReceivedInternalServerError() *ListTransactionsReceivedI
 	return &ListTransactionsReceivedInternalServerError{}
 }
 
+// WithVersion adds the version to the list transactions received internal server error response
+func (o *ListTransactionsReceivedInternalServerError) WithVersion(version string) *ListTransactionsReceivedInternalServerError {
+	o.Version = version
+	return o
+}
+
+// SetVersion sets the version to the list transactions received internal server error response
+func (o *ListTransactionsReceivedInternalServerError) SetVersion(version string) {
+	o.Version = version
+}
+
 // WriteResponse to the client
 func (o *ListTransactionsReceivedInternalServerError) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	// response header version
+
+	version := o.Version
+	if version != "" {
+		rw.Header().Set("version", version)
+	}
 
 	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
 

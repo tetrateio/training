@@ -23,7 +23,19 @@ get:
       description: "Success!"
       schema:
         $ref: "./definitions/transaction.yaml"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     404:
       description: "Transaction not found"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
     500:
       description: "Internal server error"
+      headers:
+        version:
+          type: string
+          description: Version of the microservice that responded
