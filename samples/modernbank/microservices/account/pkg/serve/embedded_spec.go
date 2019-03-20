@@ -184,6 +184,16 @@ func init() {
             "name": "owner",
             "in": "path",
             "required": true
+          },
+          {
+            "enum": [
+              "cash",
+              "saving"
+            ],
+            "type": "string",
+            "name": "type",
+            "in": "query",
+            "required": true
           }
         ],
         "responses": {
@@ -336,7 +346,8 @@ func init() {
       "required": [
         "number",
         "balance",
-        "owner"
+        "owner",
+        "type"
       ],
       "properties": {
         "balance": {
@@ -349,6 +360,13 @@ func init() {
         },
         "owner": {
           "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "cash",
+            "saving"
+          ]
         }
       }
     }
@@ -527,6 +545,16 @@ func init() {
             "name": "owner",
             "in": "path",
             "required": true
+          },
+          {
+            "enum": [
+              "cash",
+              "saving"
+            ],
+            "type": "string",
+            "name": "type",
+            "in": "query",
+            "required": true
           }
         ],
         "responses": {
@@ -679,7 +707,8 @@ func init() {
       "required": [
         "number",
         "balance",
-        "owner"
+        "owner",
+        "type"
       ],
       "properties": {
         "balance": {
@@ -692,6 +721,13 @@ func init() {
         },
         "owner": {
           "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "cash",
+            "saving"
+          ]
         }
       }
     }

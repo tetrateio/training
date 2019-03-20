@@ -81,7 +81,7 @@ func (m MongoDB) Get(owner string, number int64) (*model.Account, error) {
 	return &account, nil
 }
 
-func (m MongoDB) Create(owner string) (*model.Account, error) {
+func (m MongoDB) Create(owner string, accountType string) (*model.Account, error) {
 	newAccountNumber, err := m.unAssignedAccountNumber()
 	if err != nil {
 		return nil, fmt.Errorf("error finding a vacant account number: %v", err)
@@ -90,6 +90,7 @@ func (m MongoDB) Create(owner string) (*model.Account, error) {
 		Balance: swag.Float64(100),
 		Owner:   swag.String(owner),
 		Number:  swag.Int64(newAccountNumber),
+		Type:    swag.String(accountType),
 	}
 	_, err = m.defaultCollection().InsertOne(context.Background(), newAccount)
 	if err != nil {

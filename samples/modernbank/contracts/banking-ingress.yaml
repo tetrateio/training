@@ -299,6 +299,13 @@ paths:
         name: owner
         in: path
         required: true
+      - enum:
+        - cash
+        - saving
+        type: string
+        name: type
+        in: query
+        required: true
       responses:
         "201":
           description: Created
@@ -510,6 +517,7 @@ definitions:
     - number
     - balance
     - owner
+    - type
     properties:
       balance:
         type: number
@@ -519,6 +527,11 @@ definitions:
         format: int64
       owner:
         type: string
+      type:
+        type: string
+        enum:
+        - cash
+        - saving
   newtransaction:
     type: object
     required:
