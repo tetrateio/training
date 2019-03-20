@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { Account } from '../../api/client';
+import { Account, AccountTypeEnum } from '../../api/client';
 import { AuthContext } from '../../components/auth/authContext';
 import { Shell } from '../../components/shell';
 import { Navbar } from '../../components/viewAppBar/navbar';
@@ -59,7 +59,8 @@ interface IProps
 const initialAccount: Account = {
   balance: 0,
   number: 0,
-  owner: ''
+  owner: '',
+  type: AccountTypeEnum.Cash
 };
 
 export const Component: React.FunctionComponent<IProps> = (props: IProps) => {

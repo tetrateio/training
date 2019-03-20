@@ -11,7 +11,7 @@
  * Do not edit the class manually.
  */
 
-// This is edited as such to make it easier (instead of providing basePath through configuration).
+
 export const BASE_PATH = "/v1".replace(/\/+$/, "");
 
 /**

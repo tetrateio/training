@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
 
-import { Account, AccountsApi } from '../../api/client';
+import { Account, AccountsApi, AccountTypeEnum } from '../../api/client';
 import { AuthContext } from '../../components/auth/authContext';
 import { Shell } from '../../components/shell';
 import { AccountSummary } from './accountSummary';
@@ -62,16 +62,30 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     fetchAccounts();
   }, []);
 
-  // The API doesn't support account type. Fake account type using the last digit of the account number.
-  const filterByLastDigit = (start: number, end: number): Account[] => {
-    return accounts.filter(
-      acc => start <= acc.number % 10 && acc.number % 10 <= end
-    );
+  const filterByType = (type: AccountTypeEnum): Account[] => {
+    return accounts.filter(acc => acc.type === type);
   };
 
-  const cashAccounts = filterByLastDigit(0, 3);
-  const investmentAccounts = filterByLastDigit(4, 6);
-  const creditAccounts = filterByLastDigit(7, 9);
+  const cashAccounts = filterByType(AccountTypeEnum.Cash);
+  const investmentAccounts = filterByType(AccountTypeEnum.Saving);
+  const creditAccounts = [];
+
+  const renderAccounts = () => {
+    return (
+      <>
+        {cashAccounts.length > 0 && (
+          <Grid item={true}>
+            <CashAccounts accounts={cashAccounts} />
+          </Grid>
+        )}
+        {investmentAccounts.length > 0 && (
+          <Grid item={true}>
+            <InvestmentAccounts accounts={investmentAccounts} />
+          </Grid>
+        )}
+      </>
+    );
+  };
 
   return (
     <Grid
@@ -84,7 +98,7 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => {
       <Grid item={true}>
         <div className={props.classes.subheader}>
           <Typography variant="h6" className={props.classes.subheaderText}>
-            Account summary / Checking account
+            Account summary/Checking account
           </Typography>
         </div>
       </Grid>
@@ -95,15 +109,7 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => {
           minusAccounts={creditAccounts}
         />
       </Grid>
-      <Grid item={true}>
-        <CashAccounts accounts={cashAccounts} />
-      </Grid>
-      <Grid item={true}>
-        <InvestmentAccounts accounts={investmentAccounts} />
-      </Grid>
-      <Grid item={true}>
-        <CreditAccounts accounts={creditAccounts} />
-      </Grid>
+      {renderAccounts()}
       <Grid item={true}>
         <Divider className={props.classes.divider} />
       </Grid>

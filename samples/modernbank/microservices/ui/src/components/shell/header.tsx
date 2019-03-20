@@ -26,6 +26,10 @@ const styles = () =>
       fontStyle: 'italic',
       paddingRight: '2vw'
     },
+    emojiText: {
+      color: 'white',
+      fontSize: '4vw'
+    },
     gridContainer: {
       height: '100%'
     },
@@ -77,6 +81,13 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     <></>
   );
 
+  function emoji(version: string): string {
+    if (version === 'v1') {
+      return '😆';
+    }
+    return '👻';
+  }
+
   return (
     <Paper square={true} className={props.classes.paper}>
       <Grid
@@ -95,12 +106,19 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
               inline={true}
               className={props.classes.companyText}
             >
-              {`BridgeNational${
-                authContext.isAuthenticated ? '-' + versionContext.version : ''
-              }`}
+              BridgeNational
             </Typography>
             <Logo />
           </Button>
+        </Grid>
+        <Grid item={true}>
+          <Typography
+            variant="h4"
+            inline={true}
+            className={props.classes.emojiText}
+          >
+            {authContext.isAuthenticated ? emoji(versionContext.version) : ''}
+          </Typography>
         </Grid>
         <Grid item={true}>{accountIcon}</Grid>
       </Grid>
