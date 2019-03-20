@@ -127,7 +127,7 @@ spec:
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: account
+  name: account-v1
   labels:
     app: account
     version: v1
@@ -147,7 +147,7 @@ spec:
         - name: account
           image: "gcr.io/tetratelabs/modernbank/account:v1.0.0"
           imagePullPolicy: Always
-          args: ["--port", "8080"]
+          args: ["--port", "8080", "--version", "v1"]
           ports:
           - name: http
             containerPort: 8080

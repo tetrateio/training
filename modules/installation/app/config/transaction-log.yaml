@@ -127,7 +127,7 @@ spec:
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: transaction-log
+  name: transaction-log-v1
   labels:
     app: transaction-log
     version: v1
@@ -147,7 +147,7 @@ spec:
         - name: transaction-log
           image: "gcr.io/tetratelabs/modernbank/transaction-log:v1.0.0"
           imagePullPolicy: Always
-          args: ["--port", "8080"]
+          args: ["--port", "8080", "--version", "v1"]
           ports:
           - name: http
             containerPort: 8080
