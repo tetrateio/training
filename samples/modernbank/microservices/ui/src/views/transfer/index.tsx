@@ -12,6 +12,7 @@ import { Subheader } from '../../components/viewAppBar/subheader';
 import { Form } from './form';
 import { InfoPanel } from './infoPanel';
 import { accountsApi } from '../../api/client-utils';
+import { VersionContext } from '../../context/versionProvider';
 
 const styles = () =>
   createStyles({
@@ -66,6 +67,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const [account, setAccount] = React.useState<Account>(initialAccount);
 
   const accountNumber = parseInt(props.match.params.accountNumber, 10);
+  const { setVersion } = React.useContext(VersionContext);
 
   // TODO(jiajesse): GET .../accounts/{number} doesn't work. Use GET .../accounts and filter for now.
   // const fetchAccount = async () => {
@@ -77,9 +79,12 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   // }, []);
 
   const fetchAccounts = async () => {
-    const owner = authContext.user!.username;
-    const resp: Account[] = await accountsApi.listAccounts({ owner });
-    const acc = resp.find(a => a.number === accountNumber);
+    const resp = await accountsApi.listAccountsRaw({
+      owner: authContext.user!.username
+    });
+    const accounts = await resp.value();
+    setVersion(resp.raw.headers.get('version'));
+    const acc = accounts.find(a => a.number === accountNumber);
     setAccount(acc);
   };
 

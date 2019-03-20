@@ -13,6 +13,7 @@ import { CashAccounts } from './cashAccounts';
 import { CreditAccounts } from './creditAccounts';
 import { InvestmentAccounts } from './investmentAccounts';
 import { TotalAccountValue } from './totalAccountValue';
+import { VersionContext } from '../../context/versionProvider';
 
 const styles = () =>
   createStyles({
@@ -47,13 +48,13 @@ const accountsApi = new AccountsApi();
 const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const [accounts, setAccounts] = React.useState<Account[]>([]);
   const authContext = React.useContext(AuthContext);
+  const { setVersion } = React.useContext(VersionContext);
 
   const fetchAccounts = async () => {
     const owner = authContext.user!.username;
     const resp = await accountsApi.listAccountsRaw({ owner });
-    if (resp.raw.headers.has('version')) {
-      console.log(resp.raw.headers.get('version'));
-    }
+
+    setVersion(resp.raw.headers.get('version'));
     setAccounts(await resp.value());
   };
 

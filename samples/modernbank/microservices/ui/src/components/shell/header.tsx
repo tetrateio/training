@@ -12,6 +12,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { AccountsPageLink, LoginPath } from '../../routes';
 import { AuthContext } from '../auth/authContext';
 import { Logo } from './logo';
+import { VersionContext } from '../../context/versionProvider';
 
 const styles = () =>
   createStyles({
@@ -42,6 +43,8 @@ interface IProps extends WithStyles<typeof styles>, RouteComponentProps<{}> {}
 export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const authContext = React.useContext(AuthContext);
+
+  const versionContext = React.useContext(VersionContext);
 
   const handleLogout = () => {
     setAnchorEl(null);
@@ -92,7 +95,9 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
               inline={true}
               className={props.classes.companyText}
             >
-              BridgeNational
+              {`BridgeNational${
+                authContext.isAuthenticated ? '-' + versionContext.version : ''
+              }`}
             </Typography>
             <Logo />
           </Button>

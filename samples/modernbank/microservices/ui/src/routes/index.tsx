@@ -14,6 +14,7 @@ import { NotFoundView } from '../views/notfound';
 import { RegisterView } from '../views/register';
 import { TransactionsView } from '../views/transactions';
 import { TransferView } from '../views/transfer';
+import VersionProvider from '../context/versionProvider';
 
 export const AccountsPath = '/accounts';
 export const LoginPath = '/login';
@@ -69,26 +70,28 @@ const PrivateRoute: React.FunctionComponent<IPrivateRouteProps> = ({
 export const ViewsRouter: React.FunctionComponent<{}> = () => {
   return (
     <BrowserRouter>
-      <Switch>
-        <PrivateRoute
-          path={AccountsPath}
-          exact={true}
-          component={AccountsView}
-        />
-        <PrivateRoute
-          path={'/accounts/:accountNumber/transfer'}
-          component={TransferView}
-        />
-        <PrivateRoute
-          path={'/accounts/:accountNumber/transactions'}
-          component={TransactionsView}
-        />
-        <Route path={LoginPath} exact={true} component={LoginView} />
-        <Route path={RegisterPath} exact={true} component={RegisterView} />
-        <Route path="/404" exact={true} component={NotFoundView} />
-        <PrivateRoute path="*" component={NotFoundView} />
-        <Route path="*" exact={true} component={LoginView} />
-      </Switch>
+      <VersionProvider>
+        <Switch>
+          <PrivateRoute
+            path={AccountsPath}
+            exact={true}
+            component={AccountsView}
+          />
+          <PrivateRoute
+            path={'/accounts/:accountNumber/transfer'}
+            component={TransferView}
+          />
+          <PrivateRoute
+            path={'/accounts/:accountNumber/transactions'}
+            component={TransactionsView}
+          />
+          <Route path={LoginPath} exact={true} component={LoginView} />
+          <Route path={RegisterPath} exact={true} component={RegisterView} />
+          <Route path="/404" exact={true} component={NotFoundView} />
+          <PrivateRoute path="*" component={NotFoundView} />
+          <Route path="*" exact={true} component={LoginView} />
+        </Switch>
+      </VersionProvider>
     </BrowserRouter>
   );
 };

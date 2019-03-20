@@ -7,6 +7,7 @@ import { User, Account } from '../../api/client';
 import { usersApi, accountsApi } from '../../api/client-utils';
 import { AuthContext } from '../../components/auth/authContext';
 import { AccountsPageLink, AccountsPath } from '../../routes';
+import { VersionContext } from '../../context/versionProvider';
 
 const styles = () =>
   createStyles({
@@ -53,15 +54,21 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   >('');
 
   const authContext = React.useContext(AuthContext);
+  const { setVersion } = React.useContext(VersionContext);
 
   const submitNewUserForm = async () => {
     try {
-      const newUser: User = await usersApi.createUser({
+      const resp = await usersApi.createUserRaw({
         body: { email, firstName, lastName, password, username }
       });
+
+      const newUser = await resp.value();
+      setVersion(resp.raw.headers.get('version'));
+
       const newAccount: Account = await accountsApi.createAccount({
         owner: username
       });
+
       console.log(newAccount);
       // TODO(dio): show confirmation that we have created the account.
 
