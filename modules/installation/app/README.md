@@ -1,89 +1,123 @@
-# Modern Bank Demo Application
+# Installing Demo Application
 
-## Prerequisites
+Let’s take a look at the user microservice deployment.
 
-<!-- TODO: @Liam update once this section is complete
- - kubectl
- - Istio installed
- - Kubernetes Cluster Context
- -->
+```yaml
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: user
+  labels:
+    app: user
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+        version: v1
+    spec:
+      serviceAccountName: user
+      containers:
+        - name: user
+          image: "gcr.io/tetratelabs/modernbank/user:v1.0.0"
+          imagePullPolicy: Always
+          args: ["--port", "8080"]
+          ports:
+          - name: http
+            containerPort: 8080
+```
 
-## Modern Bank
+This is a typical Kubernetes deployment, there is nothing here specific to Istio.
 
-Modern Bank are a bank that allows customers to make payments to other customers on their platform.
+However, In order for Istio to intercept and proxy the requests, an Istio sidecar must be installed alongside of the application container. There are 2 ways to do this:
 
-They have five microservices:
+- Manual sidecar injection
+- Automatic sidecar injection via a Mutating Admission Webhook.
 
-- User (manages customer information)
-- Account (manages customer accounts)
-- Transaction (orchestrates customer transactions)
-- Transaction-Log (append only log of transactions)
-- UI (serves user interface)
+## Manual Sidecar Injection
 
-<!-- TODO: @Gus Insert architecture diagram here with various interactions between the microservices -->
+Use istioctl to see what using manual sidecar injection will add to the deployment.
 
-<!-- TODO: @Liam Discuss API contract here, was unable to get Swagger-UI docker image to do what I wanted it to do! -->
+```bash
+$ istioctl kube-inject -f config/user.yaml | less
+...
+        image: gcr.io/tetratelabs/modernbank/user:v1.0.0
+        name: user
+...
+        image: docker.io/istio/proxyv2:1.1.0
+        name: istio-proxy
+...
+        image: docker.io/istio/proxy_init:1.1.0
+        name: istio-init
+```
 
-## Installation
+In addition to an application container, this output now has an `istio-init` container and an `istio-proxy` container.
 
-<!-- TODO: @Liam @Zack Work out the kube semantics -->
+The `istio-init` container will set up the IP table rules in the pod’s network namespace to intercept incoming and outgoing connections and direct them to the `istio-proxy` container. The `istio-proxy` container is an Envoy binary wrapped with Pilot-Agent to manage its lifecycle.
 
-Label the `default` namespace to tell Istio to inject sidecar proxies to the application.
+If you want to use manual Istio sidecar injection, then you would always filter your Kubernetes deployment file through the istioctl utility, and deploy the resulting deployment specification. However, most users tend to take advantage of Istio’s automatic sidecar injection.
+
+## Automatic Sidecar Injection
+
+You can turn on Automatic Sidecar Injection on a per Kubernetes namespace level by setting the label istio-injection to enabled.
 
 ```bash
 kubectl label namespace default istio-injection=enabled
 ```
 
-Install the demo application.
+Deploy the entire application.
 
 ```bash
 kubectl apply -f config/
 ```
 
-Verify the demo application has installed correctly.
+This will:
 
-<!-- TODO: update response with UI microservice -->
+- Deploy our microservices:
+  - User (manages customer information)
+  - Account (manages customer accounts)
+  - Transaction (orchestrates customer transactions)
+  - Transaction-Log (append only log of transactions)
+  - UI (serves user interface)
+- Deploy MongoDB instances for microservices that store state (user, account, transaction-log).
+
+Check that all components have the Running status, and that Ready column shows 2/2. This signifies that there are 2 containers running in each of the pods (the application container and the Istio Proxy container) and that both of these are running.
 
 ```bash
 $ kubectl get pods
-NAME                                       READY   STATUS    RESTARTS   AGE
-account-ccc775744-nnbwt                    2/2     Running   0          4h
-account-mongodb-6757fb69c5-nx4v6           2/2     Running   0          4h
-transaction-b6b9c96f5-qjc7v                2/2     Running   0          4h
-transaction-log-d5976d644-xrnbs            2/2     Running   0          4h
-transaction-log-mongodb-556fbc7499-jkslx   2/2     Running   0          4h
-user-7ccc796d46-l9x8n                      2/2     Running   0          4h
-user-mongodb-7867988d7c-ptld5              2/2     Running   0          4h
+NAME                                       READY   STATUS        RESTARTS   AGE
+account-mongodb-6757fb69c5-cg7hd           2/2     Running       0          1m
+account-v1-85598cdcbb-2n9xf                2/2     Running       0          1m
+account-v2-76dbb58d49-ks6n7                2/2     Running       0          1m
+details-v1-8c85d99c7-ct7pw                 2/2     Running       0          1m
+transaction-log-mongodb-556fbc7499-8l4s4   2/2     Running       0          1m
+transaction-log-v1-6fd7878454-sn8pr        2/2     Running       0          1m
+transaction-v1-84747c99b5-rhrpd            2/2     Running       0          1m
+ui-v1-5c498fd8b5-ql69l                     2/2     Running       0          1m
+user-mongodb-7867988d7c-nv6xr              2/2     Running       0          1m
+user-v1-86d76998b8-hwh7b                   2/2     Running       0          1m
 ```
 
-We have installed all the microservices detailed above and databases for thoses that store state. We have also installed a default Istio Gateway to expose our application to the internet, we will go into more detail on this in the traffic routing section.
-
-To make a request to our application we need to know the external IP of the Istio Ingress Gateway.
+Istio has automatically injected the sidecar proxy into the pod. You can see this here:
 
 ```bash
-$ kubectl get service -n istio-system istio-ingressgateway
-NAME                   TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                         AGE
-istio-ingressgateway   LoadBalancer   10.51.250.86   35.246.69.176   80:31380/TCP,443:31390/TCP...   3d
-```
-
-To set a variable to this IP address run the following command
-
-```bash
-export CLUSTER_IP=$(kubectl get service -n istio-system istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-```
-
-Now we know the external IP, we are able to make a request to the application.
-
-<!-- TODO: @Liam move this to view the UI when it exists -->
-
-```bash
-$ curl -v http://$CLUSTER_IP/v1/users/not-yet-created
+$ kubectl get pods -l app=user -o yaml
+containerStatuses:
+image: istio/proxyv2:1.1.0
+      name: istio-proxy
 ...
-* Connected to 35.197.239.230 (35.197.239.230) port 80 (#0)
-> GET /v1/users/not-yet-created HTTP/1.1
-> Host: 35.197.239.230
+   -  image: gcr.io/tetratelabs/modernbank/user:v1.0.0
+      name: user
+...    
+initContainerStatuses:
+    - image: istio/proxy_init:1.1.0
+      name: istio-init
 ...
-< HTTP/1.1 404 Not Found
 ```
 
-We received a 404, this is expected as we tried to get information about a user that doesn't yet exist.
+You should see the `istio-init` container, and well as a container named `istio-proxy` automatically injected into the pod. Awesome. Now that we have installed Istio, we can start to check out what it can do.
