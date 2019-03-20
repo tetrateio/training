@@ -12,6 +12,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { AccountsPageLink, LoginPath } from '../../routes';
 import { AuthContext } from '../auth/authContext';
 import { Logo } from './logo';
+import { VersionContext } from '../../context/versionProvider';
 
 const styles = () =>
   createStyles({
@@ -24,6 +25,10 @@ const styles = () =>
       fontSize: '4vw',
       fontStyle: 'italic',
       paddingRight: '2vw'
+    },
+    emojiText: {
+      color: 'white',
+      fontSize: '4vw'
     },
     gridContainer: {
       height: '100%'
@@ -42,6 +47,8 @@ interface IProps extends WithStyles<typeof styles>, RouteComponentProps<{}> {}
 export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const authContext = React.useContext(AuthContext);
+
+  const versionContext = React.useContext(VersionContext);
 
   const handleLogout = () => {
     setAnchorEl(null);
@@ -74,6 +81,13 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     <></>
   );
 
+  function emoji(version: string): string {
+    if (version === 'v1') {
+      return '😆';
+    }
+    return '👻';
+  }
+
   return (
     <Paper square={true} className={props.classes.paper}>
       <Grid
@@ -96,6 +110,15 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
             </Typography>
             <Logo />
           </Button>
+        </Grid>
+        <Grid item={true}>
+          <Typography
+            variant="h4"
+            inline={true}
+            className={props.classes.emojiText}
+          >
+            {authContext.isAuthenticated ? emoji(versionContext.version) : ''}
+          </Typography>
         </Grid>
         <Grid item={true}>{accountIcon}</Grid>
       </Grid>

@@ -7,7 +7,7 @@ module.exports = function(app) {
     '/v1': {
       // We setup dynamic proxy here so we can edit with environment variables.
       target:
-        process.env.REACT_APP_PROXY || 'http://training-stag.tetr8labs.net',
+        process.env.REACT_APP_PROXY || 'http://35.197.239.230',
       pathRewrite: {
         // We can do `pathRewrite` here if required. e.g. '/v1': '/v2'.
       },

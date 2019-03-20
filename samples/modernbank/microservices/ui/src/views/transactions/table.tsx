@@ -44,14 +44,16 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const transactionsApi = new TransactionsApi();
 
   const fetchTransactionsReceived = async () => {
-    const received: any = await transactionsApi.listTransactionsReceived(
-      accountNumber
-    );
+    const received: any = await transactionsApi.listTransactionsReceived({
+      receiver: accountNumber
+    });
     setReceivedTxs(received);
   };
 
   const fetchTransactionsSent = async () => {
-    const sent: any = await transactionsApi.listTransactionsSent(accountNumber);
+    const sent: any = await transactionsApi.listTransactionsSent({
+      sender: accountNumber
+    });
     setSentTxs(sent);
   };
 

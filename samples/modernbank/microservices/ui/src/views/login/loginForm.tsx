@@ -9,6 +9,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { authenticationCheck } from '../../api/client-utils';
 import { AuthContext } from '../../components/auth/authContext';
 import { AccountsPath } from '../../routes';
+import { VersionContext } from '../../context/versionProvider';
 
 const styles = () =>
   createStyles({
@@ -38,9 +39,10 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const [password, setPassword] = React.useState<string>('');
   const [loginFailed, setLoginFailed] = React.useState<boolean>(false);
   const authContext = React.useContext(AuthContext);
+  const { setVersion } = React.useContext(VersionContext);
 
   const signInHandler = async () => {
-    const authenticatedUser = await authenticationCheck(username, password);
+    const authenticatedUser = await authenticationCheck(username, password, setVersion);
     if (authenticatedUser) {
       setLoginFailed(false);
       authContext.isAuthenticated = true;

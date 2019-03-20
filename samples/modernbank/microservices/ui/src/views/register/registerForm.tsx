@@ -1,12 +1,22 @@
-import { createStyles, WithStyles, withStyles } from '@material-ui/core';
+import {
+  createStyles,
+  WithStyles,
+  withStyles,
+  Select,
+  MenuItem,
+  Input,
+  Checkbox,
+  FormControlLabel
+} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { User, Account } from '../../api/client';
+import { Account, CreateAccountTypeEnum } from '../../api/client';
 import { usersApi, accountsApi } from '../../api/client-utils';
 import { AuthContext } from '../../components/auth/authContext';
 import { AccountsPageLink, AccountsPath } from '../../routes';
+import { VersionContext } from '../../context/versionProvider';
 
 const styles = () =>
   createStyles({
@@ -29,6 +39,7 @@ interface IFormState {
   email: string;
   password: string;
   passwordConfirmation: string;
+  accountType: boolean;
 }
 
 const disableSubmitButton = (s: IFormState): boolean => {
@@ -38,7 +49,8 @@ const disableSubmitButton = (s: IFormState): boolean => {
     !s.lastName ||
     !s.email ||
     !s.password ||
-    !s.passwordConfirmation
+    !s.passwordConfirmation ||
+    !s.accountType
   );
 };
 
@@ -51,21 +63,32 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const [passwordConfirmation, setPasswordConfirmation] = React.useState<
     string
   >('');
+  const [cash, setCash] = React.useState<boolean>(false);
+  const [saving, setSaving] = React.useState<boolean>(false);
 
   const authContext = React.useContext(AuthContext);
+  const { setVersion } = React.useContext(VersionContext);
+
+  const createAccount = async (owner: string, type: CreateAccountTypeEnum) => {
+    await accountsApi.createAccount({ owner, type });
+  };
 
   const submitNewUserForm = async () => {
     try {
-      const newUser: User = await usersApi.createUser({
-        email,
-        firstName,
-        lastName,
-        password,
-        username
+      const resp = await usersApi.createUserRaw({
+        body: { email, firstName, lastName, password, username }
       });
-      const newAccount: Account = await accountsApi.createAccount(username);
-      console.log(newAccount);
-      // TODO(dio): show confirmation that we have created the account.
+
+      const newUser = await resp.value();
+      setVersion(resp.raw.headers.get('version'));
+
+      if (cash) {
+        await createAccount(username, CreateAccountTypeEnum.Cash)
+      }
+
+      if (saving) {
+        await createAccount(username, CreateAccountTypeEnum.Saving)
+      }
 
       authContext.isAuthenticated = true;
       authContext.user = newUser;
@@ -83,8 +106,20 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     lastName,
     password,
     passwordConfirmation,
-    username
+    username,
+    accountType: cash || saving
   });
+
+  const handleChange = (name: string) => (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    // TODO(dio): I'm lazy!
+    if (name === 'cash') {
+      setCash(event.target.checked);
+    } else if (name === 'saving') {
+      setSaving(event.target.checked);
+    }
+  };
 
   const handleKeyPress = async (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -164,6 +199,19 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
         required={true}
         className={props.classes.textField}
       />
+
+      <FormControlLabel
+        control={<Checkbox checked={cash} onChange={handleChange('cash')} />}
+        label="Cash"
+      />
+
+      <FormControlLabel
+        control={
+          <Checkbox checked={saving} onChange={handleChange('saving')} />
+        }
+        label="Saving"
+      />
+
       <div className={props.classes.buttons}>
         <Button
           variant="contained"

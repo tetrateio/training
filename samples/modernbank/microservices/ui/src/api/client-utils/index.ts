@@ -6,11 +6,13 @@ export const accountsApi = new AccountsApi();
 
 export const authenticationCheck = async (
   username: string,
-  password: string
+  password: string,
+  setVersion: Function
 ): Promise<User> => {
-  const options = {
-    method: 'GET'
-  };
-  const user: User = await usersApi.getUserByUserName(username, options);
-  return username === user.username && password === user.password ? user : null;
+  const resp = await usersApi.getUserByUserNameRaw({ username });
+  setVersion(resp.raw.headers.get('version'));
+  const user = await resp.value();
+  return username === user.username && password === user.password
+    ? await user
+    : null;
 };
