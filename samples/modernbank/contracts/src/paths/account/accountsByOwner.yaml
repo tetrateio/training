@@ -12,6 +12,11 @@ post:
     description: "Owner of the account"
     required: true
     type: string
+  - in: "query"
+    name: "type"
+    type: string
+    enum: [cash, saving]
+    required: true
   responses:
     201:
       description: "Created"

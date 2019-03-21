@@ -6,6 +6,8 @@ package model
 // Editing this file might prove futile when you re-run the swagger generate command
 
 import (
+	"encoding/json"
+
 	strfmt "github.com/go-openapi/strfmt"
 
 	"github.com/go-openapi/errors"
@@ -28,6 +30,11 @@ type Account struct {
 	// owner
 	// Required: true
 	Owner *string `json:"owner"`
+
+	// type
+	// Required: true
+	// Enum: [cash saving]
+	Type *string `json:"type"`
 }
 
 // Validate validates this account
@@ -43,6 +50,10 @@ func (m *Account) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateOwner(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateType(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -73,6 +84,49 @@ func (m *Account) validateNumber(formats strfmt.Registry) error {
 func (m *Account) validateOwner(formats strfmt.Registry) error {
 
 	if err := validate.Required("owner", "body", m.Owner); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+var accountTypeTypePropEnum []interface{}
+
+func init() {
+	var res []string
+	if err := json.Unmarshal([]byte(`["cash","saving"]`), &res); err != nil {
+		panic(err)
+	}
+	for _, v := range res {
+		accountTypeTypePropEnum = append(accountTypeTypePropEnum, v)
+	}
+}
+
+const (
+
+	// AccountTypeCash captures enum value "cash"
+	AccountTypeCash string = "cash"
+
+	// AccountTypeSaving captures enum value "saving"
+	AccountTypeSaving string = "saving"
+)
+
+// prop value enum
+func (m *Account) validateTypeEnum(path, location string, value string) error {
+	if err := validate.Enum(path, location, value, accountTypeTypePropEnum); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *Account) validateType(formats strfmt.Registry) error {
+
+	if err := validate.Required("type", "body", m.Type); err != nil {
+		return err
+	}
+
+	// value enum
+	if err := m.validateTypeEnum("type", "body", *m.Type); err != nil {
 		return err
 	}
 

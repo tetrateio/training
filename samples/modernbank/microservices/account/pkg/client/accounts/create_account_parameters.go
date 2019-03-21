@@ -66,6 +66,8 @@ type CreateAccountParams struct {
 
 	*/
 	Owner string
+	/*Type*/
+	Type string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -116,6 +118,17 @@ func (o *CreateAccountParams) SetOwner(owner string) {
 	o.Owner = owner
 }
 
+// WithType adds the typeVar to the create account params
+func (o *CreateAccountParams) WithType(typeVar string) *CreateAccountParams {
+	o.SetType(typeVar)
+	return o
+}
+
+// SetType adds the type to the create account params
+func (o *CreateAccountParams) SetType(typeVar string) {
+	o.Type = typeVar
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *CreateAccountParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -127,6 +140,15 @@ func (o *CreateAccountParams) WriteToRequest(r runtime.ClientRequest, reg strfmt
 	// path param owner
 	if err := r.SetPathParam("owner", o.Owner); err != nil {
 		return err
+	}
+
+	// query param type
+	qrType := o.Type
+	qType := qrType
+	if qType != "" {
+		if err := r.SetQueryParam("type", qType); err != nil {
+			return err
+		}
 	}
 
 	if len(res) > 0 {

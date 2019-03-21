@@ -92,7 +92,7 @@ func (m *InMemory) Get(owner string, number int64) (*model.Account, error) {
 	return account, nil
 }
 
-func (m *InMemory) Create(owner string) (*model.Account, error) {
+func (m *InMemory) Create(owner string, accountType string) (*model.Account, error) {
 	m.m.Lock()
 	defer m.m.Unlock()
 	_, ok := m.ownerAccounts[owner]
@@ -104,6 +104,7 @@ func (m *InMemory) Create(owner string) (*model.Account, error) {
 		Balance: swag.Float64(100),
 		Owner:   swag.String(owner),
 		Number:  swag.Int64(newAccountNumber),
+		Type:    swag.String(accountType),
 	}
 	m.ownerAccounts[owner].add(newAccountNumber, newAccount)
 	m.accountsOwner[newAccountNumber] = owner

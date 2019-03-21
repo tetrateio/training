@@ -9,7 +9,9 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/go-openapi/validate"
 
 	strfmt "github.com/go-openapi/strfmt"
 )
@@ -35,6 +37,11 @@ type CreateAccountParams struct {
 	  In: path
 	*/
 	Owner string
+	/*
+	  Required: true
+	  In: query
+	*/
+	Type string
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -46,8 +53,15 @@ func (o *CreateAccountParams) BindRequest(r *http.Request, route *middleware.Mat
 
 	o.HTTPRequest = r
 
+	qs := runtime.Values(r.URL.Query())
+
 	rOwner, rhkOwner, _ := route.Params.GetOK("owner")
 	if err := o.bindOwner(rOwner, rhkOwner, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	qType, qhkType, _ := qs.GetOK("type")
+	if err := o.bindType(qType, qhkType, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -68,6 +82,41 @@ func (o *CreateAccountParams) bindOwner(rawData []string, hasKey bool, formats s
 	// Parameter is provided by construction from the route
 
 	o.Owner = raw
+
+	return nil
+}
+
+// bindType binds and validates parameter Type from query.
+func (o *CreateAccountParams) bindType(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	if !hasKey {
+		return errors.Required("type", "query")
+	}
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: true
+	// AllowEmptyValue: false
+	if err := validate.RequiredString("type", "query", raw); err != nil {
+		return err
+	}
+
+	o.Type = raw
+
+	if err := o.validateType(formats); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// validateType carries on validations for parameter Type
+func (o *CreateAccountParams) validateType(formats strfmt.Registry) error {
+
+	if err := validate.Enum("type", "query", o.Type, []interface{}{"cash", "saving"}); err != nil {
+		return err
+	}
 
 	return nil
 }

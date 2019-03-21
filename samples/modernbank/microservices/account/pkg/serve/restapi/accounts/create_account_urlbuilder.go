@@ -16,6 +16,8 @@ import (
 type CreateAccountURL struct {
 	Owner string
 
+	Type string
+
 	_basePath string
 	// avoid unkeyed usage
 	_ struct{}
@@ -54,6 +56,15 @@ func (o *CreateAccountURL) Build() (*url.URL, error) {
 		_basePath = "/v1"
 	}
 	_result.Path = golangswaggerpaths.Join(_basePath, _path)
+
+	qs := make(url.Values)
+
+	typeVar := o.Type
+	if typeVar != "" {
+		qs.Set("type", typeVar)
+	}
+
+	_result.RawQuery = qs.Encode()
 
 	return &_result, nil
 }

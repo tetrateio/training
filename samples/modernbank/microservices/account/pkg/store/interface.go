@@ -9,7 +9,7 @@ import (
 type Interface interface {
 	List(owner string) ([]*model.Account, error)
 	Get(owner string, number int64) (*model.Account, error)
-	Create(owner string) (*model.Account, error)
+	Create(owner string, accountType string) (*model.Account, error)
 	Delete(owner string, number int64) error
 	UpdateBalance(number int64, deltaAmount float64) error
 }

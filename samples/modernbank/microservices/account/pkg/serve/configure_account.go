@@ -43,7 +43,7 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 	accountStore = mongodb.NewMongoDB()
 
 	api.AccountsCreateAccountHandler = accounts.CreateAccountHandlerFunc(func(params accounts.CreateAccountParams) middleware.Responder {
-		res, err := accountStore.Create(params.Owner)
+		res, err := accountStore.Create(params.Owner, params.Type)
 		if err != nil {
 			api.Logger("Error adding new account for %q to store: %v", params.Owner, err)
 			return accounts.NewCreateAccountInternalServerError().WithVersion(*version)
