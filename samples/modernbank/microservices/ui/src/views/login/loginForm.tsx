@@ -10,6 +10,7 @@ import { authenticationCheck } from '../../api/client-utils';
 import { AuthContext } from '../../components/auth/authContext';
 import { AccountsPath } from '../../routes';
 import { VersionContext } from '../../context/versionProvider';
+import useSessionstorage from '@rooks/use-sessionstorage';
 
 const styles = () =>
   createStyles({
@@ -40,13 +41,27 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const [loginFailed, setLoginFailed] = React.useState<boolean>(false);
   const authContext = React.useContext(AuthContext);
   const { setVersion } = React.useContext(VersionContext);
+  const { value, set } = useSessionstorage('user', '');
 
   const signInHandler = async () => {
-    const authenticatedUser = await authenticationCheck(username, password, setVersion);
-    if (authenticatedUser) {
+    let authenticatedUser = await authenticationCheck(
+      username,
+      password,
+      setVersion
+    );
+    if (authenticatedUser || value) {
+      if (authenticatedUser) {
+        set(JSON.stringify(authenticatedUser));
+      }
+
+      if (value) {
+        authenticatedUser = JSON.parse(value);
+      }
+
       setLoginFailed(false);
       authContext.isAuthenticated = true;
       authContext.user = authenticatedUser;
+      // TODO(dio): get the current path.
       props.history.push(AccountsPath);
     } else {
       setLoginFailed(true);
