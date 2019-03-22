@@ -15,6 +15,7 @@ import { RegisterView } from '../views/register';
 import { TransactionsView } from '../views/transactions';
 import { TransferView } from '../views/transfer';
 import VersionProvider from '../context/versionProvider';
+import useSessionstorage from '@rooks/use-sessionstorage';
 
 export const AccountsPath = '/accounts';
 export const LoginPath = '/login';
@@ -56,7 +57,12 @@ const PrivateRoute: React.FunctionComponent<IPrivateRouteProps> = ({
   component: Component,
   ...rest
 }) => {
+  const { value } = useSessionstorage('user', '');
   const authContext: IAuthContext = React.useContext(AuthContext);
+  if (value) {
+    authContext.user = JSON.parse(value);
+    authContext.isAuthenticated = true;
+  }
   const renderFunc = (props: RouteComponentProps<any>): React.ReactNode =>
     authContext.isAuthenticated ? (
       <Component {...props} />
