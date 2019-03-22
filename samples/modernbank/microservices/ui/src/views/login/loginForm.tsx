@@ -51,6 +51,7 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     );
     if (authenticatedUser || value) {
       if (authenticatedUser) {
+        console.log(authenticatedUser);
         set(JSON.stringify(authenticatedUser));
       }
 

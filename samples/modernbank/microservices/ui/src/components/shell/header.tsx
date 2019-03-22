@@ -13,6 +13,7 @@ import { AccountsPageLink, LoginPath } from '../../routes';
 import { AuthContext } from '../auth/authContext';
 import { Logo } from './logo';
 import { VersionContext } from '../../context/versionProvider';
+import useSessionstorage from '@rooks/use-sessionstorage';
 
 const styles = () =>
   createStyles({
@@ -49,10 +50,12 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const authContext = React.useContext(AuthContext);
 
   const versionContext = React.useContext(VersionContext);
+  const { remove } = useSessionstorage('user', '');
 
   const handleLogout = () => {
     setAnchorEl(null);
     authContext.isAuthenticated = false;
+    remove();
     props.history.push(LoginPath);
   };
 
