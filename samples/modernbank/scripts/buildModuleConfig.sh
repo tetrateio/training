@@ -4,8 +4,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 DEMO_APP_DIR=${DIR}/../../../modules/installation/app
 TRAFFIC_MAN_DIR=${DIR}/../../../modules/traffic-management
 
-TENANT=$1
-
 # Deployment YAMLs
 for VALUES_YAML in  $(find $DIR/../kubernetes/helm/values/$TENANT -name '*.yaml')
 do 
@@ -21,7 +19,4 @@ do
 done
 
 # Default Istio Gateway
-cp ${DIR}/../networking/${TENANT}/gateway.yaml ${TRAFFIC_MAN_DIR}/ingress/config/gateway.yaml
-
-# Ingress Swagger/API Contract
-cat ${DIR}/../contracts/banking-ingress.yaml | yq . > ${DEMO_APP_DIR}/swagger/ingress.json
+cp  -R ${DIR}/../networking/ingress/ ${TRAFFIC_MAN_DIR}/ingress/config/
