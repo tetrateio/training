@@ -49,20 +49,12 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => {
       password,
       setVersion
     );
-    if (authenticatedUser || value) {
-      if (authenticatedUser) {
-        console.log(authenticatedUser);
-        set(JSON.stringify(authenticatedUser));
-      }
-
-      if (value) {
-        authenticatedUser = JSON.parse(value);
-      }
-
+    if (authenticatedUser) {
       setLoginFailed(false);
       authContext.isAuthenticated = true;
       authContext.user = authenticatedUser;
-      // TODO(dio): get the current path.
+      // We set the authenticated user to the session storage.
+      set(JSON.stringify(authenticatedUser));
       props.history.push(AccountsPath);
     } else {
       setLoginFailed(true);
