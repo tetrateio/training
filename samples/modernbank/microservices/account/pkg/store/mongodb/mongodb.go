@@ -125,7 +125,7 @@ func (m MongoDB) Delete(owner string, number int64) error {
 }
 
 func (m MongoDB) UpdateBalance(number int64, deltaAmount float64) error {
-	res, err := m.defaultCollection().UpdateOne(context.Background(), bson.M{"number": number}, bson.D{{"$inc", bson.D{{"amount", deltaAmount}}}})
+	res, err := m.defaultCollection().UpdateOne(context.Background(), bson.M{"number": number}, bson.D{{"$inc", bson.D{{"balance", deltaAmount}}}})
 	if res != nil && res.ModifiedCount != 1 {
 		return &store.NotFound{}
 	} else if err != nil {
