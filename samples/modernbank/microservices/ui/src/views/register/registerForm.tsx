@@ -12,11 +12,12 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { Account, CreateAccountTypeEnum } from '../../api/client';
+import { CreateAccountTypeEnum } from '../../api/client';
 import { usersApi, accountsApi } from '../../api/client-utils';
 import { AuthContext } from '../../components/auth/authContext';
 import { AccountsPageLink, AccountsPath } from '../../routes';
 import { VersionContext } from '../../context/versionProvider';
+import useSessionstorage from '@rooks/use-sessionstorage';
 
 const styles = () =>
   createStyles({
@@ -68,6 +69,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
 
   const authContext = React.useContext(AuthContext);
   const { setVersion } = React.useContext(VersionContext);
+  const { set } = useSessionstorage('user');
 
   const createAccount = async (owner: string, type: CreateAccountTypeEnum) => {
     await accountsApi.createAccount({ owner, type });
@@ -83,15 +85,18 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
       setVersion(resp.raw.headers.get('version'));
 
       if (cash) {
-        await createAccount(username, CreateAccountTypeEnum.Cash)
+        await createAccount(username, CreateAccountTypeEnum.Cash);
       }
 
       if (saving) {
-        await createAccount(username, CreateAccountTypeEnum.Saving)
+        await createAccount(username, CreateAccountTypeEnum.Saving);
       }
 
       authContext.isAuthenticated = true;
       authContext.user = newUser;
+
+      // We set the authenticated user to the session storage.
+      set(JSON.stringify(newUser));
       props.history.push(AccountsPath);
     } catch (err) {
       // TODO(dio): show the error.
