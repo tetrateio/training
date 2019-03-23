@@ -1,34 +1,29 @@
-get:
+post:
   tags:
   - "accounts"
-  summary: "Get account details"
-  description: ""
-  operationId: "getAccountByNumber"
+  summary: "Create a new account for a customer"
+  description: "Creates a new account for a given customer"
+  operationId: "createAccount"
   produces:
   - "application/json"
   parameters:
-  - in: "path"
-    name: "owner"
-    description: "Owner of the account"
+  - type: string
+    description: Owner of the account
+    name: owner
+    in: query
     required: true
+  - enum:
+    - cash
+    - saving
     type: string
-  - name: "number"
-    in: "path"
-    description: "The number of the account that is to be fetched."
+    name: type
+    in: query
     required: true
-    type: "integer"
-    format: "int64"
   responses:
-    200:
-      description: "Success!"
+    201:
+      description: "Created"
       schema:
         $ref: "./definitions/account.yaml"
-      headers:
-        version:
-          type: string
-          description: Version of the microservice that responded
-    404:
-      description: "Account not found"
       headers:
         version:
           type: string
@@ -39,35 +34,33 @@ get:
         version:
           type: string
           description: Version of the microservice that responded
-delete:
+get:
   tags:
   - "accounts"
-  summary: "Delete account by account number"
-  description: "Delete account by account number."
-  operationId: "deleteAccount"
+  summary: "Lists all accounts for a given customer"
+  description: "Lists all accounts for a given customer"
+  operationId: "listAccounts"
   produces:
   - "application/json"
   parameters:
-  - in: "path"
+  - in: "query"
     name: "owner"
-    description: "Owner of the account"
+    description: "Owner of the accounts"
     required: true
     type: string
-  - name: "number"
-    in: "path"
-    description: "The number of the account that is to be deleted."
-    required: true
-    type: "integer"
-    format: "int64"
   responses:
     200:
-      description: "Aaaaand it's gone!"
+      description: "Success!"
+      schema:
+        type: array
+        items:
+          $ref: "./definitions/account.yaml"
       headers:
         version:
           type: string
           description: Version of the microservice that responded
     404:
-      description: "Account not found"
+      description: "Owner not found"
       headers:
         version:
           type: string

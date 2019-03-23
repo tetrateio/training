@@ -55,36 +55,6 @@ func (a *Client) CreateUser(params *CreateUserParams) (*CreateUserCreated, error
 }
 
 /*
-DeleteUser deletes user
-
-Delete user by username.
-*/
-func (a *Client) DeleteUser(params *DeleteUserParams) (*DeleteUserOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteUserParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "deleteUser",
-		Method:             "DELETE",
-		PathPattern:        "/users/{username}",
-		ProducesMediaTypes: []string{""},
-		ConsumesMediaTypes: []string{""},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &DeleteUserReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return result.(*DeleteUserOK), nil
-
-}
-
-/*
 GetUserByUserName gets user by user name
 */
 func (a *Client) GetUserByUserName(params *GetUserByUserNameParams) (*GetUserByUserNameOK, error) {
@@ -109,36 +79,6 @@ func (a *Client) GetUserByUserName(params *GetUserByUserNameParams) (*GetUserByU
 		return nil, err
 	}
 	return result.(*GetUserByUserNameOK), nil
-
-}
-
-/*
-UpdateUser updates user
-
-Update user by username.
-*/
-func (a *Client) UpdateUser(params *UpdateUserParams) (*UpdateUserOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewUpdateUserParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "updateUser",
-		Method:             "PUT",
-		PathPattern:        "/users/{username}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{"application/json"},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &UpdateUserReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return result.(*UpdateUserOK), nil
 
 }
 

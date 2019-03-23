@@ -51,30 +51,6 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 		api.Logger("Created transaction %q", *res.ID)
 		return transactions.NewCreateTransactionCreated().WithPayload(res).WithVersion(*version)
 	})
-	api.TransactionsGetTransactionReceivedHandler = transactions.GetTransactionReceivedHandlerFunc(func(params transactions.GetTransactionReceivedParams) middleware.Responder {
-		res, err := transactionStore.GetReceived(params.Receiver, params.Transaction)
-		if err != nil {
-			if _, ok := err.(*store.NotFound); ok {
-				return transactions.NewGetTransactionReceivedNotFound().WithVersion(*version)
-			}
-			api.Logger("Unable to retrieve transaction %v received by %v: %v", params.Transaction, params.Receiver, err)
-			return transactions.NewGetTransactionReceivedInternalServerError().WithVersion(*version)
-		}
-		api.Logger("Retrieved transaction %v received by %v", params.Transaction, params.Receiver)
-		return transactions.NewGetTransactionReceivedOK().WithPayload(res).WithVersion(*version)
-	})
-	api.TransactionsGetTransactionSentHandler = transactions.GetTransactionSentHandlerFunc(func(params transactions.GetTransactionSentParams) middleware.Responder {
-		res, err := transactionStore.GetSent(params.Sender, params.Transaction)
-		if err != nil {
-			if _, ok := err.(*store.NotFound); ok {
-				return transactions.NewGetTransactionSentNotFound().WithVersion(*version)
-			}
-			api.Logger("Unable to retrieve transaction %v sent by %v: %v", params.Transaction, params.Sender, err)
-			return transactions.NewGetTransactionSentInternalServerError().WithVersion(*version)
-		}
-		api.Logger("Retrieved transaction %v sent by %v", params.Transaction, params.Sender)
-		return transactions.NewGetTransactionSentOK().WithPayload(res).WithVersion(*version)
-	})
 	api.TransactionsListTransactionsReceivedHandler = transactions.ListTransactionsReceivedHandlerFunc(func(params transactions.ListTransactionsReceivedParams) middleware.Responder {
 		res, err := transactionStore.ListReceived(params.Receiver)
 		if err != nil {

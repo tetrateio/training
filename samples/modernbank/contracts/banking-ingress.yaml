@@ -46,48 +46,6 @@ paths:
             version:
               type: string
               description: Version of the microservice that responded
-  /account/{receiver}/received/{transaction}:
-    get:
-      description: Get a specific transaction received by a given account
-      produces:
-      - application/json
-      tags:
-      - transactions
-      summary: Get a specific transaction received by a given account
-      operationId: getTransactionReceived
-      parameters:
-      - type: integer
-        format: int64
-        description: Account number that received the transactions
-        name: receiver
-        in: path
-        required: true
-      - type: string
-        description: Transaction ID
-        name: transaction
-        in: path
-        required: true
-      responses:
-        "200":
-          description: Success!
-          schema:
-            $ref: '#/definitions/transaction'
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "404":
-          description: Transaction not found
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "500":
-          description: Internal server error
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
   /account/{sender}/sent:
     get:
       description: Lists all transactions sent from a given account
@@ -117,48 +75,6 @@ paths:
               description: Version of the microservice that responded
         "404":
           description: No transactions found
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "500":
-          description: Internal server error
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-  /account/{sender}/sent/{transaction}:
-    get:
-      description: Get a specific transaction sent from a given account
-      produces:
-      - application/json
-      tags:
-      - transactions
-      summary: Get a specific transaction sent from a given account
-      operationId: getTransactionSent
-      parameters:
-      - type: integer
-        format: int64
-        description: Account number that made the transactions
-        name: sender
-        in: path
-        required: true
-      - type: string
-        description: Transaction ID
-        name: transaction
-        in: path
-        required: true
-      responses:
-        "200":
-          description: Success!
-          schema:
-            $ref: '#/definitions/transaction'
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "404":
-          description: Transaction not found
           headers:
             version:
               type: string
@@ -247,160 +163,6 @@ paths:
             version:
               type: string
               description: Version of the microservice that responded
-  /users/{owner}/accounts:
-    get:
-      description: Lists all accounts for a given customer
-      produces:
-      - application/json
-      tags:
-      - accounts
-      summary: Lists all accounts for a given customer
-      operationId: listAccounts
-      parameters:
-      - type: string
-        description: Owner of the accounts
-        name: owner
-        in: path
-        required: true
-      responses:
-        "200":
-          description: Success!
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/account'
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "404":
-          description: Owner not found
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "500":
-          description: Internal server error
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-    post:
-      description: Creates a new account for a given customer
-      produces:
-      - application/json
-      tags:
-      - accounts
-      summary: Create a new account for a customer
-      operationId: createAccount
-      parameters:
-      - type: string
-        description: Owner of the account
-        name: owner
-        in: path
-        required: true
-      - enum:
-        - cash
-        - saving
-        type: string
-        name: type
-        in: query
-        required: true
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/account'
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "500":
-          description: Internal server error
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-  /users/{owner}/accounts/{number}:
-    get:
-      produces:
-      - application/json
-      tags:
-      - accounts
-      summary: Get account details
-      operationId: getAccountByNumber
-      parameters:
-      - type: string
-        description: Owner of the account
-        name: owner
-        in: path
-        required: true
-      - type: integer
-        format: int64
-        description: The number of the account that is to be fetched.
-        name: number
-        in: path
-        required: true
-      responses:
-        "200":
-          description: Success!
-          schema:
-            $ref: '#/definitions/account'
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "404":
-          description: Account not found
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "500":
-          description: Internal server error
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-    delete:
-      description: Delete account by account number.
-      produces:
-      - application/json
-      tags:
-      - accounts
-      summary: Delete account by account number
-      operationId: deleteAccount
-      parameters:
-      - type: string
-        description: Owner of the account
-        name: owner
-        in: path
-        required: true
-      - type: integer
-        format: int64
-        description: The number of the account that is to be deleted.
-        name: number
-        in: path
-        required: true
-      responses:
-        "200":
-          description: Aaaaand it's gone!
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "404":
-          description: Account not found
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "500":
-          description: Internal server error
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
   /users/{username}:
     get:
       produces:
@@ -436,70 +198,34 @@ paths:
             version:
               type: string
               description: Version of the microservice that responded
-    put:
-      description: Update user by username.
-      consumes:
-      - application/json
+  /users/{username}/accounts:
+    get:
+      description: Lists all accounts for a given customer
       produces:
       - application/json
       tags:
-      - users
-      summary: Update user
-      operationId: updateUser
+      - accounts
+      summary: Lists all accounts for a given customer
+      operationId: listAccounts
       parameters:
       - type: string
-        description: name that need to be updated
+        description: Username to fetch the accounts of
         name: username
         in: path
         required: true
-      - description: Updated user object
-        name: body
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/user'
       responses:
         "200":
           description: Success!
           schema:
-            $ref: '#/definitions/user'
+            type: array
+            items:
+              $ref: '#/definitions/account'
           headers:
             version:
               type: string
               description: Version of the microservice that responded
         "404":
-          description: User not found
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "500":
-          description: Internal server error
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-    delete:
-      description: Delete user by username.
-      tags:
-      - users
-      summary: Delete user
-      operationId: deleteUser
-      parameters:
-      - type: string
-        description: The name that needs to be deleted
-        name: username
-        in: path
-        required: true
-      responses:
-        "200":
-          description: Success!
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "404":
-          description: User not found
+          description: Owner not found
           headers:
             version:
               type: string

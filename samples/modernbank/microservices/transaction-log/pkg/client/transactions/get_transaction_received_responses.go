@@ -69,7 +69,7 @@ type GetTransactionReceivedOK struct {
 }
 
 func (o *GetTransactionReceivedOK) Error() string {
-	return fmt.Sprintf("[GET /account/{receiver}/received/{transaction}][%d] getTransactionReceivedOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /transactions/account/{receiver}/received/{transaction}][%d] getTransactionReceivedOK  %+v", 200, o.Payload)
 }
 
 func (o *GetTransactionReceivedOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -103,7 +103,7 @@ type GetTransactionReceivedNotFound struct {
 }
 
 func (o *GetTransactionReceivedNotFound) Error() string {
-	return fmt.Sprintf("[GET /account/{receiver}/received/{transaction}][%d] getTransactionReceivedNotFound ", 404)
+	return fmt.Sprintf("[GET /transactions/account/{receiver}/received/{transaction}][%d] getTransactionReceivedNotFound ", 404)
 }
 
 func (o *GetTransactionReceivedNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -130,7 +130,7 @@ type GetTransactionReceivedInternalServerError struct {
 }
 
 func (o *GetTransactionReceivedInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /account/{receiver}/received/{transaction}][%d] getTransactionReceivedInternalServerError ", 500)
+	return fmt.Sprintf("[GET /transactions/account/{receiver}/received/{transaction}][%d] getTransactionReceivedInternalServerError ", 500)
 }
 
 func (o *GetTransactionReceivedInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

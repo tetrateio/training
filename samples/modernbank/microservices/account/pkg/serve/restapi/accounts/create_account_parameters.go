@@ -34,7 +34,7 @@ type CreateAccountParams struct {
 
 	/*Owner of the account
 	  Required: true
-	  In: path
+	  In: query
 	*/
 	Owner string
 	/*
@@ -55,8 +55,8 @@ func (o *CreateAccountParams) BindRequest(r *http.Request, route *middleware.Mat
 
 	qs := runtime.Values(r.URL.Query())
 
-	rOwner, rhkOwner, _ := route.Params.GetOK("owner")
-	if err := o.bindOwner(rOwner, rhkOwner, route.Formats); err != nil {
+	qOwner, qhkOwner, _ := qs.GetOK("owner")
+	if err := o.bindOwner(qOwner, qhkOwner, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -71,15 +71,21 @@ func (o *CreateAccountParams) BindRequest(r *http.Request, route *middleware.Mat
 	return nil
 }
 
-// bindOwner binds and validates parameter Owner from path.
+// bindOwner binds and validates parameter Owner from query.
 func (o *CreateAccountParams) bindOwner(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	if !hasKey {
+		return errors.Required("owner", "query")
+	}
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
 
 	// Required: true
-	// Parameter is provided by construction from the route
+	// AllowEmptyValue: false
+	if err := validate.RequiredString("owner", "query", raw); err != nil {
+		return err
+	}
 
 	o.Owner = raw
 

@@ -9,7 +9,9 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/go-openapi/validate"
 
 	strfmt "github.com/go-openapi/strfmt"
 )
@@ -32,7 +34,7 @@ type ListAccountsParams struct {
 
 	/*Owner of the accounts
 	  Required: true
-	  In: path
+	  In: query
 	*/
 	Owner string
 }
@@ -46,8 +48,10 @@ func (o *ListAccountsParams) BindRequest(r *http.Request, route *middleware.Matc
 
 	o.HTTPRequest = r
 
-	rOwner, rhkOwner, _ := route.Params.GetOK("owner")
-	if err := o.bindOwner(rOwner, rhkOwner, route.Formats); err != nil {
+	qs := runtime.Values(r.URL.Query())
+
+	qOwner, qhkOwner, _ := qs.GetOK("owner")
+	if err := o.bindOwner(qOwner, qhkOwner, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -57,15 +61,21 @@ func (o *ListAccountsParams) BindRequest(r *http.Request, route *middleware.Matc
 	return nil
 }
 
-// bindOwner binds and validates parameter Owner from path.
+// bindOwner binds and validates parameter Owner from query.
 func (o *ListAccountsParams) bindOwner(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	if !hasKey {
+		return errors.Required("owner", "query")
+	}
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
 
 	// Required: true
-	// Parameter is provided by construction from the route
+	// AllowEmptyValue: false
+	if err := validate.RequiredString("owner", "query", raw); err != nil {
+		return err
+	}
 
 	o.Owner = raw
 

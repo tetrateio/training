@@ -46,12 +46,6 @@ func NewAccountAPI(spec *loads.Document) *AccountAPI {
 		AccountsCreateAccountHandler: accounts.CreateAccountHandlerFunc(func(params accounts.CreateAccountParams) middleware.Responder {
 			return middleware.NotImplemented("operation AccountsCreateAccount has not yet been implemented")
 		}),
-		AccountsDeleteAccountHandler: accounts.DeleteAccountHandlerFunc(func(params accounts.DeleteAccountParams) middleware.Responder {
-			return middleware.NotImplemented("operation AccountsDeleteAccount has not yet been implemented")
-		}),
-		AccountsGetAccountByNumberHandler: accounts.GetAccountByNumberHandlerFunc(func(params accounts.GetAccountByNumberParams) middleware.Responder {
-			return middleware.NotImplemented("operation AccountsGetAccountByNumber has not yet been implemented")
-		}),
 		HealthHealthCheckHandler: health.HealthCheckHandlerFunc(func(params health.HealthCheckParams) middleware.Responder {
 			return middleware.NotImplemented("operation HealthHealthCheck has not yet been implemented")
 		}),
@@ -93,10 +87,6 @@ type AccountAPI struct {
 	AccountsChangeBalanceHandler accounts.ChangeBalanceHandler
 	// AccountsCreateAccountHandler sets the operation handler for the create account operation
 	AccountsCreateAccountHandler accounts.CreateAccountHandler
-	// AccountsDeleteAccountHandler sets the operation handler for the delete account operation
-	AccountsDeleteAccountHandler accounts.DeleteAccountHandler
-	// AccountsGetAccountByNumberHandler sets the operation handler for the get account by number operation
-	AccountsGetAccountByNumberHandler accounts.GetAccountByNumberHandler
 	// HealthHealthCheckHandler sets the operation handler for the health check operation
 	HealthHealthCheckHandler health.HealthCheckHandler
 	// AccountsListAccountsHandler sets the operation handler for the list accounts operation
@@ -170,14 +160,6 @@ func (o *AccountAPI) Validate() error {
 
 	if o.AccountsCreateAccountHandler == nil {
 		unregistered = append(unregistered, "accounts.CreateAccountHandler")
-	}
-
-	if o.AccountsDeleteAccountHandler == nil {
-		unregistered = append(unregistered, "accounts.DeleteAccountHandler")
-	}
-
-	if o.AccountsGetAccountByNumberHandler == nil {
-		unregistered = append(unregistered, "accounts.GetAccountByNumberHandler")
 	}
 
 	if o.HealthHealthCheckHandler == nil {
@@ -294,17 +276,7 @@ func (o *AccountAPI) initHandlerCache() {
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
-	o.handlers["POST"]["/users/{owner}/accounts"] = accounts.NewCreateAccount(o.context, o.AccountsCreateAccountHandler)
-
-	if o.handlers["DELETE"] == nil {
-		o.handlers["DELETE"] = make(map[string]http.Handler)
-	}
-	o.handlers["DELETE"]["/users/{owner}/accounts/{number}"] = accounts.NewDeleteAccount(o.context, o.AccountsDeleteAccountHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/users/{owner}/accounts/{number}"] = accounts.NewGetAccountByNumber(o.context, o.AccountsGetAccountByNumberHandler)
+	o.handlers["POST"]["/accounts"] = accounts.NewCreateAccount(o.context, o.AccountsCreateAccountHandler)
 
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
@@ -314,7 +286,7 @@ func (o *AccountAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/users/{owner}/accounts"] = accounts.NewListAccounts(o.context, o.AccountsListAccountsHandler)
+	o.handlers["GET"]["/accounts"] = accounts.NewListAccounts(o.context, o.AccountsListAccountsHandler)
 
 }
 

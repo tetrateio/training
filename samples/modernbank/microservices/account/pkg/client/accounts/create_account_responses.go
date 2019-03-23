@@ -62,7 +62,7 @@ type CreateAccountCreated struct {
 }
 
 func (o *CreateAccountCreated) Error() string {
-	return fmt.Sprintf("[POST /users/{owner}/accounts][%d] createAccountCreated  %+v", 201, o.Payload)
+	return fmt.Sprintf("[POST /accounts][%d] createAccountCreated  %+v", 201, o.Payload)
 }
 
 func (o *CreateAccountCreated) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -96,7 +96,7 @@ type CreateAccountInternalServerError struct {
 }
 
 func (o *CreateAccountInternalServerError) Error() string {
-	return fmt.Sprintf("[POST /users/{owner}/accounts][%d] createAccountInternalServerError ", 500)
+	return fmt.Sprintf("[POST /accounts][%d] createAccountInternalServerError ", 500)
 }
 
 func (o *CreateAccountInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

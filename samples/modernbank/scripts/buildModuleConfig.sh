@@ -19,4 +19,7 @@ do
 done
 
 # Default Istio Gateway
-cp  -R ${DIR}/../networking/ingress/ ${TRAFFIC_MAN_DIR}/ingress/config/
+cp -R ${DIR}/../networking/ingress/ ${TRAFFIC_MAN_DIR}/ingress/config/
+
+# Default Istio VirtualServices
+cp ${DIR}/../networking/default/vs.yaml ${TRAFFIC_MAN_DIR}/resiliency/config/default-vs.yaml

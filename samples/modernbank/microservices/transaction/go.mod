@@ -11,7 +11,7 @@ require (
 	github.com/spf13/pflag v1.0.3
 	github.com/tetrateio/training/samples/modernbank/microservices/account v0.0.0
 	github.com/tetrateio/training/samples/modernbank/microservices/transaction-log v0.0.0
-	golang.org/x/net v0.0.0-20190318221613-d196dffd7c2b
+	golang.org/x/net v0.0.0-20190322120337-addf6b3196f6
 )
 
 replace github.com/tetrateio/training/samples/modernbank/microservices/account => ../account

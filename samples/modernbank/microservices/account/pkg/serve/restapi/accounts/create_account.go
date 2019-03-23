@@ -29,7 +29,7 @@ func NewCreateAccount(ctx *middleware.Context, handler CreateAccountHandler) *Cr
 	return &CreateAccount{Context: ctx, Handler: handler}
 }
 
-/*CreateAccount swagger:route POST /users/{owner}/accounts accounts createAccount
+/*CreateAccount swagger:route POST /accounts accounts createAccount
 
 Create a new account for a customer
 

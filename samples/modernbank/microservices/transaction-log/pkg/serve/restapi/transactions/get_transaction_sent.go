@@ -29,7 +29,7 @@ func NewGetTransactionSent(ctx *middleware.Context, handler GetTransactionSentHa
 	return &GetTransactionSent{Context: ctx, Handler: handler}
 }
 
-/*GetTransactionSent swagger:route GET /account/{sender}/sent/{transaction} transactions getTransactionSent
+/*GetTransactionSent swagger:route GET /transactions/account/{sender}/sent/{transaction} transactions getTransactionSent
 
 Get a specific transaction sent from a given account
 

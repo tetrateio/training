@@ -42,7 +42,7 @@ func (o *ListTransactionsReceivedURL) SetBasePath(bp string) {
 func (o *ListTransactionsReceivedURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/account/{receiver}/received"
+	var _path = "/transactions/account/{receiver}/received"
 
 	receiver := swag.FormatInt64(o.Receiver)
 	if receiver != "" {

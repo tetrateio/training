@@ -14,17 +14,11 @@ paths:
     $ref: "./paths/user/users.yaml"
   /users/{username}:
     $ref: "./paths/user/usersByUsername.yaml"
-  /users/{owner}/accounts:
-    $ref: "./paths/account/accountsByOwner.yaml"
-  /users/{owner}/accounts/{number}:
-    $ref: "./paths/account/accountsByOwnerAndNumber.yaml"
+  /users/{username}/accounts:
+    $ref: "./paths/user/accountsByUsername.yaml"
   /transactions:
     $ref: "./paths/transaction/transactions.yaml"
   /account/{sender}/sent:
     $ref: "./paths/transaction/transactionsSentFromAccount.yaml"
   /account/{receiver}/received:
     $ref: "./paths/transaction/transactionsReceivedToAccount.yaml"
-  /account/{sender}/sent/{transaction}:
-    $ref: "./paths/transaction/transactionsSentFromAccountByID.yaml"
-  /account/{receiver}/received/{transaction}:
-    $ref: "./paths/transaction/transactionsReceivedToAccountByID.yaml"

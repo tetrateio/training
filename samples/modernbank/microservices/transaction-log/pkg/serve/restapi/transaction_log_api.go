@@ -43,12 +43,6 @@ func NewTransactionLogAPI(spec *loads.Document) *TransactionLogAPI {
 		TransactionsCreateTransactionHandler: transactions.CreateTransactionHandlerFunc(func(params transactions.CreateTransactionParams) middleware.Responder {
 			return middleware.NotImplemented("operation TransactionsCreateTransaction has not yet been implemented")
 		}),
-		TransactionsGetTransactionReceivedHandler: transactions.GetTransactionReceivedHandlerFunc(func(params transactions.GetTransactionReceivedParams) middleware.Responder {
-			return middleware.NotImplemented("operation TransactionsGetTransactionReceived has not yet been implemented")
-		}),
-		TransactionsGetTransactionSentHandler: transactions.GetTransactionSentHandlerFunc(func(params transactions.GetTransactionSentParams) middleware.Responder {
-			return middleware.NotImplemented("operation TransactionsGetTransactionSent has not yet been implemented")
-		}),
 		HealthHealthCheckHandler: health.HealthCheckHandlerFunc(func(params health.HealthCheckParams) middleware.Responder {
 			return middleware.NotImplemented("operation HealthHealthCheck has not yet been implemented")
 		}),
@@ -91,10 +85,6 @@ type TransactionLogAPI struct {
 
 	// TransactionsCreateTransactionHandler sets the operation handler for the create transaction operation
 	TransactionsCreateTransactionHandler transactions.CreateTransactionHandler
-	// TransactionsGetTransactionReceivedHandler sets the operation handler for the get transaction received operation
-	TransactionsGetTransactionReceivedHandler transactions.GetTransactionReceivedHandler
-	// TransactionsGetTransactionSentHandler sets the operation handler for the get transaction sent operation
-	TransactionsGetTransactionSentHandler transactions.GetTransactionSentHandler
 	// HealthHealthCheckHandler sets the operation handler for the health check operation
 	HealthHealthCheckHandler health.HealthCheckHandler
 	// TransactionsListTransactionsReceivedHandler sets the operation handler for the list transactions received operation
@@ -166,14 +156,6 @@ func (o *TransactionLogAPI) Validate() error {
 
 	if o.TransactionsCreateTransactionHandler == nil {
 		unregistered = append(unregistered, "transactions.CreateTransactionHandler")
-	}
-
-	if o.TransactionsGetTransactionReceivedHandler == nil {
-		unregistered = append(unregistered, "transactions.GetTransactionReceivedHandler")
-	}
-
-	if o.TransactionsGetTransactionSentHandler == nil {
-		unregistered = append(unregistered, "transactions.GetTransactionSentHandler")
 	}
 
 	if o.HealthHealthCheckHandler == nil {
@@ -291,16 +273,6 @@ func (o *TransactionLogAPI) initHandlerCache() {
 	}
 	o.handlers["POST"]["/transactions"] = transactions.NewCreateTransaction(o.context, o.TransactionsCreateTransactionHandler)
 
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/account/{receiver}/received/{transaction}"] = transactions.NewGetTransactionReceived(o.context, o.TransactionsGetTransactionReceivedHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/account/{sender}/sent/{transaction}"] = transactions.NewGetTransactionSent(o.context, o.TransactionsGetTransactionSentHandler)
-
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
@@ -309,12 +281,12 @@ func (o *TransactionLogAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/account/{receiver}/received"] = transactions.NewListTransactionsReceived(o.context, o.TransactionsListTransactionsReceivedHandler)
+	o.handlers["GET"]["/transactions/account/{receiver}/received"] = transactions.NewListTransactionsReceived(o.context, o.TransactionsListTransactionsReceivedHandler)
 
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/account/{sender}/sent"] = transactions.NewListTransactionsSent(o.context, o.TransactionsListTransactionsSentHandler)
+	o.handlers["GET"]["/transactions/account/{sender}/sent"] = transactions.NewListTransactionsSent(o.context, o.TransactionsListTransactionsSentHandler)
 
 }
 
