@@ -51,8 +51,8 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const { setVersion } = React.useContext(VersionContext);
 
   const fetchAccounts = async () => {
-    const owner = authContext.user!.username;
-    const resp = await accountsApi.listAccountsRaw({ owner });
+    const username = authContext.user!.username;
+    const resp = await accountsApi.listAccountsRaw({ username });
 
     setVersion(resp.raw.headers.get('version'));
     setAccounts(await resp.value());

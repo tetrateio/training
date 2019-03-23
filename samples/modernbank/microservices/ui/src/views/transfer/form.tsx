@@ -77,8 +77,8 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
 
   const [accounts, setAccounts] = React.useState<Account[]>([]);
   const fetchAccounts = async () => {
-    const owner = authContext.user!.username;
-    const resp: Account[] = await accountsApi.listAccounts({ owner });
+    const username = authContext.user!.username;
+    const resp: Account[] = await accountsApi.listAccounts({ username });
     setAccounts(resp);
   };
 
