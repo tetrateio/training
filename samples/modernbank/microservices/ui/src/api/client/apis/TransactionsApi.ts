@@ -26,16 +26,6 @@ export interface CreateTransactionRequest {
     body: Newtransaction;
 }
 
-export interface GetTransactionReceivedRequest {
-    receiver: number;
-    transaction: string;
-}
-
-export interface GetTransactionSentRequest {
-    sender: number;
-    transaction: string;
-}
-
 export interface ListTransactionsReceivedRequest {
     receiver: number;
 }
@@ -81,78 +71,6 @@ export class TransactionsApi extends runtime.BaseAPI {
      */
     async createTransaction(requestParameters: CreateTransactionRequest): Promise<Transaction> {
         const response = await this.createTransactionRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     * Get a specific transaction received by a given account
-     * Get a specific transaction received by a given account
-     */
-    async getTransactionReceivedRaw(requestParameters: GetTransactionReceivedRequest): Promise<runtime.ApiResponse<Transaction>> {
-        if (requestParameters.receiver === null || requestParameters.receiver === undefined) {
-            throw new runtime.RequiredError('receiver','Required parameter requestParameters.receiver was null or undefined when calling getTransactionReceived.');
-        }
-
-        if (requestParameters.transaction === null || requestParameters.transaction === undefined) {
-            throw new runtime.RequiredError('transaction','Required parameter requestParameters.transaction was null or undefined when calling getTransactionReceived.');
-        }
-
-        const queryParameters: runtime.HTTPQuery = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/account/{receiver}/received/{transaction}`.replace(`{${"receiver"}}`, encodeURIComponent(String(requestParameters.receiver))).replace(`{${"transaction"}}`, encodeURIComponent(String(requestParameters.transaction))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => TransactionFromJSON(jsonValue));
-    }
-
-    /**
-     * Get a specific transaction received by a given account
-     * Get a specific transaction received by a given account
-     */
-    async getTransactionReceived(requestParameters: GetTransactionReceivedRequest): Promise<Transaction> {
-        const response = await this.getTransactionReceivedRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     * Get a specific transaction sent from a given account
-     * Get a specific transaction sent from a given account
-     */
-    async getTransactionSentRaw(requestParameters: GetTransactionSentRequest): Promise<runtime.ApiResponse<Transaction>> {
-        if (requestParameters.sender === null || requestParameters.sender === undefined) {
-            throw new runtime.RequiredError('sender','Required parameter requestParameters.sender was null or undefined when calling getTransactionSent.');
-        }
-
-        if (requestParameters.transaction === null || requestParameters.transaction === undefined) {
-            throw new runtime.RequiredError('transaction','Required parameter requestParameters.transaction was null or undefined when calling getTransactionSent.');
-        }
-
-        const queryParameters: runtime.HTTPQuery = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/account/{sender}/sent/{transaction}`.replace(`{${"sender"}}`, encodeURIComponent(String(requestParameters.sender))).replace(`{${"transaction"}}`, encodeURIComponent(String(requestParameters.transaction))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => TransactionFromJSON(jsonValue));
-    }
-
-    /**
-     * Get a specific transaction sent from a given account
-     * Get a specific transaction sent from a given account
-     */
-    async getTransactionSent(requestParameters: GetTransactionSentRequest): Promise<Transaction> {
-        const response = await this.getTransactionSentRaw(requestParameters);
         return await response.value();
     }
 

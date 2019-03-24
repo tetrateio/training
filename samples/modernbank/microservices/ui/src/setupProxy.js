@@ -6,7 +6,7 @@ module.exports = function(app) {
   const listEndpoints = {
     '/v1': {
       // We setup dynamic proxy here so we can edit with environment variables.
-      target: process.env.REACT_APP_PROXY || 'http://35.189.115.1',
+      target: process.env.REACT_APP_PROXY || 'http://35.197.239.230',
       pathRewrite: {
         // We can do `pathRewrite` here if required. e.g. '/v1': '/v2'.
       },
