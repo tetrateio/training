@@ -281,12 +281,12 @@ func (o *TransactionLogAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/transactions/account/{receiver}/received"] = transactions.NewListTransactionsReceived(o.context, o.TransactionsListTransactionsReceivedHandler)
+	o.handlers["GET"]["/account/{receiver}/received"] = transactions.NewListTransactionsReceived(o.context, o.TransactionsListTransactionsReceivedHandler)
 
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/transactions/account/{sender}/sent"] = transactions.NewListTransactionsSent(o.context, o.TransactionsListTransactionsSentHandler)
+	o.handlers["GET"]["/account/{sender}/sent"] = transactions.NewListTransactionsSent(o.context, o.TransactionsListTransactionsSentHandler)
 
 }
 

@@ -6,6 +6,8 @@ import (
 	"math/rand"
 	"time"
 
+	transLogClient "github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/client"
+	transLogTransactions "github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/client/transactions"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/client"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/client/transactions"
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction/pkg/model"
@@ -14,20 +16,24 @@ import (
 )
 
 type Creator struct {
-	client  *client.Transaction
-	store   store.Interface
-	limiter *rate.Limiter
-	count   int64
+	client     *client.Transaction
+	listClient *transLogClient.TransactionLog
+	store      store.Interface
+	limiter    *rate.Limiter
+	count      int64
 }
 
 func NewCreator(host string, userStore store.Interface, limit rate.Limit) *Creator {
 	transportConfig := client.DefaultTransportConfig().WithHost(host)
 	transactionClient := client.NewHTTPClientWithConfig(nil, transportConfig)
+	transportConfigTransLog := transLogClient.DefaultTransportConfig().WithHost(host)
+	transactionLogClient := transLogClient.NewHTTPClientWithConfig(nil, transportConfigTransLog)
 	return &Creator{
-		client:  transactionClient,
-		store:   userStore,
-		limiter: rate.NewLimiter(limit, 1),
-		count:   0,
+		client:     transactionClient,
+		listClient: transactionLogClient,
+		store:      userStore,
+		limiter:    rate.NewLimiter(limit, 1),
+		count:      0,
 	}
 }
 
@@ -43,6 +49,35 @@ func (c *Creator) Run(ctx context.Context) {
 			c.limiter.Wait(ctx)
 			c.createTransaction()
 		}
+	}
+}
+
+func (c *Creator) RunListTransactions(ctx context.Context) {
+	time.Sleep(time.Second * 10) // allow some users to be created...
+	for {
+		select {
+		case <-ctx.Done():
+			log.Print("Transaction listing terminating.")
+			return
+		default:
+			c.limiter.Wait(ctx)
+			c.listTransactions()
+		}
+	}
+}
+func (c *Creator) listTransactions() {
+	acc := c.store.GetRandomAccount()
+	recParams := transLogTransactions.NewListTransactionsReceivedParams().WithReceiver(acc)
+	sentParams := transLogTransactions.NewListTransactionsSentParams().WithSender(acc)
+	if _, err := c.listClient.Transactions.ListTransactionsReceived(recParams); err != nil {
+		log.Printf("error listing transactions received by account %v: %v", acc, err)
+	} else {
+		log.Printf("Successfully listed transactions received by account %v.", acc)
+	}
+	if _, err := c.listClient.Transactions.ListTransactionsSent(sentParams); err != nil {
+		log.Printf("error listing transactions sent to account %v: %v", acc, err)
+	} else {
+		log.Printf("Successfully listed transactions sent by account %v.", acc)
 	}
 }
 

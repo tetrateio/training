@@ -31,6 +31,7 @@ func main() {
 
 	go waitForCompletion(ctx, userCreator.Run)
 	go waitForCompletion(ctx, transactionCreator.Run)
+	go waitForCompletion(ctx, transactionCreator.RunListTransactions)
 
 	// Wait for SIGTERM or SIGINT then clean up
 	sigs := make(chan os.Signal, 1)

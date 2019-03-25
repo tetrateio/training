@@ -68,7 +68,7 @@ func (a *Client) ListTransactionsReceived(params *ListTransactionsReceivedParams
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "listTransactionsReceived",
 		Method:             "GET",
-		PathPattern:        "/transactions/account/{receiver}/received",
+		PathPattern:        "/account/{receiver}/received",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{""},
 		Schemes:            []string{"http"},
@@ -98,7 +98,7 @@ func (a *Client) ListTransactionsSent(params *ListTransactionsSentParams) (*List
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "listTransactionsSent",
 		Method:             "GET",
-		PathPattern:        "/transactions/account/{sender}/sent",
+		PathPattern:        "/account/{sender}/sent",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{""},
 		Schemes:            []string{"http"},

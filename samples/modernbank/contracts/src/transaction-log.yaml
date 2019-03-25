@@ -13,9 +13,9 @@ schemes:
 paths:
   /transactions:
     $ref: "./paths/transaction/transactions.yaml"
-  /transactions/account/{sender}/sent:
+  /account/{sender}/sent:
     $ref: "./paths/transaction/transactionsSentFromAccount.yaml"
-  /transactions/account/{receiver}/received:
+  /account/{receiver}/received:
     $ref: "./paths/transaction/transactionsReceivedToAccount.yaml"
   /health:
     $ref: "./paths/shared/health.yaml"
