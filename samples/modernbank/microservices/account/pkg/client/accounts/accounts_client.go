@@ -68,7 +68,7 @@ func (a *Client) CreateAccount(params *CreateAccountParams) (*CreateAccountCreat
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "createAccount",
 		Method:             "POST",
-		PathPattern:        "/users/{owner}/accounts",
+		PathPattern:        "/accounts",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{""},
 		Schemes:            []string{"http"},
@@ -81,64 +81,6 @@ func (a *Client) CreateAccount(params *CreateAccountParams) (*CreateAccountCreat
 		return nil, err
 	}
 	return result.(*CreateAccountCreated), nil
-
-}
-
-/*
-DeleteAccount deletes account by account number
-
-Delete account by account number.
-*/
-func (a *Client) DeleteAccount(params *DeleteAccountParams) (*DeleteAccountOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewDeleteAccountParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "deleteAccount",
-		Method:             "DELETE",
-		PathPattern:        "/users/{owner}/accounts/{number}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{""},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &DeleteAccountReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return result.(*DeleteAccountOK), nil
-
-}
-
-/*
-GetAccountByNumber gets account details
-*/
-func (a *Client) GetAccountByNumber(params *GetAccountByNumberParams) (*GetAccountByNumberOK, error) {
-	// TODO: Validate the params before sending
-	if params == nil {
-		params = NewGetAccountByNumberParams()
-	}
-
-	result, err := a.transport.Submit(&runtime.ClientOperation{
-		ID:                 "getAccountByNumber",
-		Method:             "GET",
-		PathPattern:        "/users/{owner}/accounts/{number}",
-		ProducesMediaTypes: []string{"application/json"},
-		ConsumesMediaTypes: []string{""},
-		Schemes:            []string{"http"},
-		Params:             params,
-		Reader:             &GetAccountByNumberReader{formats: a.formats},
-		Context:            params.Context,
-		Client:             params.HTTPClient,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return result.(*GetAccountByNumberOK), nil
 
 }
 
@@ -156,7 +98,7 @@ func (a *Client) ListAccounts(params *ListAccountsParams) (*ListAccountsOK, erro
 	result, err := a.transport.Submit(&runtime.ClientOperation{
 		ID:                 "listAccounts",
 		Method:             "GET",
-		PathPattern:        "/users/{owner}/accounts",
+		PathPattern:        "/accounts",
 		ProducesMediaTypes: []string{"application/json"},
 		ConsumesMediaTypes: []string{""},
 		Schemes:            []string{"http"},

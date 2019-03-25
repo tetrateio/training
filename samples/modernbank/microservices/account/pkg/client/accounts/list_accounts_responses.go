@@ -69,7 +69,7 @@ type ListAccountsOK struct {
 }
 
 func (o *ListAccountsOK) Error() string {
-	return fmt.Sprintf("[GET /users/{owner}/accounts][%d] listAccountsOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /accounts][%d] listAccountsOK  %+v", 200, o.Payload)
 }
 
 func (o *ListAccountsOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -101,7 +101,7 @@ type ListAccountsNotFound struct {
 }
 
 func (o *ListAccountsNotFound) Error() string {
-	return fmt.Sprintf("[GET /users/{owner}/accounts][%d] listAccountsNotFound ", 404)
+	return fmt.Sprintf("[GET /accounts][%d] listAccountsNotFound ", 404)
 }
 
 func (o *ListAccountsNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -128,7 +128,7 @@ type ListAccountsInternalServerError struct {
 }
 
 func (o *ListAccountsInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /users/{owner}/accounts][%d] listAccountsInternalServerError ", 500)
+	return fmt.Sprintf("[GET /accounts][%d] listAccountsInternalServerError ", 500)
 }
 
 func (o *ListAccountsInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

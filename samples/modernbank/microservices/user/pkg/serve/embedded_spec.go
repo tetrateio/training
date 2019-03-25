@@ -161,43 +161,36 @@ func init() {
             }
           }
         }
-      },
-      "put": {
-        "description": "Update user by username.",
-        "consumes": [
-          "application/json"
-        ],
+      }
+    },
+    "/users/{username}/accounts": {
+      "get": {
+        "description": "Lists all accounts for a given customer",
         "produces": [
           "application/json"
         ],
         "tags": [
-          "users"
+          "accounts"
         ],
-        "summary": "Update user",
-        "operationId": "updateUser",
+        "summary": "Lists all accounts for a given customer",
+        "operationId": "listAccounts",
         "parameters": [
           {
             "type": "string",
-            "description": "name that need to be updated",
+            "description": "Username to fetch the accounts of",
             "name": "username",
             "in": "path",
             "required": true
-          },
-          {
-            "description": "Updated user object",
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
           }
         ],
         "responses": {
           "200": {
             "description": "Success!",
             "schema": {
-              "$ref": "#/definitions/user"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/account"
+              }
             },
             "headers": {
               "version": {
@@ -207,53 +200,7 @@ func init() {
             }
           },
           "404": {
-            "description": "User not found",
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "description": "Delete user by username.",
-        "tags": [
-          "users"
-        ],
-        "summary": "Delete user",
-        "operationId": "deleteUser",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "The name that needs to be deleted",
-            "name": "username",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!",
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          },
-          "404": {
-            "description": "User not found",
+            "description": "Owner not found",
             "headers": {
               "version": {
                 "type": "string",
@@ -275,6 +222,35 @@ func init() {
     }
   },
   "definitions": {
+    "account": {
+      "type": "object",
+      "required": [
+        "number",
+        "balance",
+        "owner",
+        "type"
+      ],
+      "properties": {
+        "balance": {
+          "type": "number",
+          "format": "currency"
+        },
+        "number": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "cash",
+            "saving"
+          ]
+        }
+      }
+    },
     "user": {
       "type": "object",
       "required": [
@@ -454,43 +430,36 @@ func init() {
             }
           }
         }
-      },
-      "put": {
-        "description": "Update user by username.",
-        "consumes": [
-          "application/json"
-        ],
+      }
+    },
+    "/users/{username}/accounts": {
+      "get": {
+        "description": "Lists all accounts for a given customer",
         "produces": [
           "application/json"
         ],
         "tags": [
-          "users"
+          "accounts"
         ],
-        "summary": "Update user",
-        "operationId": "updateUser",
+        "summary": "Lists all accounts for a given customer",
+        "operationId": "listAccounts",
         "parameters": [
           {
             "type": "string",
-            "description": "name that need to be updated",
+            "description": "Username to fetch the accounts of",
             "name": "username",
             "in": "path",
             "required": true
-          },
-          {
-            "description": "Updated user object",
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
           }
         ],
         "responses": {
           "200": {
             "description": "Success!",
             "schema": {
-              "$ref": "#/definitions/user"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/account"
+              }
             },
             "headers": {
               "version": {
@@ -500,53 +469,7 @@ func init() {
             }
           },
           "404": {
-            "description": "User not found",
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "description": "Delete user by username.",
-        "tags": [
-          "users"
-        ],
-        "summary": "Delete user",
-        "operationId": "deleteUser",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "The name that needs to be deleted",
-            "name": "username",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!",
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          },
-          "404": {
-            "description": "User not found",
+            "description": "Owner not found",
             "headers": {
               "version": {
                 "type": "string",
@@ -568,6 +491,35 @@ func init() {
     }
   },
   "definitions": {
+    "account": {
+      "type": "object",
+      "required": [
+        "number",
+        "balance",
+        "owner",
+        "type"
+      ],
+      "properties": {
+        "balance": {
+          "type": "number",
+          "format": "currency"
+        },
+        "number": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "cash",
+            "saving"
+          ]
+        }
+      }
+    },
     "user": {
       "type": "object",
       "required": [

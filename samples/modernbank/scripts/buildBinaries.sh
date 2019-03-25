@@ -16,6 +16,7 @@ do
     then
         # UI is Javascript!
         prettyPrint "Building ${SERVICE_NAME} server"
+        npm install
         npm run-script build
         continue
     fi

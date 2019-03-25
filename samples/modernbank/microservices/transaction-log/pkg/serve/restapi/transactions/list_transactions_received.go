@@ -29,7 +29,7 @@ func NewListTransactionsReceived(ctx *middleware.Context, handler ListTransactio
 	return &ListTransactionsReceived{Context: ctx, Handler: handler}
 }
 
-/*ListTransactionsReceived swagger:route GET /account/{receiver}/received transactions listTransactionsReceived
+/*ListTransactionsReceived swagger:route GET /transactions/account/{receiver}/received transactions listTransactionsReceived
 
 Lists all transactions sent to a given account
 

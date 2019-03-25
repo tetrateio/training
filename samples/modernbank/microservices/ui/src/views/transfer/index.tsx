@@ -81,7 +81,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
 
   const fetchAccounts = async () => {
     const resp = await accountsApi.listAccountsRaw({
-      owner: authContext.user!.username
+      username: authContext.user!.username
     });
     const accounts = await resp.value();
     setVersion(resp.raw.headers.get('version'));

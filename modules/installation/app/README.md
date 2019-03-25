@@ -6,7 +6,7 @@ Let’s take a look at the user microservice deployment.
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: user
+  name: user-v1
   labels:
     app: user
     version: v1
@@ -26,7 +26,7 @@ spec:
         - name: user
           image: "gcr.io/tetratelabs/modernbank/user:v1.0.0"
           imagePullPolicy: Always
-          args: ["--port", "8080"]
+          args: ["--port", "8080", "--version", "v1"]
           ports:
           - name: http
             containerPort: 8080

@@ -1,0 +1,23 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: user-gateway
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - ingress
+  http:
+  - match:
+    - uri:
+        prefix: /v1/users
+    route:
+    - destination:
+        host: user
+        port:
+          number: 80
+    timeout: 3s
+    retries:
+      attempts: 3
+      perTryTimeout: 0.5s
+      retryOn: gateway-error,connect-failure,unavailable

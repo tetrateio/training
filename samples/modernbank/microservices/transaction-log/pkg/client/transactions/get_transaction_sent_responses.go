@@ -69,7 +69,7 @@ type GetTransactionSentOK struct {
 }
 
 func (o *GetTransactionSentOK) Error() string {
-	return fmt.Sprintf("[GET /account/{sender}/sent/{transaction}][%d] getTransactionSentOK  %+v", 200, o.Payload)
+	return fmt.Sprintf("[GET /transactions/account/{sender}/sent/{transaction}][%d] getTransactionSentOK  %+v", 200, o.Payload)
 }
 
 func (o *GetTransactionSentOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -103,7 +103,7 @@ type GetTransactionSentNotFound struct {
 }
 
 func (o *GetTransactionSentNotFound) Error() string {
-	return fmt.Sprintf("[GET /account/{sender}/sent/{transaction}][%d] getTransactionSentNotFound ", 404)
+	return fmt.Sprintf("[GET /transactions/account/{sender}/sent/{transaction}][%d] getTransactionSentNotFound ", 404)
 }
 
 func (o *GetTransactionSentNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
@@ -130,7 +130,7 @@ type GetTransactionSentInternalServerError struct {
 }
 
 func (o *GetTransactionSentInternalServerError) Error() string {
-	return fmt.Sprintf("[GET /account/{sender}/sent/{transaction}][%d] getTransactionSentInternalServerError ", 500)
+	return fmt.Sprintf("[GET /transactions/account/{sender}/sent/{transaction}][%d] getTransactionSentInternalServerError ", 500)
 }
 
 func (o *GetTransactionSentInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {

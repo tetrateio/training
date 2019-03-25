@@ -23,17 +23,8 @@ export interface CreateUserRequest {
     body: User;
 }
 
-export interface DeleteUserRequest {
-    username: string;
-}
-
 export interface GetUserByUserNameRequest {
     username: string;
-}
-
-export interface UpdateUserRequest {
-    username: string;
-    body: User;
 }
 
 /**
@@ -77,37 +68,6 @@ export class UsersApi extends runtime.BaseAPI {
     }
 
     /**
-     * Delete user by username.
-     * Delete user
-     */
-    async deleteUserRaw(requestParameters: DeleteUserRequest): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.username === null || requestParameters.username === undefined) {
-            throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling deleteUser.');
-        }
-
-        const queryParameters: runtime.HTTPQuery = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/users/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        });
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Delete user by username.
-     * Delete user
-     */
-    async deleteUser(requestParameters: DeleteUserRequest): Promise<void> {
-        await this.deleteUserRaw(requestParameters);
-    }
-
-    /**
      * Get user by user name
      */
     async getUserByUserNameRaw(requestParameters: GetUserByUserNameRequest): Promise<runtime.ApiResponse<User>> {
@@ -134,45 +94,6 @@ export class UsersApi extends runtime.BaseAPI {
      */
     async getUserByUserName(requestParameters: GetUserByUserNameRequest): Promise<User> {
         const response = await this.getUserByUserNameRaw(requestParameters);
-        return await response.value();
-    }
-
-    /**
-     * Update user by username.
-     * Update user
-     */
-    async updateUserRaw(requestParameters: UpdateUserRequest): Promise<runtime.ApiResponse<User>> {
-        if (requestParameters.username === null || requestParameters.username === undefined) {
-            throw new runtime.RequiredError('username','Required parameter requestParameters.username was null or undefined when calling updateUser.');
-        }
-
-        if (requestParameters.body === null || requestParameters.body === undefined) {
-            throw new runtime.RequiredError('body','Required parameter requestParameters.body was null or undefined when calling updateUser.');
-        }
-
-        const queryParameters: runtime.HTTPQuery = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/users/{username}`.replace(`{${"username"}}`, encodeURIComponent(String(requestParameters.username))),
-            method: 'PUT',
-            headers: headerParameters,
-            query: queryParameters,
-            body: UserToJSON(requestParameters.body),
-        });
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserFromJSON(jsonValue));
-    }
-
-    /**
-     * Update user by username.
-     * Update user
-     */
-    async updateUser(requestParameters: UpdateUserRequest): Promise<User> {
-        const response = await this.updateUserRaw(requestParameters);
         return await response.value();
     }
 

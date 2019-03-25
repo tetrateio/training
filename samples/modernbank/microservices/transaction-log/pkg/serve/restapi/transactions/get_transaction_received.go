@@ -29,7 +29,7 @@ func NewGetTransactionReceived(ctx *middleware.Context, handler GetTransactionRe
 	return &GetTransactionReceived{Context: ctx, Handler: handler}
 }
 
-/*GetTransactionReceived swagger:route GET /account/{receiver}/received/{transaction} transactions getTransactionReceived
+/*GetTransactionReceived swagger:route GET /transactions/account/{receiver}/received/{transaction} transactions getTransactionReceived
 
 Get a specific transaction received by a given account
 

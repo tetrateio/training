@@ -14,7 +14,13 @@ import (
 	middleware "github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/swag"
 
+	accountsClient "github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/client"
+	accountsClientResources "github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/client/accounts"
+	accountModel "github.com/tetrateio/training/samples/modernbank/microservices/account/pkg/model"
+
+	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/model"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/serve/restapi"
+	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/serve/restapi/accounts"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/serve/restapi/health"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/serve/restapi/users"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/store"
@@ -26,6 +32,10 @@ var userStore store.Interface
 //go:generate swagger generate server --target ../../../user --name User --spec ../../../../swagger/user.yaml --api-package restapi --model-package pkg/model --server-package pkg/serve
 
 var version *string = flag.String("version", "v1", "the version of service to run. Should match version label used in Istio.")
+
+var (
+	accountService *accountsClientResources.Client
+)
 
 func configureFlags(api *restapi.UserAPI) {
 	api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{
@@ -41,6 +51,7 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 	api.JSONConsumer = runtime.JSONConsumer()
 	api.JSONProducer = runtime.JSONProducer()
 
+	accountService = accountsClient.Default.Accounts
 	userStore = mongodb.NewMongoDB()
 
 	api.UsersCreateUserHandler = users.CreateUserHandlerFunc(func(params users.CreateUserParams) middleware.Responder {
@@ -53,19 +64,18 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 			return users.NewCreateUserInternalServerError().WithVersion(*version)
 		}
 		api.Logger("Created user %q", *params.Body.Username)
-		return users.NewCreateUserCreated().WithPayload(res).WithVersion(*version)
-
-	})
-	api.UsersDeleteUserHandler = users.DeleteUserHandlerFunc(func(params users.DeleteUserParams) middleware.Responder {
-		if err := userStore.Delete(params.Username); err != nil {
-			api.Logger("Error deleting user %q: %v", params.Username, err)
-			if _, ok := err.(*store.NotFound); ok {
-				return users.NewDeleteUserNotFound().WithVersion(*version)
+		for i := 0; i < 10; i++ {
+			newAccountParams := accountsClientResources.NewCreateAccountParams().WithOwner(*params.Body.Username)
+			if i%2 == 0 {
+				newAccountParams.SetType("saving")
+			} else {
+				newAccountParams.SetType("cash")
 			}
-			return users.NewDeleteUserInternalServerError().WithVersion(*version)
+			if _, err := accountService.CreateAccount(newAccountParams); err != nil {
+				api.Logger("Error creating account for user %q: %v", *params.Body.Username, err)
+			}
 		}
-		api.Logger("Deleted user %q", params.Username)
-		return users.NewDeleteUserOK().WithVersion(*version)
+		return users.NewCreateUserCreated().WithPayload(res).WithVersion(*version)
 	})
 	api.UsersGetUserByUserNameHandler = users.GetUserByUserNameHandlerFunc(func(params users.GetUserByUserNameParams) middleware.Responder {
 		res, err := userStore.Get(params.Username)
@@ -79,25 +89,35 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 		api.Logger("Retrieved user %q", params.Username)
 		return users.NewGetUserByUserNameOK().WithPayload(res).WithVersion(*version)
 	})
-	api.UsersUpdateUserHandler = users.UpdateUserHandlerFunc(func(params users.UpdateUserParams) middleware.Responder {
-		res, err := userStore.Update(params.Username, params.Body)
+	api.AccountsListAccountsHandler = accounts.ListAccountsHandlerFunc(func(params accounts.ListAccountsParams) middleware.Responder {
+		listParams := accountsClientResources.NewListAccountsParams().WithOwner(params.Username)
+		res, err := accountService.ListAccounts(listParams)
 		if err != nil {
-			api.Logger("Error updating user %q: %v", *params.Body.Username, err)
-			if _, ok := err.(*store.NotFound); ok {
-				return users.NewUpdateUserNotFound().WithVersion(*version)
-			}
-			return users.NewUpdateUserInternalServerError().WithVersion(*version)
+			api.Logger("Error retrieving accounts for user %q: %v", params.Username, err)
+			return accounts.NewListAccountsInternalServerError().WithVersion(*version)
 		}
-		api.Logger("Updated user %q", *params.Body.Username)
-		return users.NewUpdateUserOK().WithPayload(res).WithVersion(*version)
+		return accounts.NewListAccountsOK().WithPayload(convertAccountList(res.Payload)).WithVersion(*version)
 	})
 	api.HealthHealthCheckHandler = health.HealthCheckHandlerFunc(func(_ health.HealthCheckParams) middleware.Responder {
 		return health.NewHealthCheckOK().WithVersion(*version)
 	})
 
 	api.ServerShutdown = func() {}
-
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))
+}
+
+// This is not nice...
+func convertAccountList(in []*accountModel.Account) []*model.Account {
+	res := []*model.Account{}
+	for _, a := range in {
+		res = append(res, &model.Account{
+			Balance: a.Balance,
+			Number:  a.Number,
+			Owner:   a.Owner,
+			Type:    a.Type,
+		})
+	}
+	return res
 }
 
 // The TLS configuration before HTTPS server starts.

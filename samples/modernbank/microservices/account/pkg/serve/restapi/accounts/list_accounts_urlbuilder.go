@@ -9,7 +9,6 @@ import (
 	"errors"
 	"net/url"
 	golangswaggerpaths "path"
-	"strings"
 )
 
 // ListAccountsURL generates an URL for the list accounts operation
@@ -40,20 +39,22 @@ func (o *ListAccountsURL) SetBasePath(bp string) {
 func (o *ListAccountsURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/users/{owner}/accounts"
-
-	owner := o.Owner
-	if owner != "" {
-		_path = strings.Replace(_path, "{owner}", owner, -1)
-	} else {
-		return nil, errors.New("Owner is required on ListAccountsURL")
-	}
+	var _path = "/accounts"
 
 	_basePath := o._basePath
 	if _basePath == "" {
 		_basePath = "/v1"
 	}
 	_result.Path = golangswaggerpaths.Join(_basePath, _path)
+
+	qs := make(url.Values)
+
+	owner := o.Owner
+	if owner != "" {
+		qs.Set("owner", owner)
+	}
+
+	_result.RawQuery = qs.Encode()
 
 	return &_result, nil
 }

@@ -19,6 +19,7 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
+	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/serve/restapi/accounts"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/serve/restapi/health"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/serve/restapi/users"
 )
@@ -43,17 +44,14 @@ func NewUserAPI(spec *loads.Document) *UserAPI {
 		UsersCreateUserHandler: users.CreateUserHandlerFunc(func(params users.CreateUserParams) middleware.Responder {
 			return middleware.NotImplemented("operation UsersCreateUser has not yet been implemented")
 		}),
-		UsersDeleteUserHandler: users.DeleteUserHandlerFunc(func(params users.DeleteUserParams) middleware.Responder {
-			return middleware.NotImplemented("operation UsersDeleteUser has not yet been implemented")
-		}),
 		UsersGetUserByUserNameHandler: users.GetUserByUserNameHandlerFunc(func(params users.GetUserByUserNameParams) middleware.Responder {
 			return middleware.NotImplemented("operation UsersGetUserByUserName has not yet been implemented")
 		}),
 		HealthHealthCheckHandler: health.HealthCheckHandlerFunc(func(params health.HealthCheckParams) middleware.Responder {
 			return middleware.NotImplemented("operation HealthHealthCheck has not yet been implemented")
 		}),
-		UsersUpdateUserHandler: users.UpdateUserHandlerFunc(func(params users.UpdateUserParams) middleware.Responder {
-			return middleware.NotImplemented("operation UsersUpdateUser has not yet been implemented")
+		AccountsListAccountsHandler: accounts.ListAccountsHandlerFunc(func(params accounts.ListAccountsParams) middleware.Responder {
+			return middleware.NotImplemented("operation AccountsListAccounts has not yet been implemented")
 		}),
 	}
 }
@@ -88,14 +86,12 @@ type UserAPI struct {
 
 	// UsersCreateUserHandler sets the operation handler for the create user operation
 	UsersCreateUserHandler users.CreateUserHandler
-	// UsersDeleteUserHandler sets the operation handler for the delete user operation
-	UsersDeleteUserHandler users.DeleteUserHandler
 	// UsersGetUserByUserNameHandler sets the operation handler for the get user by user name operation
 	UsersGetUserByUserNameHandler users.GetUserByUserNameHandler
 	// HealthHealthCheckHandler sets the operation handler for the health check operation
 	HealthHealthCheckHandler health.HealthCheckHandler
-	// UsersUpdateUserHandler sets the operation handler for the update user operation
-	UsersUpdateUserHandler users.UpdateUserHandler
+	// AccountsListAccountsHandler sets the operation handler for the list accounts operation
+	AccountsListAccountsHandler accounts.ListAccountsHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -163,10 +159,6 @@ func (o *UserAPI) Validate() error {
 		unregistered = append(unregistered, "users.CreateUserHandler")
 	}
 
-	if o.UsersDeleteUserHandler == nil {
-		unregistered = append(unregistered, "users.DeleteUserHandler")
-	}
-
 	if o.UsersGetUserByUserNameHandler == nil {
 		unregistered = append(unregistered, "users.GetUserByUserNameHandler")
 	}
@@ -175,8 +167,8 @@ func (o *UserAPI) Validate() error {
 		unregistered = append(unregistered, "health.HealthCheckHandler")
 	}
 
-	if o.UsersUpdateUserHandler == nil {
-		unregistered = append(unregistered, "users.UpdateUserHandler")
+	if o.AccountsListAccountsHandler == nil {
+		unregistered = append(unregistered, "accounts.ListAccountsHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -282,11 +274,6 @@ func (o *UserAPI) initHandlerCache() {
 	}
 	o.handlers["POST"]["/users"] = users.NewCreateUser(o.context, o.UsersCreateUserHandler)
 
-	if o.handlers["DELETE"] == nil {
-		o.handlers["DELETE"] = make(map[string]http.Handler)
-	}
-	o.handlers["DELETE"]["/users/{username}"] = users.NewDeleteUser(o.context, o.UsersDeleteUserHandler)
-
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -297,10 +284,10 @@ func (o *UserAPI) initHandlerCache() {
 	}
 	o.handlers["POST"]["/health"] = health.NewHealthCheck(o.context, o.HealthHealthCheckHandler)
 
-	if o.handlers["PUT"] == nil {
-		o.handlers["PUT"] = make(map[string]http.Handler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["PUT"]["/users/{username}"] = users.NewUpdateUser(o.context, o.UsersUpdateUserHandler)
+	o.handlers["GET"]["/users/{username}/accounts"] = accounts.NewListAccounts(o.context, o.AccountsListAccountsHandler)
 
 }
 

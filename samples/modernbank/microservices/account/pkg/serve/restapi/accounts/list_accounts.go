@@ -29,7 +29,7 @@ func NewListAccounts(ctx *middleware.Context, handler ListAccountsHandler) *List
 	return &ListAccounts{Context: ctx, Handler: handler}
 }
 
-/*ListAccounts swagger:route GET /users/{owner}/accounts accounts listAccounts
+/*ListAccounts swagger:route GET /accounts accounts listAccounts
 
 Lists all accounts for a given customer
 

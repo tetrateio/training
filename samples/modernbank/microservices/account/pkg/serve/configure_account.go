@@ -51,28 +51,6 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 		api.Logger("Successfully created account for %q", params.Owner)
 		return accounts.NewCreateAccountCreated().WithPayload(res).WithVersion(*version)
 	})
-	api.AccountsDeleteAccountHandler = accounts.DeleteAccountHandlerFunc(func(params accounts.DeleteAccountParams) middleware.Responder {
-		if err := accountStore.Delete(params.Owner, params.Number); err != nil {
-			api.Logger("Error deleting account %v for %q: %v", params.Number, params.Owner, err)
-			if _, ok := err.(*store.NotFound); ok {
-				return accounts.NewDeleteAccountNotFound().WithVersion(*version)
-			}
-			return accounts.NewDeleteAccountInternalServerError().WithVersion(*version)
-		}
-		return accounts.NewDeleteAccountOK().WithVersion(*version)
-	})
-	api.AccountsGetAccountByNumberHandler = accounts.GetAccountByNumberHandlerFunc(func(params accounts.GetAccountByNumberParams) middleware.Responder {
-		res, err := accountStore.Get(params.Owner, params.Number)
-		if err != nil {
-			if _, ok := err.(*store.NotFound); ok {
-				api.Logger("Account %v for %q not found: %v", params.Number, params.Owner, err)
-				return accounts.NewGetAccountByNumberNotFound().WithVersion(*version)
-			}
-			api.Logger("Error retrieving account %v for %q: %v", params.Number, params.Owner, err)
-			return accounts.NewGetAccountByNumberInternalServerError().WithVersion(*version)
-		}
-		return accounts.NewGetAccountByNumberOK().WithPayload(res).WithVersion(*version)
-	})
 	api.AccountsListAccountsHandler = accounts.ListAccountsHandlerFunc(func(params accounts.ListAccountsParams) middleware.Responder {
 		res, err := accountStore.List(params.Owner)
 		if err != nil {

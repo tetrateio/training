@@ -1,6 +1,6 @@
 
-CONTAINER_REGISTRY ?= gcr.io/tetratelabs/modernbank
-TAG ?= v1.0.0
+CONTAINER_REGISTRY = gcr.io/tetratelabs/modernbank
+TAG = v1.0.0
 
 MONGO_REPOSITORY ?= bitnami/mongodb
 MONGO_TAG ?= 4.0.6
@@ -27,7 +27,7 @@ docker-push-third-party:
 
 deploy-kube:
 	./scripts/deployKube.sh bankingservices default
-	kubectl apply -f networking/bankingservices/gateway.yaml
+	kubectl apply -f networking/ingress/
 
 build-module-config:
-	./scripts/buildModuleConfig.sh bankingservices
+	./scripts/buildModuleConfig.sh

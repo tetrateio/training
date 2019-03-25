@@ -9,6 +9,80 @@ info:
 host: account
 basePath: /v1
 paths:
+  /accounts:
+    get:
+      description: Lists all accounts for a given customer
+      produces:
+      - application/json
+      tags:
+      - accounts
+      summary: Lists all accounts for a given customer
+      operationId: listAccounts
+      parameters:
+      - type: string
+        description: Owner of the accounts
+        name: owner
+        in: query
+        required: true
+      responses:
+        "200":
+          description: Success!
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/account'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
+        "404":
+          description: Owner not found
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
+        "500":
+          description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
+    post:
+      description: Creates a new account for a given customer
+      produces:
+      - application/json
+      tags:
+      - accounts
+      summary: Create a new account for a customer
+      operationId: createAccount
+      parameters:
+      - type: string
+        description: Owner of the account
+        name: owner
+        in: query
+        required: true
+      - enum:
+        - cash
+        - saving
+        type: string
+        name: type
+        in: query
+        required: true
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/account'
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
+        "500":
+          description: Internal server error
+          headers:
+            version:
+              type: string
+              description: Version of the microservice that responded
   /accounts/{number}/balance/{delta}:
     put:
       description: Change the balance of an account
@@ -60,160 +134,6 @@ paths:
       responses:
         "200":
           description: OK
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-  /users/{owner}/accounts:
-    get:
-      description: Lists all accounts for a given customer
-      produces:
-      - application/json
-      tags:
-      - accounts
-      summary: Lists all accounts for a given customer
-      operationId: listAccounts
-      parameters:
-      - type: string
-        description: Owner of the accounts
-        name: owner
-        in: path
-        required: true
-      responses:
-        "200":
-          description: Success!
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/account'
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "404":
-          description: Owner not found
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "500":
-          description: Internal server error
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-    post:
-      description: Creates a new account for a given customer
-      produces:
-      - application/json
-      tags:
-      - accounts
-      summary: Create a new account for a customer
-      operationId: createAccount
-      parameters:
-      - type: string
-        description: Owner of the account
-        name: owner
-        in: path
-        required: true
-      - enum:
-        - cash
-        - saving
-        type: string
-        name: type
-        in: query
-        required: true
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/account'
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "500":
-          description: Internal server error
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-  /users/{owner}/accounts/{number}:
-    get:
-      produces:
-      - application/json
-      tags:
-      - accounts
-      summary: Get account details
-      operationId: getAccountByNumber
-      parameters:
-      - type: string
-        description: Owner of the account
-        name: owner
-        in: path
-        required: true
-      - type: integer
-        format: int64
-        description: The number of the account that is to be fetched.
-        name: number
-        in: path
-        required: true
-      responses:
-        "200":
-          description: Success!
-          schema:
-            $ref: '#/definitions/account'
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "404":
-          description: Account not found
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "500":
-          description: Internal server error
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-    delete:
-      description: Delete account by account number.
-      produces:
-      - application/json
-      tags:
-      - accounts
-      summary: Delete account by account number
-      operationId: deleteAccount
-      parameters:
-      - type: string
-        description: Owner of the account
-        name: owner
-        in: path
-        required: true
-      - type: integer
-        format: int64
-        description: The number of the account that is to be deleted.
-        name: number
-        in: path
-        required: true
-      responses:
-        "200":
-          description: Aaaaand it's gone!
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "404":
-          description: Account not found
-          headers:
-            version:
-              type: string
-              description: Version of the microservice that responded
-        "500":
-          description: Internal server error
           headers:
             version:
               type: string

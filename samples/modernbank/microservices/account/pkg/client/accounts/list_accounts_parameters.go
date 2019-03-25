@@ -124,9 +124,13 @@ func (o *ListAccountsParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.
 	}
 	var res []error
 
-	// path param owner
-	if err := r.SetPathParam("owner", o.Owner); err != nil {
-		return err
+	// query param owner
+	qrOwner := o.Owner
+	qOwner := qrOwner
+	if qOwner != "" {
+		if err := r.SetQueryParam("owner", qOwner); err != nil {
+			return err
+		}
 	}
 
 	if len(res) > 0 {
