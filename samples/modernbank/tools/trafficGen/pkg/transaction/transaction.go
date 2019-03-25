@@ -32,7 +32,7 @@ func NewCreator(host string, userStore store.Interface, limit rate.Limit) *Creat
 }
 
 func (c *Creator) Run(ctx context.Context) {
-	time.Sleep(time.Second * 10) // allow some accounts to be created...
+	time.Sleep(time.Second * 5) // allow some users to be created...
 	rand.Seed(time.Now().UnixNano())
 	for {
 		select {
