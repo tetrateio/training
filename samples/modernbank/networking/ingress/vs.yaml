@@ -19,6 +19,8 @@ spec:
   - match:
     - uri:
         prefix: /v1/account
+    rewrite:
+      uri: /v1/transactions/account
     route:
     - destination:
         host: transaction-log

@@ -69,7 +69,7 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 			if i%2 == 0 {
 				newAccountParams.SetType("saving")
 			} else {
-				newAccountParams.SetType("current")
+				newAccountParams.SetType("cash")
 			}
 			if _, err := accountService.CreateAccount(newAccountParams); err != nil {
 				api.Logger("Error creating account for user %q: %v", *params.Body.Username, err)

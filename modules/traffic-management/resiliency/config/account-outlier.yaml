@@ -1,0 +1,10 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: account
+spec:
+  host: account
+  trafficPolicy:
+   outlierDetection:
+      consecutiveErrors: 5
+      baseEjectionTime: 5m

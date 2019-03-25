@@ -19,6 +19,8 @@ spec:
   - match:
     - uri:
         prefix: /v1/account
+    rewrite:
+      uri: /v1/transactions/account
     route:
     - destination:
         host: transaction-log
@@ -35,14 +37,6 @@ spec:
   gateways:
   - ingress
   http:
-  - match:
-    - uri:
-        regex: /v1/users/.*/accounts
-    route:
-    - destination:
-        host: account
-        port:
-          number: 80
   - match:
     - uri:
         prefix: /v1/users

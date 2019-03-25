@@ -1,0 +1,55 @@
+---
+# Source: microservice/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: user
+
+---
+# Source: microservice/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: user
+  labels:
+    app: user
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http-user
+  selector:
+    app: user
+
+---
+# Source: microservice/templates/deployment.yaml
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: user-v2
+  labels:
+    app: user
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+        version: v2
+    spec:
+      serviceAccountName: user
+      containers:
+        - name: user
+          image: "gcr.io/tetratelabs/modernbank/user:v1.0.0"
+          imagePullPolicy: Always
+          args: ["--port", "8080", "--version", "v2"]
+          ports:
+          - name: http
+            containerPort: 8080
+
