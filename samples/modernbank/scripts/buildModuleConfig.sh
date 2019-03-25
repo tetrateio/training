@@ -21,4 +21,5 @@ done
 
 # Default Istio Gateway
 cp -R ${DIR}/../networking/ingress/ ${TRAFFIC_MAN_DIR}/ingress/config/
+cp -R ${DIR}/../networking/ingress/vs.yaml ${TRAFFIC_MAN_DIR}/release/config/vs-reset.yaml
 
