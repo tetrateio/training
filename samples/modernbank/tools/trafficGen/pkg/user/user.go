@@ -13,6 +13,7 @@ import (
 	petname "github.com/dustinkirkland/golang-petname"
 	"github.com/go-openapi/swag"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/client"
+	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/client/accounts"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/client/users"
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/model"
 	"github.com/tetrateio/training/samples/modernbank/tools/trafficGen/pkg/store"
@@ -72,6 +73,16 @@ func (c *Creator) createUser() {
 	log.Printf("Successfully created user %q, adding to internal store.", *created.Payload.Username)
 	c.count++
 	c.store.AddUser(*created.Payload.Username)
+	accountParams := accounts.NewListAccountsParams().WithUsername(*created.Payload.Username)
+	accounts, err := c.client.Accounts.ListAccounts(accountParams)
+	if err != nil {
+		log.Printf("Error listing accounts of user %q: %v", *created.Payload.Username, err)
+		return
+	}
+	for _, account := range accounts.Payload {
+		c.store.AddAccount(*created.Payload.Username, *account.Number)
+	}
+	log.Printf("Successfully added accounts of user %q to internal store.", *created.Payload.Username)
 }
 
 func genUser() *model.User {

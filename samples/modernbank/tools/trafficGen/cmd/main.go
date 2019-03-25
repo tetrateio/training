@@ -10,7 +10,6 @@ import (
 
 	"golang.org/x/time/rate"
 
-	"github.com/tetrateio/training/samples/modernbank/tools/trafficGen/pkg/account"
 	"github.com/tetrateio/training/samples/modernbank/tools/trafficGen/pkg/store"
 	"github.com/tetrateio/training/samples/modernbank/tools/trafficGen/pkg/transaction"
 	"github.com/tetrateio/training/samples/modernbank/tools/trafficGen/pkg/user"
@@ -28,12 +27,11 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	userCreator := user.NewCreator(*host, userStore, rate.Limit(1.0))                // 1qps
-	accountCreator := account.NewCreator(*host, userStore, rate.Limit(2.0))          // 2qps
 	transactionCreator := transaction.NewCreator(*host, userStore, rate.Limit(10.0)) // 10qps
 
 	go waitForCompletion(ctx, userCreator.Run)
-	go waitForCompletion(ctx, accountCreator.Run)
 	go waitForCompletion(ctx, transactionCreator.Run)
+	go waitForCompletion(ctx, transactionCreator.RunListTransactions)
 
 	// Wait for SIGTERM or SIGINT then clean up
 	sigs := make(chan os.Signal, 1)

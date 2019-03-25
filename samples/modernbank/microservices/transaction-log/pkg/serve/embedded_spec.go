@@ -30,6 +30,122 @@ func init() {
   "host": "transaction-log",
   "basePath": "/v1",
   "paths": {
+    "/account/{receiver}/received": {
+      "get": {
+        "description": "Lists all transactions sent to a given account",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "transactions"
+        ],
+        "summary": "Lists all transactions sent to a given account",
+        "operationId": "listTransactionsReceived",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "Account number that received the transactions",
+            "name": "receiver",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/transaction"
+              }
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          },
+          "404": {
+            "description": "No transactions found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/account/{sender}/sent": {
+      "get": {
+        "description": "Lists all transactions sent from a given account",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "transactions"
+        ],
+        "summary": "Lists all transactions sent from a given account",
+        "operationId": "listTransactionsSent",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "Account number that made the transactions",
+            "name": "sender",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/transaction"
+              }
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          },
+          "404": {
+            "description": "No transactions found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "post": {
         "description": "returns 200",
@@ -91,122 +207,6 @@ func init() {
           },
           "400": {
             "description": "Nice try! You can't send negative amounts...",
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/transactions/account/{receiver}/received": {
-      "get": {
-        "description": "Lists all transactions sent to a given account",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "transactions"
-        ],
-        "summary": "Lists all transactions sent to a given account",
-        "operationId": "listTransactionsReceived",
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Account number that received the transactions",
-            "name": "receiver",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/transaction"
-              }
-            },
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          },
-          "404": {
-            "description": "No transactions found",
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/transactions/account/{sender}/sent": {
-      "get": {
-        "description": "Lists all transactions sent from a given account",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "transactions"
-        ],
-        "summary": "Lists all transactions sent from a given account",
-        "operationId": "listTransactionsSent",
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Account number that made the transactions",
-            "name": "sender",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/transaction"
-              }
-            },
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          },
-          "404": {
-            "description": "No transactions found",
             "headers": {
               "version": {
                 "type": "string",
@@ -308,6 +308,122 @@ func init() {
   "host": "transaction-log",
   "basePath": "/v1",
   "paths": {
+    "/account/{receiver}/received": {
+      "get": {
+        "description": "Lists all transactions sent to a given account",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "transactions"
+        ],
+        "summary": "Lists all transactions sent to a given account",
+        "operationId": "listTransactionsReceived",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "Account number that received the transactions",
+            "name": "receiver",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/transaction"
+              }
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          },
+          "404": {
+            "description": "No transactions found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/account/{sender}/sent": {
+      "get": {
+        "description": "Lists all transactions sent from a given account",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "transactions"
+        ],
+        "summary": "Lists all transactions sent from a given account",
+        "operationId": "listTransactionsSent",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "Account number that made the transactions",
+            "name": "sender",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/transaction"
+              }
+            },
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          },
+          "404": {
+            "description": "No transactions found",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "headers": {
+              "version": {
+                "type": "string",
+                "description": "Version of the microservice that responded"
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "post": {
         "description": "returns 200",
@@ -369,122 +485,6 @@ func init() {
           },
           "400": {
             "description": "Nice try! You can't send negative amounts...",
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/transactions/account/{receiver}/received": {
-      "get": {
-        "description": "Lists all transactions sent to a given account",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "transactions"
-        ],
-        "summary": "Lists all transactions sent to a given account",
-        "operationId": "listTransactionsReceived",
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Account number that received the transactions",
-            "name": "receiver",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/transaction"
-              }
-            },
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          },
-          "404": {
-            "description": "No transactions found",
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/transactions/account/{sender}/sent": {
-      "get": {
-        "description": "Lists all transactions sent from a given account",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "transactions"
-        ],
-        "summary": "Lists all transactions sent from a given account",
-        "operationId": "listTransactionsSent",
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "int64",
-            "description": "Account number that made the transactions",
-            "name": "sender",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success!",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/transaction"
-              }
-            },
-            "headers": {
-              "version": {
-                "type": "string",
-                "description": "Version of the microservice that responded"
-              }
-            }
-          },
-          "404": {
-            "description": "No transactions found",
             "headers": {
               "version": {
                 "type": "string",

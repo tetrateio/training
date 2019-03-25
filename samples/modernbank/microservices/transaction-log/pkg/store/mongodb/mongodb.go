@@ -63,9 +63,6 @@ func (m MongoDB) ListSent(account int64) ([]*model.Transaction, error) {
 		}
 		transactions = append(transactions, &transaction)
 	}
-	if len(transactions) == 0 {
-		return transactions, &store.NotFound{}
-	}
 	return transactions, nil
 }
 
@@ -82,9 +79,6 @@ func (m MongoDB) ListReceived(account int64) ([]*model.Transaction, error) {
 			return nil, fmt.Errorf("unable to decode response: %v", err)
 		}
 		transactions = append(transactions, &transaction)
-	}
-	if len(transactions) == 0 {
-		return transactions, &store.NotFound{}
 	}
 	return transactions, nil
 }
