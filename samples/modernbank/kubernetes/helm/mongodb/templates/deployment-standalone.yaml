@@ -109,7 +109,7 @@ spec:
           value: {{ .Values.mongodbExtraFlags | join " " }}
         {{- end }}
         ports:
-        - name: mongodb
+        - name: mongo
           containerPort: 27017
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:

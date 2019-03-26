@@ -20,7 +20,7 @@ kind: Service
 metadata:
   name: transaction-log-mongodb
   labels:
-    app: mongodb
+    app: transaction-log-mongodb
     chart: mongodb-5.3.2
     release: "transaction-log"
     heritage: "Tiller"
@@ -29,9 +29,9 @@ spec:
   ports:
   - name: mongo
     port: 27017
-    targetPort: mongodb
+    targetPort: mongo
   selector:
-    app: mongodb
+    app: transaction-log-mongodb
     release: "transaction-log"
 
 ---
@@ -60,19 +60,19 @@ kind: Deployment
 metadata:
   name: transaction-log-mongodb
   labels:
-    app: mongodb
+    app: transaction-log-mongodb
     chart: mongodb-5.3.2
     release: "transaction-log"
     heritage: "Tiller"
 spec:
   selector:
     matchLabels:
-      app: mongodb
+      app: transaction-log-mongodb
       release: "transaction-log"
   template:
     metadata:
       labels:
-        app: mongodb
+        app: transaction-log-mongodb
         release: "transaction-log"
         chart: mongodb-5.3.2
     spec:
@@ -89,7 +89,7 @@ spec:
         - name: MONGODB_ENABLE_IPV6
           value: "yes"
         ports:
-        - name: mongodb
+        - name: mongo
           containerPort: 27017
         livenessProbe:
           exec:

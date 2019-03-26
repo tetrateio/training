@@ -18,9 +18,9 @@ spec:
    clusterIP: {{ .Values.service.clusterIP }}
    {{- end }}
   ports:
-  - name: mongodb
+  - name: mongo
     port: 27017
-    targetPort: mongodb
+    targetPort: mongo
 {{- if .Values.service.nodePort }}
     nodePort: {{ .Values.service.nodePort }}
 {{- end }}

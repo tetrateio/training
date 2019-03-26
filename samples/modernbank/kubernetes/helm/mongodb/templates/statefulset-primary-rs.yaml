@@ -68,7 +68,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
           - containerPort: {{ .Values.service.port }}
-            name: mongodb
+            name: mongo
           env:
           {{- if .Values.image.debug}}
           - name: NAMI_DEBUG

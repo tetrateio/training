@@ -63,7 +63,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
           - containerPort: {{ .Values.service.port }}
-            name: mongodb
+            name: mongo
           env:
           {{- if .Values.image.debug}}
           - name: NAMI_DEBUG
@@ -116,7 +116,7 @@ spec:
           {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
-              port: mongodb
+              port: mongo
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -126,7 +126,7 @@ spec:
           {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
-              port: mongodb
+              port: mongo
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}

@@ -11,3 +11,5 @@ image:
 
 mongodb:
     enabled: true
+    nameOverride: account-mongodb
+    fullnameOverride: account-mongodb
