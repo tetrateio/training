@@ -1,13 +1,13 @@
 # Istio
 
-In this section we’ll get started with Istio on Kubernetes (K8s). Istio is infrastructure-agnostic and not tied to K8s, but K8s is a great place to run Istio because of its native support of sidecar deployments.
+In this section we’ll get started with Istio on Kubernetes. Istio is infrastructure-agnostic and not tied to Kubernetes, but Kubernetes is the easiest place to run Istio because of its native support of sidecar deployments.
 
 ## Installing Istio
 
 Let’s install Istio.
 
-```bash
-kubectl apply -f config/istio-demo.yaml --as=admin --as-group=system:masters
+``` bash
+kubectl apply -f ./modules/install/istio/config/istio-demo.yaml --as=admin --as-group=system:masters
 ```
 
 > We use `--as=admin --as-group=system:masters` to escalate our privilege while installing Istio, which is required to configure the webhook Istio uses to automate sidecar injection. We'll talk about sidecar injection in depth later.
@@ -55,12 +55,12 @@ kiali-5d68f4c676-n4bdw                    1/1     Running     0          11m
 prometheus-89bc5668c-crdzs                1/1     Running     0          11m
 ```
 
-This includes all the needed Istio control-plane components (including Istio Sidecar Injector and Istio Gateways), as well as some companion services such as Prometheus (metric collection Grafana (metrics dashboard) and Kiali (to visualize how microservices on Istio service mesh are connected)
+This includes all the of Istio control-plane components (including Istio Sidecar Injector and Istio Gateways), as well as some Istio addons like Prometheus (metric collection), Grafana (metrics dashboard) and Kiali (to visualize how microservices on Istio service mesh are connected).
 
-## Installing istioctl
+## Installing Istioctl
 
 Istio also has its own command line tool for debugging, verifying configuration, manually injecting sidecars and various other things. We can also use istioctl to validate everything has installed correctly.
-
+ 
 Download Istio CLI.
 
 ```bash
@@ -70,11 +70,12 @@ curl -L https://git.io/getLatestIstio | sh -
 ln -sf istio-$ISTIO_VERSION istio
 ```
 
-Add Istio binary path to $PATH.
+Add Istio binary path to `$PATH`.
 
-```bash 
+```bash
 export PATH=~/istio/bin:$PATH
 echo 'export PATH=~/istio/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
 ```
 
 We can use the experimental `verify-install` command to fully validate that Istio successfully installed. This command may take up to a minute to complete.
