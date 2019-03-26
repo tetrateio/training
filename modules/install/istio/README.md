@@ -60,7 +60,7 @@ This includes all the of Istio control-plane components (including Istio Sidecar
 ## Installing Istioctl
 
 Istio also has its own command line tool for debugging, verifying configuration, manually injecting sidecars and various other things. We can also use istioctl to validate everything has installed correctly.
- 
+
 Download Istio CLI.
 
 ```bash
