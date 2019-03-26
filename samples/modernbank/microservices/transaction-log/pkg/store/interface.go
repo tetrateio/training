@@ -10,8 +10,6 @@ import (
 type Interface interface {
 	ListSent(ctx context.Context, account int64) ([]*model.Transaction, error)
 	ListReceived(ctx context.Context, account int64) ([]*model.Transaction, error)
-	GetSent(ctx context.Context, account int64, id string) (*model.Transaction, error)
-	GetReceived(ctx context.Context, account int64, id string) (*model.Transaction, error)
 	Create(ctx context.Context, transaction *model.Newtransaction) (*model.Transaction, error)
 }
 

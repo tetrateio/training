@@ -83,34 +83,6 @@ func (m *InMemory) ListReceived(ctx context.Context, account int64) ([]*model.Tr
 	return m.received[account].list(), nil
 }
 
-func (m *InMemory) GetSent(ctx context.Context, account int64, id string) (*model.Transaction, error) {
-	m.m.RLock()
-	defer m.m.RUnlock()
-	res, ok := m.sent[account]
-	if !ok {
-		return nil, &store.NotFound{}
-	}
-	transaction, ok := res.get(id)
-	if !ok {
-		return nil, &store.NotFound{}
-	}
-	return transaction, nil
-}
-
-func (m *InMemory) GetReceived(ctx context.Context, account int64, id string) (*model.Transaction, error) {
-	m.m.RLock()
-	defer m.m.RUnlock()
-	res, ok := m.received[account]
-	if !ok {
-		return nil, &store.NotFound{}
-	}
-	transaction, ok := res.get(id)
-	if !ok {
-		return nil, &store.NotFound{}
-	}
-	return transaction, nil
-}
-
 func (m *InMemory) Create(ctx context.Context, transaction *model.Newtransaction) (*model.Transaction, error) {
 	m.m.Lock()
 	defer m.m.Unlock()
@@ -123,7 +95,13 @@ func (m *InMemory) Create(ctx context.Context, transaction *model.Newtransaction
 	}
 
 	newTransactionID := m.genID(transaction)
-	newTransaction := &model.Transaction{transaction.Amount, transaction.Receiver, transaction.Sender, swag.String(newTransactionID)}
+	newTransaction := &model.Transaction{
+		ID:        swag.String(newTransactionID),
+		Amount:    transaction.Amount,
+		Receiver:  transaction.Receiver,
+		Sender:    transaction.Sender,
+		Timestamp: swag.Int64(time.Now().Unix()),
+	}
 	m.sent[*transaction.Sender].add(newTransactionID, newTransaction)
 	m.received[*transaction.Receiver].add(newTransactionID, newTransaction)
 	return newTransaction, nil

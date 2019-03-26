@@ -1,6 +1,7 @@
 module github.com/tetrateio/training/samples/modernbank/microservices/transaction-log
 
 require (
+	github.com/davecgh/go-spew v1.1.1
 	github.com/go-openapi/analysis v0.19.0 // indirect
 	github.com/go-openapi/errors v0.19.0
 	github.com/go-openapi/jsonpointer v0.19.0 // indirect
@@ -14,6 +15,7 @@ require (
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/go-cmp v0.2.0 // indirect
+	github.com/mongodb/mongo-go-driver v1.0.0
 	github.com/spf13/pflag v1.0.3
 	github.com/tidwall/pretty v0.0.0-20190325153808-1166b9ac2b65 // indirect
 	github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c // indirect
