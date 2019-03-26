@@ -426,9 +426,13 @@ definitions:
     - type: object
       required:
       - id
+      - timestamp
       properties:
         id:
           type: string
+        timestamp:
+          type: integer
+          format: int64
   user:
     type: object
     required:

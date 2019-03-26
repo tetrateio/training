@@ -7,10 +7,11 @@ import (
 	"time"
 
 	"github.com/go-openapi/swag"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+
 	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/tetrateio/training/samples/modernbank/microservices/transaction-log/pkg/model"
@@ -83,39 +84,19 @@ func (m MongoDB) ListReceived(ctx context.Context, account int64) ([]*model.Tran
 	return transactions, nil
 }
 
-func (m MongoDB) GetSent(ctx context.Context, account int64, id string) (*model.Transaction, error) {
-	var transaction model.Transaction
-	if err := m.defaultCollection().FindOne(ctx, bson.M{"_id": id, "sender": account}).Decode(&transaction); err != nil {
-		if err.Error() == mongo.ErrNoDocuments.Error() {
-			return nil, &store.NotFound{}
-		}
-		return nil, fmt.Errorf("unable to get transaction in database: %v", err)
-	}
-	return &transaction, nil
-}
-
-func (m MongoDB) GetReceived(ctx context.Context, account int64, id string) (*model.Transaction, error) {
-	var transaction model.Transaction
-	if err := m.defaultCollection().FindOne(ctx, bson.M{"_id": id, "receiver": account}).Decode(&transaction); err != nil {
-		if err.Error() == mongo.ErrNoDocuments.Error() {
-			return nil, &store.NotFound{}
-		}
-		return nil, fmt.Errorf("unable to get transaction in database: %v", err)
-	}
-	return &transaction, nil
-}
-
 func (m MongoDB) Create(ctx context.Context, transaction *model.Newtransaction) (*model.Transaction, error) {
-	res, err := m.defaultCollection().InsertOne(ctx, transaction)
+	new := &model.Transaction{
+		Amount:    transaction.Amount,
+		Sender:    transaction.Sender,
+		Receiver:  transaction.Receiver,
+		Timestamp: swag.Int64(time.Now().Unix()),
+	}
+	res, err := m.defaultCollection().InsertOne(ctx, new)
 	if err != nil {
 		return nil, fmt.Errorf("unable to create transaction in database: %v", err)
 	}
-	return &model.Transaction{
-		ID:       swag.String(res.InsertedID.(primitive.ObjectID).Hex()),
-		Amount:   transaction.Amount,
-		Sender:   transaction.Sender,
-		Receiver: transaction.Receiver,
-	}, nil
+	new.ID = swag.String(res.InsertedID.(primitive.ObjectID).Hex())
+	return new, nil
 }
 
 func (m MongoDB) defaultCollection() *mongo.Collection {

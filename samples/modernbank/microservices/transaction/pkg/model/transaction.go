@@ -32,6 +32,10 @@ type Transaction struct {
 	// id
 	// Required: true
 	ID *string `json:"id"`
+
+	// timestamp
+	// Required: true
+	Timestamp *int64 `json:"timestamp"`
 }
 
 // UnmarshalJSON unmarshals this object from a JSON structure
@@ -57,12 +61,16 @@ func (m *Transaction) UnmarshalJSON(raw []byte) error {
 	// AO1
 	var dataAO1 struct {
 		ID *string `json:"id"`
+
+		Timestamp *int64 `json:"timestamp"`
 	}
 	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
 		return err
 	}
 
 	m.ID = dataAO1.ID
+
+	m.Timestamp = dataAO1.Timestamp
 
 	return nil
 }
@@ -93,9 +101,13 @@ func (m Transaction) MarshalJSON() ([]byte, error) {
 
 	var dataAO1 struct {
 		ID *string `json:"id"`
+
+		Timestamp *int64 `json:"timestamp"`
 	}
 
 	dataAO1.ID = m.ID
+
+	dataAO1.Timestamp = m.Timestamp
 
 	jsonDataAO1, errAO1 := swag.WriteJSON(dataAO1)
 	if errAO1 != nil {
@@ -123,6 +135,10 @@ func (m *Transaction) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateID(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateTimestamp(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -162,6 +178,15 @@ func (m *Transaction) validateSender(formats strfmt.Registry) error {
 func (m *Transaction) validateID(formats strfmt.Registry) error {
 
 	if err := validate.Required("id", "body", m.ID); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Transaction) validateTimestamp(formats strfmt.Registry) error {
+
+	if err := validate.Required("timestamp", "body", m.Timestamp); err != nil {
 		return err
 	}
 

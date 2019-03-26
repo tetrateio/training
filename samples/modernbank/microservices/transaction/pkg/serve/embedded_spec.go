@@ -235,11 +235,16 @@ func init() {
         {
           "type": "object",
           "required": [
-            "id"
+            "id",
+            "timestamp"
           ],
           "properties": {
             "id": {
               "type": "string"
+            },
+            "timestamp": {
+              "type": "integer",
+              "format": "int64"
             }
           }
         }
@@ -471,11 +476,16 @@ func init() {
         {
           "type": "object",
           "required": [
-            "id"
+            "id",
+            "timestamp"
           ],
           "properties": {
             "id": {
               "type": "string"
+            },
+            "timestamp": {
+              "type": "integer",
+              "format": "int64"
             }
           }
         }

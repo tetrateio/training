@@ -125,10 +125,11 @@ func transToTransLogNewTransaction(trans *model.Newtransaction) *translogModel.N
 
 func transLogToTransTransaction(translog *translogModel.Transaction) *model.Transaction {
 	return &model.Transaction{
-		ID:       translog.ID,
-		Amount:   translog.Amount,
-		Sender:   translog.Sender,
-		Receiver: translog.Receiver,
+		ID:        translog.ID,
+		Amount:    translog.Amount,
+		Sender:    translog.Sender,
+		Receiver:  translog.Receiver,
+		Timestamp: translog.Timestamp,
 	}
 }
 
