@@ -62,11 +62,13 @@ func configureAPI(api *restapi.TransactionAPI) http.Handler {
 		// Move the monies
 		// TODO: Verify both accounts exist before moving the money around
 		sendingParams := accountsClientResources.NewChangeBalanceParams().WithNumber(*params.Body.Sender).WithDelta(*params.Body.Amount * -1)
+		propagateTracingHeadersAccounts(params, sendingParams)
 		if _, err := accounts.ChangeBalance(sendingParams); err != nil {
 			api.Logger("Error updating sender balance: %v", err)
 			return transactions.NewCreateTransactionInternalServerError().WithVersion(*version)
 		}
 		receivingParams := accountsClientResources.NewChangeBalanceParams().WithNumber(*params.Body.Receiver).WithDelta(*params.Body.Amount)
+		propagateTracingHeadersAccounts(params, receivingParams)
 		if _, err := accounts.ChangeBalance(receivingParams); err != nil {
 			api.Logger("Error updating receiver balance: %v", err)
 			return transactions.NewCreateTransactionInternalServerError().WithVersion(*version)
@@ -74,6 +76,7 @@ func configureAPI(api *restapi.TransactionAPI) http.Handler {
 
 		// Add to transaction-log
 		translogParams := translogClientResources.NewCreateTransactionParams().WithBody(transToTransLogNewTransaction(params.Body))
+		propagateTracingHeadersTransactionLog(params, translogParams)
 		res, err := translog.CreateTransaction(translogParams)
 		if err != nil {
 			log.Printf("failed to create transaction in log from %v to %v for %v: %v", *params.Body.Sender, *params.Body.Receiver, *params.Body.Amount, err)
@@ -89,6 +92,27 @@ func configureAPI(api *restapi.TransactionAPI) http.Handler {
 	api.ServerShutdown = func() {}
 
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))
+}
+
+func propagateTracingHeadersAccounts(inParams transactions.CreateTransactionParams, outParams *accountsClientResources.ChangeBalanceParams) {
+	outParams.SetB3(inParams.B3)
+	outParams.SetXB3Flags(inParams.XB3Flags)
+	outParams.SetXB3Parentspanid(inParams.XB3Parentspanid)
+	outParams.SetXB3Sampled(inParams.XB3Sampled)
+	outParams.SetXB3SpanID(inParams.XB3SpanID)
+	outParams.SetXB3Traceid(inParams.XB3Traceid)
+	outParams.SetXRequestID(inParams.XRequestID)
+}
+
+// Something, something, generics...
+func propagateTracingHeadersTransactionLog(inParams transactions.CreateTransactionParams, outParams *translogClientResources.CreateTransactionParams) {
+	outParams.SetB3(inParams.B3)
+	outParams.SetXB3Flags(inParams.XB3Flags)
+	outParams.SetXB3Parentspanid(inParams.XB3Parentspanid)
+	outParams.SetXB3Sampled(inParams.XB3Sampled)
+	outParams.SetXB3SpanID(inParams.XB3SpanID)
+	outParams.SetXB3Traceid(inParams.XB3Traceid)
+	outParams.SetXRequestID(inParams.XRequestID)
 }
 
 func transToTransLogNewTransaction(trans *model.Newtransaction) *translogModel.Newtransaction {

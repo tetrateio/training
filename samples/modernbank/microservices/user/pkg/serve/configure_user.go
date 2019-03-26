@@ -55,7 +55,7 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 	userStore = mongodb.NewMongoDB()
 
 	api.UsersCreateUserHandler = users.CreateUserHandlerFunc(func(params users.CreateUserParams) middleware.Responder {
-		res, err := userStore.Create(params.Body)
+		res, err := userStore.Create(params.HTTPRequest.Context(), params.Body)
 		if err != nil {
 			api.Logger("Error creating user %q: %v", *params.Body.Username, err)
 			if _, ok := err.(*store.Conflict); ok {
@@ -78,7 +78,7 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 		return users.NewCreateUserCreated().WithPayload(res).WithVersion(*version)
 	})
 	api.UsersGetUserByUserNameHandler = users.GetUserByUserNameHandlerFunc(func(params users.GetUserByUserNameParams) middleware.Responder {
-		res, err := userStore.Get(params.Username)
+		res, err := userStore.Get(params.HTTPRequest.Context(), params.Username)
 		if err != nil {
 			api.Logger("Error retrieving user %q: %v", params.Username, err)
 			if _, ok := err.(*store.NotFound); ok {
@@ -90,7 +90,8 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 		return users.NewGetUserByUserNameOK().WithPayload(res).WithVersion(*version)
 	})
 	api.AccountsListAccountsHandler = accounts.ListAccountsHandlerFunc(func(params accounts.ListAccountsParams) middleware.Responder {
-		listParams := accountsClientResources.NewListAccountsParams().WithOwner(params.Username)
+		listParams := accountsClientResources.NewListAccountsParams().WithOwner(params.Username).WithContext(params.HTTPRequest.Context())
+		propagateTracingHeaders(params, listParams)
 		res, err := accountService.ListAccounts(listParams)
 		if err != nil {
 			api.Logger("Error retrieving accounts for user %q: %v", params.Username, err)
@@ -104,6 +105,16 @@ func configureAPI(api *restapi.UserAPI) http.Handler {
 
 	api.ServerShutdown = func() {}
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))
+}
+
+func propagateTracingHeaders(inParams accounts.ListAccountsParams, outParams *accountsClientResources.ListAccountsParams) {
+	outParams.SetB3(inParams.B3)
+	outParams.SetXB3Flags(inParams.XB3Flags)
+	outParams.SetXB3Parentspanid(inParams.XB3Parentspanid)
+	outParams.SetXB3Sampled(inParams.XB3Sampled)
+	outParams.SetXB3SpanID(inParams.XB3SpanID)
+	outParams.SetXB3Traceid(inParams.XB3Traceid)
+	outParams.SetXRequestID(inParams.XRequestID)
 }
 
 // This is not nice...

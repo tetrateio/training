@@ -2,6 +2,7 @@ module github.com/tetrateio/training/samples/modernbank/microservices/account
 
 require (
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
+	github.com/davecgh/go-spew v1.1.1
 	github.com/go-openapi/analysis v0.18.0 // indirect
 	github.com/go-openapi/errors v0.18.0
 	github.com/go-openapi/jsonpointer v0.18.0 // indirect

@@ -41,15 +41,6 @@ func init() {
         ],
         "summary": "Lists all accounts for a given customer",
         "operationId": "listAccounts",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "Owner of the accounts",
-            "name": "owner",
-            "in": "query",
-            "required": true
-          }
-        ],
         "responses": {
           "200": {
             "description": "Success!",
@@ -98,13 +89,6 @@ func init() {
         "operationId": "createAccount",
         "parameters": [
           {
-            "type": "string",
-            "description": "Owner of the account",
-            "name": "owner",
-            "in": "query",
-            "required": true
-          },
-          {
             "enum": [
               "cash",
               "saving"
@@ -138,7 +122,51 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "description": "Owner of the account",
+          "name": "owner",
+          "in": "query",
+          "required": true
+        },
+        {
+          "type": "string",
+          "name": "x-request-id",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-flags",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-parentspanid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-sampled",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-spanId",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-traceid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "b3",
+          "in": "header"
+        }
+      ]
     },
     "/accounts/{number}/balance/{delta}": {
       "put": {
@@ -198,7 +226,44 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "x-request-id",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-flags",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-parentspanid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-sampled",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-spanId",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-traceid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "b3",
+          "in": "header"
+        }
+      ]
     },
     "/health": {
       "post": {
@@ -219,7 +284,44 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "x-request-id",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-flags",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-parentspanid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-sampled",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-spanId",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-traceid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "b3",
+          "in": "header"
+        }
+      ]
     }
   },
   "definitions": {
@@ -284,15 +386,6 @@ func init() {
         ],
         "summary": "Lists all accounts for a given customer",
         "operationId": "listAccounts",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "Owner of the accounts",
-            "name": "owner",
-            "in": "query",
-            "required": true
-          }
-        ],
         "responses": {
           "200": {
             "description": "Success!",
@@ -341,13 +434,6 @@ func init() {
         "operationId": "createAccount",
         "parameters": [
           {
-            "type": "string",
-            "description": "Owner of the account",
-            "name": "owner",
-            "in": "query",
-            "required": true
-          },
-          {
             "enum": [
               "cash",
               "saving"
@@ -381,7 +467,51 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "description": "Owner of the account",
+          "name": "owner",
+          "in": "query",
+          "required": true
+        },
+        {
+          "type": "string",
+          "name": "x-request-id",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-flags",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-parentspanid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-sampled",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-spanId",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-traceid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "b3",
+          "in": "header"
+        }
+      ]
     },
     "/accounts/{number}/balance/{delta}": {
       "put": {
@@ -441,7 +571,44 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "x-request-id",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-flags",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-parentspanid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-sampled",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-spanId",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-traceid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "b3",
+          "in": "header"
+        }
+      ]
     },
     "/health": {
       "post": {
@@ -462,7 +629,44 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "x-request-id",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-flags",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-parentspanid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-sampled",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-spanId",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-traceid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "b3",
+          "in": "header"
+        }
+      ]
     }
   },
   "definitions": {

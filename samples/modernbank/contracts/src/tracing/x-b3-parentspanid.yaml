@@ -1,0 +1,3 @@
+type: string
+name: x-b3-parentspanid
+in: header

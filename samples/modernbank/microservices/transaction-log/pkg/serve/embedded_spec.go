@@ -86,7 +86,44 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "x-request-id",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-flags",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-parentspanid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-sampled",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-spanId",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-traceid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "b3",
+          "in": "header"
+        }
+      ]
     },
     "/account/{sender}/sent": {
       "get": {
@@ -144,7 +181,44 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "x-request-id",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-flags",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-parentspanid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-sampled",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-spanId",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-traceid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "b3",
+          "in": "header"
+        }
+      ]
     },
     "/health": {
       "post": {
@@ -165,7 +239,44 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "x-request-id",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-flags",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-parentspanid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-sampled",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-spanId",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-traceid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "b3",
+          "in": "header"
+        }
+      ]
     },
     "/transactions": {
       "post": {
@@ -224,7 +335,44 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "x-request-id",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-flags",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-parentspanid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-sampled",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-spanId",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-traceid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "b3",
+          "in": "header"
+        }
+      ]
     }
   },
   "definitions": {
@@ -364,7 +512,44 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "x-request-id",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-flags",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-parentspanid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-sampled",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-spanId",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-traceid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "b3",
+          "in": "header"
+        }
+      ]
     },
     "/account/{sender}/sent": {
       "get": {
@@ -422,7 +607,44 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "x-request-id",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-flags",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-parentspanid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-sampled",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-spanId",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-traceid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "b3",
+          "in": "header"
+        }
+      ]
     },
     "/health": {
       "post": {
@@ -443,7 +665,44 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "x-request-id",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-flags",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-parentspanid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-sampled",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-spanId",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-traceid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "b3",
+          "in": "header"
+        }
+      ]
     },
     "/transactions": {
       "post": {
@@ -502,7 +761,44 @@ func init() {
             }
           }
         }
-      }
+      },
+      "parameters": [
+        {
+          "type": "string",
+          "name": "x-request-id",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-flags",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-parentspanid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-sampled",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-spanId",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "x-b3-traceid",
+          "in": "header"
+        },
+        {
+          "type": "string",
+          "name": "b3",
+          "in": "header"
+        }
+      ]
     }
   },
   "definitions": {

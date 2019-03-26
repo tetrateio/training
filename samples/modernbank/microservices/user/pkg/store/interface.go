@@ -1,16 +1,17 @@
 package store
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/model"
 )
 
 type Interface interface {
-	Get(username string) (*model.User, error)
-	Create(user *model.User) (*model.User, error)
-	Update(username string, user *model.User) (*model.User, error)
-	Delete(username string) error
+	Get(ctx context.Context, username string) (*model.User, error)
+	Create(ctx context.Context, user *model.User) (*model.User, error)
+	Update(ctx context.Context, username string, user *model.User) (*model.User, error)
+	Delete(ctx context.Context, username string) error
 }
 
 type Conflict struct{}

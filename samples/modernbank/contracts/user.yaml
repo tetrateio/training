@@ -23,6 +23,28 @@ paths:
             version:
               type: string
               description: Version of the microservice that responded
+    parameters:
+    - type: string
+      name: x-request-id
+      in: header
+    - type: string
+      name: x-b3-flags
+      in: header
+    - type: string
+      name: x-b3-parentspanid
+      in: header
+    - type: string
+      name: x-b3-sampled
+      in: header
+    - type: string
+      name: x-b3-spanId
+      in: header
+    - type: string
+      name: x-b3-traceid
+      in: header
+    - type: string
+      name: b3
+      in: header
   /users:
     post:
       description: Creates a new user
@@ -62,6 +84,28 @@ paths:
             version:
               type: string
               description: Version of the microservice that responded
+    parameters:
+    - type: string
+      name: x-request-id
+      in: header
+    - type: string
+      name: x-b3-flags
+      in: header
+    - type: string
+      name: x-b3-parentspanid
+      in: header
+    - type: string
+      name: x-b3-sampled
+      in: header
+    - type: string
+      name: x-b3-spanId
+      in: header
+    - type: string
+      name: x-b3-traceid
+      in: header
+    - type: string
+      name: b3
+      in: header
   /users/{username}:
     get:
       produces:
@@ -97,6 +141,28 @@ paths:
             version:
               type: string
               description: Version of the microservice that responded
+    parameters:
+    - type: string
+      name: x-request-id
+      in: header
+    - type: string
+      name: x-b3-flags
+      in: header
+    - type: string
+      name: x-b3-parentspanid
+      in: header
+    - type: string
+      name: x-b3-sampled
+      in: header
+    - type: string
+      name: x-b3-spanId
+      in: header
+    - type: string
+      name: x-b3-traceid
+      in: header
+    - type: string
+      name: b3
+      in: header
   /users/{username}/accounts:
     get:
       description: Lists all accounts for a given customer
@@ -135,6 +201,28 @@ paths:
             version:
               type: string
               description: Version of the microservice that responded
+    parameters:
+    - type: string
+      name: x-request-id
+      in: header
+    - type: string
+      name: x-b3-flags
+      in: header
+    - type: string
+      name: x-b3-parentspanid
+      in: header
+    - type: string
+      name: x-b3-sampled
+      in: header
+    - type: string
+      name: x-b3-spanId
+      in: header
+    - type: string
+      name: x-b3-traceid
+      in: header
+    - type: string
+      name: b3
+      in: header
 definitions:
   account:
     type: object

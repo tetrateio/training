@@ -43,7 +43,7 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 	accountStore = mongodb.NewMongoDB()
 
 	api.AccountsCreateAccountHandler = accounts.CreateAccountHandlerFunc(func(params accounts.CreateAccountParams) middleware.Responder {
-		res, err := accountStore.Create(params.Owner, params.Type)
+		res, err := accountStore.Create(params.HTTPRequest.Context(), params.Owner, params.Type)
 		if err != nil {
 			api.Logger("Error adding new account for %q to store: %v", params.Owner, err)
 			return accounts.NewCreateAccountInternalServerError().WithVersion(*version)
@@ -52,7 +52,7 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 		return accounts.NewCreateAccountCreated().WithPayload(res).WithVersion(*version)
 	})
 	api.AccountsListAccountsHandler = accounts.ListAccountsHandlerFunc(func(params accounts.ListAccountsParams) middleware.Responder {
-		res, err := accountStore.List(params.Owner)
+		res, err := accountStore.List(params.HTTPRequest.Context(), params.Owner)
 		if err != nil {
 			api.Logger("Error listing accounts for %q: %v", params.Owner, err)
 			if _, ok := err.(*store.NotFound); ok {
@@ -63,7 +63,7 @@ func configureAPI(api *restapi.AccountAPI) http.Handler {
 		return accounts.NewListAccountsOK().WithPayload(res).WithVersion(*version)
 	})
 	api.AccountsChangeBalanceHandler = accounts.ChangeBalanceHandlerFunc(func(params accounts.ChangeBalanceParams) middleware.Responder {
-		if err := accountStore.UpdateBalance(params.Number, params.Delta); err != nil {
+		if err := accountStore.UpdateBalance(params.HTTPRequest.Context(), params.Number, params.Delta); err != nil {
 			if _, ok := err.(*store.NotFound); ok {
 				api.Logger("Account not found - %v", params.Number)
 				return accounts.NewChangeBalanceNotFound().WithVersion(*version)

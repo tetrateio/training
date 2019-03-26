@@ -46,9 +46,9 @@ type MongoDB struct {
 	client *mongo.Client
 }
 
-func (m MongoDB) Get(username string) (*model.User, error) {
+func (m MongoDB) Get(ctx context.Context, username string) (*model.User, error) {
 	var user model.User
-	if err := m.defaultCollection().FindOne(context.Background(), bson.M{"username": username}).Decode(&user); err != nil {
+	if err := m.defaultCollection().FindOne(ctx, bson.M{"username": username}).Decode(&user); err != nil {
 		if err.Error() == mongo.ErrNoDocuments.Error() {
 			return nil, &store.NotFound{}
 		}
@@ -57,15 +57,15 @@ func (m MongoDB) Get(username string) (*model.User, error) {
 	return &user, nil
 }
 
-func (m MongoDB) Create(user *model.User) (*model.User, error) {
-	if _, err := m.defaultCollection().InsertOne(context.Background(), *user); err != nil {
+func (m MongoDB) Create(ctx context.Context, user *model.User) (*model.User, error) {
+	if _, err := m.defaultCollection().InsertOne(ctx, *user); err != nil {
 		return nil, fmt.Errorf("unable to create user in database: %v", err)
 	}
 	return user, nil
 }
 
-func (m MongoDB) Update(username string, user *model.User) (*model.User, error) {
-	res, err := m.defaultCollection().UpdateOne(context.Background(), bson.M{"username": username}, *user)
+func (m MongoDB) Update(ctx context.Context, username string, user *model.User) (*model.User, error) {
+	res, err := m.defaultCollection().UpdateOne(ctx, bson.M{"username": username}, *user)
 	if res != nil && res.UpsertedCount == 0 {
 		return nil, &store.NotFound{}
 	}
@@ -75,8 +75,8 @@ func (m MongoDB) Update(username string, user *model.User) (*model.User, error) 
 	return user, nil
 }
 
-func (m MongoDB) Delete(username string) error {
-	res, err := m.defaultCollection().DeleteOne(context.Background(), bson.M{"username": username})
+func (m MongoDB) Delete(ctx context.Context, username string) error {
+	res, err := m.defaultCollection().DeleteOne(ctx, bson.M{"username": username})
 	if res != nil && res.DeletedCount == 0 {
 		return &store.NotFound{}
 	}

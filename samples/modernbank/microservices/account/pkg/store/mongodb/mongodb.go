@@ -53,14 +53,14 @@ type MongoDB struct {
 	client *mongo.Client
 }
 
-func (m MongoDB) List(owner string) ([]*model.Account, error) {
+func (m MongoDB) List(ctx context.Context, owner string) ([]*model.Account, error) {
 	accounts := []*model.Account{}
-	res, err := m.defaultCollection().Find(context.Background(), bson.M{"owner": owner})
+	res, err := m.defaultCollection().Find(ctx, bson.M{"owner": owner})
 	if err != nil {
 		return nil, fmt.Errorf("unable to get accounts in database: %v", err)
 	}
-	defer res.Close(context.Background())
-	for res.Next(context.Background()) {
+	defer res.Close(ctx)
+	for res.Next(ctx) {
 		var account model.Account
 		if err := res.Decode(&account); err != nil {
 			return nil, fmt.Errorf("unable to decode response: %v", err)
@@ -70,9 +70,9 @@ func (m MongoDB) List(owner string) ([]*model.Account, error) {
 	return accounts, nil
 }
 
-func (m MongoDB) Get(owner string, number int64) (*model.Account, error) {
+func (m MongoDB) Get(ctx context.Context, owner string, number int64) (*model.Account, error) {
 	var account model.Account
-	if err := m.defaultCollection().FindOne(context.Background(), bson.M{"owner": owner, "number": number}).Decode(&account); err != nil {
+	if err := m.defaultCollection().FindOne(ctx, bson.M{"owner": owner, "number": number}).Decode(&account); err != nil {
 		if err.Error() == mongo.ErrNoDocuments.Error() {
 			return nil, &store.NotFound{}
 		}
@@ -81,8 +81,8 @@ func (m MongoDB) Get(owner string, number int64) (*model.Account, error) {
 	return &account, nil
 }
 
-func (m MongoDB) Create(owner string, accountType string) (*model.Account, error) {
-	newAccountNumber, err := m.unAssignedAccountNumber()
+func (m MongoDB) Create(ctx context.Context, owner string, accountType string) (*model.Account, error) {
+	newAccountNumber, err := m.unAssignedAccountNumber(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("error finding a vacant account number: %v", err)
 	}
@@ -92,7 +92,7 @@ func (m MongoDB) Create(owner string, accountType string) (*model.Account, error
 		Number:  swag.Int64(newAccountNumber),
 		Type:    swag.String(accountType),
 	}
-	_, err = m.defaultCollection().InsertOne(context.Background(), newAccount)
+	_, err = m.defaultCollection().InsertOne(ctx, newAccount)
 	if err != nil {
 		return nil, fmt.Errorf("error creating account in database: %v", err)
 	}
@@ -101,12 +101,12 @@ func (m MongoDB) Create(owner string, accountType string) (*model.Account, error
 
 // Not concurrency safe but close enough for a demo app
 // Clashes are highly unlikely
-func (m MongoDB) unAssignedAccountNumber() (int64, error) {
+func (m MongoDB) unAssignedAccountNumber(ctx context.Context) (int64, error) {
 	var err error
 	candidate, count := int64(0), int64(0)
 	for i := 0; i < 10; i++ {
 		candidate = randomAccountNumber()
-		count, err = m.defaultCollection().CountDocuments(context.Background(), bson.M{"number": candidate})
+		count, err = m.defaultCollection().CountDocuments(ctx, bson.M{"number": candidate})
 		if count == 0 {
 			return candidate, nil
 		}
@@ -114,8 +114,8 @@ func (m MongoDB) unAssignedAccountNumber() (int64, error) {
 	return 0, err
 }
 
-func (m MongoDB) Delete(owner string, number int64) error {
-	res := m.defaultCollection().FindOneAndDelete(context.Background(), bson.M{"owner": owner, "number": number})
+func (m MongoDB) Delete(ctx context.Context, owner string, number int64) error {
+	res := m.defaultCollection().FindOneAndDelete(ctx, bson.M{"owner": owner, "number": number})
 	if res.Err().Error() == mongo.ErrNoDocuments.Error() {
 		return &store.NotFound{}
 	} else if res.Err() != nil {
@@ -124,8 +124,8 @@ func (m MongoDB) Delete(owner string, number int64) error {
 	return nil
 }
 
-func (m MongoDB) UpdateBalance(number int64, deltaAmount float64) error {
-	res, err := m.defaultCollection().UpdateOne(context.Background(), bson.M{"number": number}, bson.D{{"$inc", bson.D{{"balance", deltaAmount}}}})
+func (m MongoDB) UpdateBalance(ctx context.Context, number int64, deltaAmount float64) error {
+	res, err := m.defaultCollection().UpdateOne(ctx, bson.M{"number": number}, bson.D{{"$inc", bson.D{{"balance", deltaAmount}}}})
 	if res != nil && res.ModifiedCount != 1 {
 		return &store.NotFound{}
 	} else if err != nil {

@@ -1,3 +1,11 @@
+parameters:
+- $ref: "./tracing/x-request-id.yaml"
+- $ref: "./tracing/x-b3-flags.yaml"
+- $ref: "./tracing/x-b3-parentspanid.yaml"
+- $ref: "./tracing/x-b3-sampled.yaml"
+- $ref: "./tracing/x-b3-spanId.yaml"
+- $ref: "./tracing/x-b3-traceid.yaml"
+- $ref: "./tracing/b3.yaml"
 put:
   tags:
   - "accounts"
