@@ -8,7 +8,13 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { Newtransaction, TransactionsApi } from '../../api/client';
+import {
+  Account,
+  AccountsApi,
+  Newtransaction,
+  TransactionsApi
+} from '../../api/client';
+import useSessionstorage from '@rooks/use-sessionstorage';
 
 const styles = () =>
   createStyles({
@@ -34,34 +40,66 @@ interface IProps
 export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const accountNumber = parseInt(props.match.params.accountNumber, 10);
 
-  const [receivedTransactions, setReceivedTxs] = React.useState<
-    Newtransaction[]
-  >([]);
-  const [sentTransactions, setSentTxs] = React.useState<Newtransaction[]>([]);
+  const [transactions, setTrxs] = React.useState<Newtransaction[]>([]);
 
   const [doFetch, setDoFetch] = React.useState<boolean>(true);
 
   const transactionsApi = new TransactionsApi();
+  const accountsApi = new AccountsApi();
+  const { value } = useSessionstorage('user', '');
 
-  const fetchTransactionsReceived = async () => {
+  function merge(a: Newtransaction[], b: Newtransaction[]) {
+    return a.concat(b).sort((i: Newtransaction, j: Newtransaction) => {
+      return i.timestamp - j.timestamp;
+    });
+  }
+
+  function renderDate(currentDate) {
+    var date = currentDate.getDate();
+    var month = currentDate.getMonth(); //Be careful! January is 0 not 1
+    var year = currentDate.getFullYear() + '';
+
+    return date + '/' + (month + 1) + '/' + year.substr(2, 2);
+  }
+
+  const fetchTransactions = async () => {
+    const accounts: any = await accountsApi.listAccounts({
+      username: JSON.parse(value).username
+    });
+
     const received: any = await transactionsApi.listTransactionsReceived({
       receiver: accountNumber
     });
-    setReceivedTxs(received);
-  };
 
-  const fetchTransactionsSent = async () => {
     const sent: any = await transactionsApi.listTransactionsSent({
       sender: accountNumber
     });
-    setSentTxs(sent);
+
+    const currentAccounts: any = accounts.filter(account => {
+      return account.number === accountNumber;
+    });
+
+    if (currentAccounts.length > 0) {
+      const currentAccount = currentAccounts.pop();
+      const merged = merge(received, sent).map(trx => {
+        if (trx.receiver === accountNumber) {
+          currentAccount.balance -= trx.amount;
+          trx.balance = currentAccount.balance + trx.amount;
+        } else {
+          currentAccount.balance += trx.amount;
+          trx.balance = currentAccount.balance - trx.amount;
+        }
+        return trx;
+      });
+
+      setTrxs(merged);
+    }
   };
 
   React.useEffect(() => {
     if (doFetch) {
       setDoFetch(false);
-      fetchTransactionsReceived();
-      fetchTransactionsSent();
+      fetchTransactions();
     }
   });
 
@@ -70,6 +108,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
       <Table>
         <TableHead className={props.classes.tableHead}>
           <TableRow>
+            <TableCell className={props.classes.tableHeadCell}>Date</TableCell>
             <TableCell className={props.classes.tableHeadCell}>From</TableCell>
             <TableCell className={props.classes.tableHeadCell}>
               Deposits
@@ -84,26 +123,28 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {receivedTransactions.map(transaction => (
-            <TableRow>
+          {transactions.map((transaction, index) => (
+            <TableRow key={index}>
+              <TableCell component="th" scope="row" align="left">
+                <Typography>
+                  {renderDate(new Date(transaction.timestamp * 1000))}
+                </Typography>
+              </TableCell>
               <TableCell component="th" scope="row" align="left">
                 <Typography>{transaction.sender}</Typography>
               </TableCell>
-              <TableCell align="right">{transaction.amount}</TableCell>
-              <TableCell />
-              <TableCell />
-              <TableCell />
-            </TableRow>
-          ))}
-          {sentTransactions.map(transaction => (
-            <TableRow>
-              <TableCell />
-              <TableCell />
+              <TableCell align="right">
+                {transaction.sender !== accountNumber ? transaction.amount : ''}
+              </TableCell>
               <TableCell component="th" scope="row" align="left">
                 <Typography>{transaction.receiver}</Typography>
               </TableCell>
-              <TableCell align="right">{transaction.amount}</TableCell>
-              <TableCell />
+              <TableCell align="right">
+                {transaction.receiver !== accountNumber
+                  ? transaction.amount
+                  : ''}
+              </TableCell>
+              <TableCell align="right">{transaction.balance}</TableCell>
             </TableRow>
           ))}
         </TableBody>

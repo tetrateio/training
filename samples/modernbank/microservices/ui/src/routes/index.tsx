@@ -64,10 +64,15 @@ const PrivateRoute: React.FunctionComponent<IPrivateRouteProps> = ({
     authContext.isAuthenticated = true;
   }
   const renderFunc = (props: RouteComponentProps<any>): React.ReactNode =>
-    authContext.isAuthenticated ? (
+    authContext.isAuthenticated && props.location.pathname !== '/' ? (
       <Component {...props} />
     ) : (
-      <Redirect to={{ pathname: LoginPath, state: { from: props.location } }} />
+      <Redirect
+        to={{
+          pathname: authContext.isAuthenticated ? AccountsPath : LoginPath,
+          state: { from: props.location }
+        }}
+      />
     );
   return <Route {...rest} render={renderFunc} />;
 };
