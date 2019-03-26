@@ -20,7 +20,7 @@ kind: Service
 metadata:
   name: account-mongodb
   labels:
-    app: mongodb
+    app: account-mongodb
     chart: mongodb-5.3.2
     release: "account"
     heritage: "Tiller"
@@ -29,9 +29,9 @@ spec:
   ports:
   - name: mongo
     port: 27017
-    targetPort: mongodb
+    targetPort: mongo
   selector:
-    app: mongodb
+    app: account-mongodb
     release: "account"
 
 ---
@@ -60,19 +60,19 @@ kind: Deployment
 metadata:
   name: account-mongodb
   labels:
-    app: mongodb
+    app: account-mongodb
     chart: mongodb-5.3.2
     release: "account"
     heritage: "Tiller"
 spec:
   selector:
     matchLabels:
-      app: mongodb
+      app: account-mongodb
       release: "account"
   template:
     metadata:
       labels:
-        app: mongodb
+        app: account-mongodb
         release: "account"
         chart: mongodb-5.3.2
     spec:
@@ -89,7 +89,7 @@ spec:
         - name: MONGODB_ENABLE_IPV6
           value: "yes"
         ports:
-        - name: mongodb
+        - name: mongo
           containerPort: 27017
         livenessProbe:
           exec:

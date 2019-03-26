@@ -11,3 +11,5 @@ image:
 
 mongodb:
     enabled: true
+    nameOverride: transaction-log-mongodb
+    fullnameOverride: transaction-log-mongodb
