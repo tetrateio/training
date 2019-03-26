@@ -1,8 +1,8 @@
 #! /bin/bash -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-DEMO_APP_DIR=${DIR}/../../../modules/installation/app
-TRAFFIC_MAN_DIR=${DIR}/../../../modules/traffic-management
+DEMO_APP_DIR=${DIR}/../../../modules/install/app
+TRAFFIC_MAN_DIR=${DIR}/../../../modules/traffic
 
 # Deployment YAMLs
 helm dependencies update $DIR/../kubernetes/helm/microservice
@@ -21,5 +21,5 @@ done
 
 # Default Istio Gateway
 cp -R ${DIR}/../networking/ingress/ ${TRAFFIC_MAN_DIR}/ingress/config/
-cp -R ${DIR}/../networking/ingress/vs.yaml ${TRAFFIC_MAN_DIR}/release/config/vs-reset.yaml
+cp -R ${DIR}/../networking/ingress/virtualservice.yaml ${TRAFFIC_MAN_DIR}/release/config/virtualservice-reset.yaml
 

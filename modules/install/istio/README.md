@@ -7,15 +7,17 @@ In this section we’ll get started with Istio on Kubernetes (K8s). Istio is inf
 Let’s install Istio.
 
 ```bash
-kubectl apply -f config/istio-demo-auth.yaml
+kubectl apply -f config/istio-demo.yaml --as=admin --as-group=system:masters
 ```
+
+> We use `--as=admin --as-group=system:masters` to escalate our privilege while installing Istio, which is required to configure the webhook Istio uses to automate sidecar injection. We'll talk about sidecar injection in depth later.
 
 There were a lot of things deployed there so we will break down the important parts and verify that they installed successfully.
 
 Istio extends Kubernetes using Custom Resource Definitions (CRDs). These enable Kubernetes to store configuration for Istio routing, security and telemetry. Let’s verify they were successfully added. Note, this is an abbreviated list covering the more frequently used CRDs, yours will contain a few more.
 
 ```bash
-$ kubectl get crds | grep istio
+$ kubectl get crds | grep istio | head
 authorizations.config.istio.io          2019-03-19T20:41:53Z
 clusterrbacconfigs.rbac.istio.io        2019-03-19T20:41:44Z
 envoyfilters.networking.istio.io        2019-03-19T20:41:44Z

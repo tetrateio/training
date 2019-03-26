@@ -3,14 +3,14 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: user-mongodb
+  name: account-mongodb
 
 ---
 # Source: microservice/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: user
+  name: account
 
 ---
 # Source: microservice/charts/mongodb/templates/svc-standalone.yaml
@@ -18,11 +18,11 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: user-mongodb
+  name: account-mongodb
   labels:
-    app: user-mongodb
+    app: account-mongodb
     chart: mongodb-5.3.2
-    release: "user"
+    release: "account"
     heritage: "Tiller"
 spec:
   type: ClusterIP
@@ -31,26 +31,26 @@ spec:
     port: 27017
     targetPort: mongo
   selector:
-    app: user-mongodb
-    release: "user"
+    app: account-mongodb
+    release: "account"
 
 ---
 # Source: microservice/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: user
+  name: account
   labels:
-    app: user
+    app: account
 spec:
   type: ClusterIP
   ports:
     - port: 80
       targetPort: http
       protocol: TCP
-      name: http-user
+      name: http-account
   selector:
-    app: user
+    app: account
 
 ---
 # Source: microservice/charts/mongodb/templates/deployment-standalone.yaml
@@ -58,27 +58,27 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: user-mongodb
+  name: account-mongodb
   labels:
-    app: user-mongodb
+    app: account-mongodb
     chart: mongodb-5.3.2
-    release: "user"
+    release: "account"
     heritage: "Tiller"
 spec:
   selector:
     matchLabels:
-      app: user-mongodb
-      release: "user"
+      app: account-mongodb
+      release: "account"
   template:
     metadata:
       labels:
-        app: user-mongodb
-        release: "user"
+        app: account-mongodb
+        release: "account"
         chart: mongodb-5.3.2
     spec:
-      serviceAccountName: user-mongodb
+      serviceAccountName: account-mongodb
       containers:
-      - name: user-mongodb
+      - name: account-mongodb
         image: gcr.io/tetratelabs/modernbank/mongodb:4.0.6
         imagePullPolicy: "Always"
         env:
@@ -127,79 +127,28 @@ spec:
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: user-v1
+  name: account-v1
   labels:
-    app: user
+    app: account
     version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user
+      app: account
   template:
     metadata:
       labels:
-        app: user
+        app: account
         version: v1
     spec:
-      serviceAccountName: user
+      serviceAccountName: account
       containers:
-        - name: user
-          image: "gcr.io/tetratelabs/modernbank/user:v1.0.0"
+        - name: account
+          image: "gcr.io/tetratelabs/modernbank/account:v1.0.0"
           imagePullPolicy: Always
           args: ["--port", "8080", "--version", "v1"]
           ports:
           - name: http
             containerPort: 8080
-
----
-# Source: microservice/charts/mongodb/templates/configmap.yaml
-
----
-# Source: microservice/charts/mongodb/templates/headless-svc-rs.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/initialization-configmap.yaml
-
----
-# Source: microservice/charts/mongodb/templates/poddisruptionbudget-arbiter-rs.yaml
-
----
-# Source: microservice/charts/mongodb/templates/poddisruptionbudget-primary-rs.yaml
-
----
-# Source: microservice/charts/mongodb/templates/poddisruptionbudget-secondary-rs.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/prometheus-alerting-rule.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/prometheus-service-monitor.yaml
-      
-
----
-# Source: microservice/charts/mongodb/templates/pvc-standalone.yaml
-
----
-# Source: microservice/charts/mongodb/templates/secrets.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/statefulset-arbiter-rs.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/statefulset-primary-rs.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/statefulset-secondary-rs.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/svc-primary-rs.yaml
-
 

@@ -3,14 +3,14 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: account-mongodb
+  name: transaction-log-mongodb
 
 ---
 # Source: microservice/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: account
+  name: transaction-log
 
 ---
 # Source: microservice/charts/mongodb/templates/svc-standalone.yaml
@@ -18,11 +18,11 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: account-mongodb
+  name: transaction-log-mongodb
   labels:
-    app: account-mongodb
+    app: transaction-log-mongodb
     chart: mongodb-5.3.2
-    release: "account"
+    release: "transaction-log"
     heritage: "Tiller"
 spec:
   type: ClusterIP
@@ -31,26 +31,26 @@ spec:
     port: 27017
     targetPort: mongo
   selector:
-    app: account-mongodb
-    release: "account"
+    app: transaction-log-mongodb
+    release: "transaction-log"
 
 ---
 # Source: microservice/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: account
+  name: transaction-log
   labels:
-    app: account
+    app: transaction-log
 spec:
   type: ClusterIP
   ports:
     - port: 80
       targetPort: http
       protocol: TCP
-      name: http-account
+      name: http-transaction-log
   selector:
-    app: account
+    app: transaction-log
 
 ---
 # Source: microservice/charts/mongodb/templates/deployment-standalone.yaml
@@ -58,27 +58,27 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: account-mongodb
+  name: transaction-log-mongodb
   labels:
-    app: account-mongodb
+    app: transaction-log-mongodb
     chart: mongodb-5.3.2
-    release: "account"
+    release: "transaction-log"
     heritage: "Tiller"
 spec:
   selector:
     matchLabels:
-      app: account-mongodb
-      release: "account"
+      app: transaction-log-mongodb
+      release: "transaction-log"
   template:
     metadata:
       labels:
-        app: account-mongodb
-        release: "account"
+        app: transaction-log-mongodb
+        release: "transaction-log"
         chart: mongodb-5.3.2
     spec:
-      serviceAccountName: account-mongodb
+      serviceAccountName: transaction-log-mongodb
       containers:
-      - name: account-mongodb
+      - name: transaction-log-mongodb
         image: gcr.io/tetratelabs/modernbank/mongodb:4.0.6
         imagePullPolicy: "Always"
         env:
@@ -127,79 +127,28 @@ spec:
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: account-v1
+  name: transaction-log-v1
   labels:
-    app: account
+    app: transaction-log
     version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: account
+      app: transaction-log
   template:
     metadata:
       labels:
-        app: account
+        app: transaction-log
         version: v1
     spec:
-      serviceAccountName: account
+      serviceAccountName: transaction-log
       containers:
-        - name: account
-          image: "gcr.io/tetratelabs/modernbank/account:v1.0.0"
+        - name: transaction-log
+          image: "gcr.io/tetratelabs/modernbank/transaction-log:v1.0.0"
           imagePullPolicy: Always
           args: ["--port", "8080", "--version", "v1"]
           ports:
           - name: http
             containerPort: 8080
-
----
-# Source: microservice/charts/mongodb/templates/configmap.yaml
-
----
-# Source: microservice/charts/mongodb/templates/headless-svc-rs.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/initialization-configmap.yaml
-
----
-# Source: microservice/charts/mongodb/templates/poddisruptionbudget-arbiter-rs.yaml
-
----
-# Source: microservice/charts/mongodb/templates/poddisruptionbudget-primary-rs.yaml
-
----
-# Source: microservice/charts/mongodb/templates/poddisruptionbudget-secondary-rs.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/prometheus-alerting-rule.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/prometheus-service-monitor.yaml
-      
-
----
-# Source: microservice/charts/mongodb/templates/pvc-standalone.yaml
-
----
-# Source: microservice/charts/mongodb/templates/secrets.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/statefulset-arbiter-rs.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/statefulset-primary-rs.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/statefulset-secondary-rs.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/svc-primary-rs.yaml
-
 

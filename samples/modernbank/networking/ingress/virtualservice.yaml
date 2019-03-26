@@ -1,0 +1,64 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: transaction-gateway
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - ingress
+  http:
+  - match:
+    - uri:
+        prefix: /v1/transaction
+    route:
+    - destination:
+        host: transaction
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /v1/account
+    route:
+    - destination:
+        host: transaction-log
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: user-gateway
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - ingress
+  http:
+  - match:
+    - uri:
+        prefix: /v1/users
+    route:
+    - destination:
+        host: user
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ui-gateway
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - ingress
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: ui
+        port:
+          number: 80
