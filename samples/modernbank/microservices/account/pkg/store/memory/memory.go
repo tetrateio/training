@@ -1,6 +1,7 @@
 package memory
 
 import (
+	"context"
 	"sync"
 	"sync/atomic"
 
@@ -68,7 +69,7 @@ func (a accounts) list() []*model.Account {
 	return res
 }
 
-func (m *InMemory) List(owner string) ([]*model.Account, error) {
+func (m *InMemory) List(ctx context.Context, owner string) ([]*model.Account, error) {
 	m.m.RLock()
 	defer m.m.RUnlock()
 	_, ok := m.ownerAccounts[owner]
@@ -78,7 +79,7 @@ func (m *InMemory) List(owner string) ([]*model.Account, error) {
 	return m.ownerAccounts[owner].list(), nil
 }
 
-func (m *InMemory) Get(owner string, number int64) (*model.Account, error) {
+func (m *InMemory) Get(ctx context.Context, owner string, number int64) (*model.Account, error) {
 	m.m.RLock()
 	defer m.m.RUnlock()
 	res, ok := m.ownerAccounts[owner]
@@ -92,7 +93,7 @@ func (m *InMemory) Get(owner string, number int64) (*model.Account, error) {
 	return account, nil
 }
 
-func (m *InMemory) Create(owner string, accountType string) (*model.Account, error) {
+func (m *InMemory) Create(ctx context.Context, owner string, accountType string) (*model.Account, error) {
 	m.m.Lock()
 	defer m.m.Unlock()
 	_, ok := m.ownerAccounts[owner]
@@ -111,7 +112,7 @@ func (m *InMemory) Create(owner string, accountType string) (*model.Account, err
 	return newAccount, nil
 }
 
-func (m *InMemory) Delete(owner string, number int64) error {
+func (m *InMemory) Delete(ctx context.Context, owner string, number int64) error {
 	m.m.Lock()
 	defer m.m.Unlock()
 	_, ok := m.ownerAccounts[owner]
@@ -122,7 +123,7 @@ func (m *InMemory) Delete(owner string, number int64) error {
 	return m.ownerAccounts[owner].delete(number)
 }
 
-func (m *InMemory) UpdateBalance(number int64, deltaAmount float64) error {
+func (m *InMemory) UpdateBalance(ctx context.Context, number int64, deltaAmount float64) error {
 	owner, ok := m.accountsOwner[number]
 	if !ok {
 		return &store.NotFound{}

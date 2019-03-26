@@ -62,11 +62,25 @@ for the list transactions received operation typically these are written to a ht
 */
 type ListTransactionsReceivedParams struct {
 
+	/*B3*/
+	B3 *string
 	/*Receiver
 	  Account number that received the transactions
 
 	*/
 	Receiver int64
+	/*XB3Flags*/
+	XB3Flags *string
+	/*XB3Parentspanid*/
+	XB3Parentspanid *string
+	/*XB3Sampled*/
+	XB3Sampled *string
+	/*XB3SpanID*/
+	XB3SpanID *string
+	/*XB3Traceid*/
+	XB3Traceid *string
+	/*XRequestID*/
+	XRequestID *string
 
 	timeout    time.Duration
 	Context    context.Context
@@ -106,6 +120,17 @@ func (o *ListTransactionsReceivedParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
+// WithB3 adds the b3 to the list transactions received params
+func (o *ListTransactionsReceivedParams) WithB3(b3 *string) *ListTransactionsReceivedParams {
+	o.SetB3(b3)
+	return o
+}
+
+// SetB3 adds the b3 to the list transactions received params
+func (o *ListTransactionsReceivedParams) SetB3(b3 *string) {
+	o.B3 = b3
+}
+
 // WithReceiver adds the receiver to the list transactions received params
 func (o *ListTransactionsReceivedParams) WithReceiver(receiver int64) *ListTransactionsReceivedParams {
 	o.SetReceiver(receiver)
@@ -117,6 +142,72 @@ func (o *ListTransactionsReceivedParams) SetReceiver(receiver int64) {
 	o.Receiver = receiver
 }
 
+// WithXB3Flags adds the xB3Flags to the list transactions received params
+func (o *ListTransactionsReceivedParams) WithXB3Flags(xB3Flags *string) *ListTransactionsReceivedParams {
+	o.SetXB3Flags(xB3Flags)
+	return o
+}
+
+// SetXB3Flags adds the xB3Flags to the list transactions received params
+func (o *ListTransactionsReceivedParams) SetXB3Flags(xB3Flags *string) {
+	o.XB3Flags = xB3Flags
+}
+
+// WithXB3Parentspanid adds the xB3Parentspanid to the list transactions received params
+func (o *ListTransactionsReceivedParams) WithXB3Parentspanid(xB3Parentspanid *string) *ListTransactionsReceivedParams {
+	o.SetXB3Parentspanid(xB3Parentspanid)
+	return o
+}
+
+// SetXB3Parentspanid adds the xB3Parentspanid to the list transactions received params
+func (o *ListTransactionsReceivedParams) SetXB3Parentspanid(xB3Parentspanid *string) {
+	o.XB3Parentspanid = xB3Parentspanid
+}
+
+// WithXB3Sampled adds the xB3Sampled to the list transactions received params
+func (o *ListTransactionsReceivedParams) WithXB3Sampled(xB3Sampled *string) *ListTransactionsReceivedParams {
+	o.SetXB3Sampled(xB3Sampled)
+	return o
+}
+
+// SetXB3Sampled adds the xB3Sampled to the list transactions received params
+func (o *ListTransactionsReceivedParams) SetXB3Sampled(xB3Sampled *string) {
+	o.XB3Sampled = xB3Sampled
+}
+
+// WithXB3SpanID adds the xB3SpanID to the list transactions received params
+func (o *ListTransactionsReceivedParams) WithXB3SpanID(xB3SpanID *string) *ListTransactionsReceivedParams {
+	o.SetXB3SpanID(xB3SpanID)
+	return o
+}
+
+// SetXB3SpanID adds the xB3SpanId to the list transactions received params
+func (o *ListTransactionsReceivedParams) SetXB3SpanID(xB3SpanID *string) {
+	o.XB3SpanID = xB3SpanID
+}
+
+// WithXB3Traceid adds the xB3Traceid to the list transactions received params
+func (o *ListTransactionsReceivedParams) WithXB3Traceid(xB3Traceid *string) *ListTransactionsReceivedParams {
+	o.SetXB3Traceid(xB3Traceid)
+	return o
+}
+
+// SetXB3Traceid adds the xB3Traceid to the list transactions received params
+func (o *ListTransactionsReceivedParams) SetXB3Traceid(xB3Traceid *string) {
+	o.XB3Traceid = xB3Traceid
+}
+
+// WithXRequestID adds the xRequestID to the list transactions received params
+func (o *ListTransactionsReceivedParams) WithXRequestID(xRequestID *string) *ListTransactionsReceivedParams {
+	o.SetXRequestID(xRequestID)
+	return o
+}
+
+// SetXRequestID adds the xRequestId to the list transactions received params
+func (o *ListTransactionsReceivedParams) SetXRequestID(xRequestID *string) {
+	o.XRequestID = xRequestID
+}
+
 // WriteToRequest writes these params to a swagger request
 func (o *ListTransactionsReceivedParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -125,9 +216,72 @@ func (o *ListTransactionsReceivedParams) WriteToRequest(r runtime.ClientRequest,
 	}
 	var res []error
 
+	if o.B3 != nil {
+
+		// header param b3
+		if err := r.SetHeaderParam("b3", *o.B3); err != nil {
+			return err
+		}
+
+	}
+
 	// path param receiver
 	if err := r.SetPathParam("receiver", swag.FormatInt64(o.Receiver)); err != nil {
 		return err
+	}
+
+	if o.XB3Flags != nil {
+
+		// header param x-b3-flags
+		if err := r.SetHeaderParam("x-b3-flags", *o.XB3Flags); err != nil {
+			return err
+		}
+
+	}
+
+	if o.XB3Parentspanid != nil {
+
+		// header param x-b3-parentspanid
+		if err := r.SetHeaderParam("x-b3-parentspanid", *o.XB3Parentspanid); err != nil {
+			return err
+		}
+
+	}
+
+	if o.XB3Sampled != nil {
+
+		// header param x-b3-sampled
+		if err := r.SetHeaderParam("x-b3-sampled", *o.XB3Sampled); err != nil {
+			return err
+		}
+
+	}
+
+	if o.XB3SpanID != nil {
+
+		// header param x-b3-spanId
+		if err := r.SetHeaderParam("x-b3-spanId", *o.XB3SpanID); err != nil {
+			return err
+		}
+
+	}
+
+	if o.XB3Traceid != nil {
+
+		// header param x-b3-traceid
+		if err := r.SetHeaderParam("x-b3-traceid", *o.XB3Traceid); err != nil {
+			return err
+		}
+
+	}
+
+	if o.XRequestID != nil {
+
+		// header param x-request-id
+		if err := r.SetHeaderParam("x-request-id", *o.XRequestID); err != nil {
+			return err
+		}
+
 	}
 
 	if len(res) > 0 {

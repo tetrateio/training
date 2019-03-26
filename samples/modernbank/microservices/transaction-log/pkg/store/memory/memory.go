@@ -1,6 +1,7 @@
 package memory
 
 import (
+	"context"
 	"crypto/md5"
 	"encoding/json"
 	"fmt"
@@ -62,7 +63,7 @@ func (t transactions) list() []*model.Transaction {
 	return res
 }
 
-func (m *InMemory) ListSent(account int64) ([]*model.Transaction, error) {
+func (m *InMemory) ListSent(ctx context.Context, account int64) ([]*model.Transaction, error) {
 	m.m.RLock()
 	defer m.m.RUnlock()
 	_, ok := m.sent[account]
@@ -72,7 +73,7 @@ func (m *InMemory) ListSent(account int64) ([]*model.Transaction, error) {
 	return m.sent[account].list(), nil
 }
 
-func (m *InMemory) ListReceived(account int64) ([]*model.Transaction, error) {
+func (m *InMemory) ListReceived(ctx context.Context, account int64) ([]*model.Transaction, error) {
 	m.m.RLock()
 	defer m.m.RUnlock()
 	_, ok := m.received[account]
@@ -82,7 +83,7 @@ func (m *InMemory) ListReceived(account int64) ([]*model.Transaction, error) {
 	return m.received[account].list(), nil
 }
 
-func (m *InMemory) GetSent(account int64, id string) (*model.Transaction, error) {
+func (m *InMemory) GetSent(ctx context.Context, account int64, id string) (*model.Transaction, error) {
 	m.m.RLock()
 	defer m.m.RUnlock()
 	res, ok := m.sent[account]
@@ -96,7 +97,7 @@ func (m *InMemory) GetSent(account int64, id string) (*model.Transaction, error)
 	return transaction, nil
 }
 
-func (m *InMemory) GetReceived(account int64, id string) (*model.Transaction, error) {
+func (m *InMemory) GetReceived(ctx context.Context, account int64, id string) (*model.Transaction, error) {
 	m.m.RLock()
 	defer m.m.RUnlock()
 	res, ok := m.received[account]
@@ -110,7 +111,7 @@ func (m *InMemory) GetReceived(account int64, id string) (*model.Transaction, er
 	return transaction, nil
 }
 
-func (m *InMemory) Create(transaction *model.Newtransaction) (*model.Transaction, error) {
+func (m *InMemory) Create(ctx context.Context, transaction *model.Newtransaction) (*model.Transaction, error) {
 	m.m.Lock()
 	defer m.m.Unlock()
 

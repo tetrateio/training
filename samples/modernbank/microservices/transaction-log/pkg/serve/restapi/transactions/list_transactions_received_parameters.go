@@ -31,11 +31,39 @@ type ListTransactionsReceivedParams struct {
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
+	/*
+	  In: header
+	*/
+	B3 *string
 	/*Account number that received the transactions
 	  Required: true
 	  In: path
 	*/
 	Receiver int64
+	/*
+	  In: header
+	*/
+	XB3Flags *string
+	/*
+	  In: header
+	*/
+	XB3Parentspanid *string
+	/*
+	  In: header
+	*/
+	XB3Sampled *string
+	/*
+	  In: header
+	*/
+	XB3SpanID *string
+	/*
+	  In: header
+	*/
+	XB3Traceid *string
+	/*
+	  In: header
+	*/
+	XRequestID *string
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -47,14 +75,60 @@ func (o *ListTransactionsReceivedParams) BindRequest(r *http.Request, route *mid
 
 	o.HTTPRequest = r
 
+	if err := o.bindB3(r.Header[http.CanonicalHeaderKey("b3")], true, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
 	rReceiver, rhkReceiver, _ := route.Params.GetOK("receiver")
 	if err := o.bindReceiver(rReceiver, rhkReceiver, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := o.bindXB3Flags(r.Header[http.CanonicalHeaderKey("x-b3-flags")], true, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := o.bindXB3Parentspanid(r.Header[http.CanonicalHeaderKey("x-b3-parentspanid")], true, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := o.bindXB3Sampled(r.Header[http.CanonicalHeaderKey("x-b3-sampled")], true, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := o.bindXB3SpanID(r.Header[http.CanonicalHeaderKey("x-b3-spanId")], true, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := o.bindXB3Traceid(r.Header[http.CanonicalHeaderKey("x-b3-traceid")], true, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := o.bindXRequestID(r.Header[http.CanonicalHeaderKey("x-request-id")], true, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+// bindB3 binds and validates parameter B3 from header.
+func (o *ListTransactionsReceivedParams) bindB3(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+
+	o.B3 = &raw
+
 	return nil
 }
 
@@ -73,6 +147,114 @@ func (o *ListTransactionsReceivedParams) bindReceiver(rawData []string, hasKey b
 		return errors.InvalidType("receiver", "path", "int64", raw)
 	}
 	o.Receiver = value
+
+	return nil
+}
+
+// bindXB3Flags binds and validates parameter XB3Flags from header.
+func (o *ListTransactionsReceivedParams) bindXB3Flags(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+
+	o.XB3Flags = &raw
+
+	return nil
+}
+
+// bindXB3Parentspanid binds and validates parameter XB3Parentspanid from header.
+func (o *ListTransactionsReceivedParams) bindXB3Parentspanid(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+
+	o.XB3Parentspanid = &raw
+
+	return nil
+}
+
+// bindXB3Sampled binds and validates parameter XB3Sampled from header.
+func (o *ListTransactionsReceivedParams) bindXB3Sampled(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+
+	o.XB3Sampled = &raw
+
+	return nil
+}
+
+// bindXB3SpanID binds and validates parameter XB3SpanID from header.
+func (o *ListTransactionsReceivedParams) bindXB3SpanID(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+
+	o.XB3SpanID = &raw
+
+	return nil
+}
+
+// bindXB3Traceid binds and validates parameter XB3Traceid from header.
+func (o *ListTransactionsReceivedParams) bindXB3Traceid(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+
+	o.XB3Traceid = &raw
+
+	return nil
+}
+
+// bindXRequestID binds and validates parameter XRequestID from header.
+func (o *ListTransactionsReceivedParams) bindXRequestID(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: false
+
+	if raw == "" { // empty values pass all other validations
+		return nil
+	}
+
+	o.XRequestID = &raw
 
 	return nil
 }

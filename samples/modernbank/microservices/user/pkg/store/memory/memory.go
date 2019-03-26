@@ -1,6 +1,7 @@
 package memory
 
 import (
+	"context"
 	"sync"
 
 	"github.com/tetrateio/training/samples/modernbank/microservices/user/pkg/model"
@@ -19,7 +20,7 @@ type InMemory struct {
 	store map[string]model.User
 }
 
-func (m *InMemory) Get(username string) (*model.User, error) {
+func (m *InMemory) Get(ctx context.Context, username string) (*model.User, error) {
 	m.m.RLock()
 	defer m.m.RUnlock()
 	tmp, ok := m.store[username]
@@ -29,7 +30,7 @@ func (m *InMemory) Get(username string) (*model.User, error) {
 	return &tmp, nil
 }
 
-func (m *InMemory) Create(user *model.User) (*model.User, error) {
+func (m *InMemory) Create(ctx context.Context, user *model.User) (*model.User, error) {
 	m.m.Lock()
 	defer m.m.Unlock()
 	if _, ok := m.store[*user.Username]; ok {
@@ -40,7 +41,7 @@ func (m *InMemory) Create(user *model.User) (*model.User, error) {
 	return &tmp, nil
 }
 
-func (m *InMemory) Update(username string, user *model.User) (*model.User, error) {
+func (m *InMemory) Update(ctx context.Context, username string, user *model.User) (*model.User, error) {
 	m.m.Lock()
 	defer m.m.Unlock()
 	if _, ok := m.store[username]; !ok {
@@ -52,7 +53,7 @@ func (m *InMemory) Update(username string, user *model.User) (*model.User, error
 	return &tmp, nil
 }
 
-func (m *InMemory) Delete(username string) error {
+func (m *InMemory) Delete(ctx context.Context, username string) error {
 	m.m.Lock()
 	defer m.m.Unlock()
 	if _, ok := m.store[username]; !ok {

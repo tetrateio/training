@@ -49,14 +49,14 @@ type MongoDB struct {
 	client *mongo.Client
 }
 
-func (m MongoDB) ListSent(account int64) ([]*model.Transaction, error) {
+func (m MongoDB) ListSent(ctx context.Context, account int64) ([]*model.Transaction, error) {
 	transactions := []*model.Transaction{}
-	res, err := m.defaultCollection().Find(context.Background(), bson.M{"sender": account})
+	res, err := m.defaultCollection().Find(ctx, bson.M{"sender": account})
 	if err != nil {
 		return nil, fmt.Errorf("unable to get transactions in database: %v", err)
 	}
-	defer res.Close(context.Background())
-	for res.Next(context.Background()) {
+	defer res.Close(ctx)
+	for res.Next(ctx) {
 		var transaction model.Transaction
 		if err := res.Decode(&transaction); err != nil {
 			return nil, fmt.Errorf("unable to decode response: %v", err)
@@ -66,14 +66,14 @@ func (m MongoDB) ListSent(account int64) ([]*model.Transaction, error) {
 	return transactions, nil
 }
 
-func (m MongoDB) ListReceived(account int64) ([]*model.Transaction, error) {
+func (m MongoDB) ListReceived(ctx context.Context, account int64) ([]*model.Transaction, error) {
 	transactions := []*model.Transaction{}
-	res, err := m.defaultCollection().Find(context.Background(), bson.M{"receiver": account})
+	res, err := m.defaultCollection().Find(ctx, bson.M{"receiver": account})
 	if err != nil {
 		return nil, fmt.Errorf("unable to get transactions in database: %v", err)
 	}
-	defer res.Close(context.Background())
-	for res.Next(context.Background()) {
+	defer res.Close(ctx)
+	for res.Next(ctx) {
 		var transaction model.Transaction
 		if err := res.Decode(&transaction); err != nil {
 			return nil, fmt.Errorf("unable to decode response: %v", err)
@@ -83,9 +83,9 @@ func (m MongoDB) ListReceived(account int64) ([]*model.Transaction, error) {
 	return transactions, nil
 }
 
-func (m MongoDB) GetSent(account int64, id string) (*model.Transaction, error) {
+func (m MongoDB) GetSent(ctx context.Context, account int64, id string) (*model.Transaction, error) {
 	var transaction model.Transaction
-	if err := m.defaultCollection().FindOne(context.Background(), bson.M{"_id": id, "sender": account}).Decode(&transaction); err != nil {
+	if err := m.defaultCollection().FindOne(ctx, bson.M{"_id": id, "sender": account}).Decode(&transaction); err != nil {
 		if err.Error() == mongo.ErrNoDocuments.Error() {
 			return nil, &store.NotFound{}
 		}
@@ -94,9 +94,9 @@ func (m MongoDB) GetSent(account int64, id string) (*model.Transaction, error) {
 	return &transaction, nil
 }
 
-func (m MongoDB) GetReceived(account int64, id string) (*model.Transaction, error) {
+func (m MongoDB) GetReceived(ctx context.Context, account int64, id string) (*model.Transaction, error) {
 	var transaction model.Transaction
-	if err := m.defaultCollection().FindOne(context.Background(), bson.M{"_id": id, "receiver": account}).Decode(&transaction); err != nil {
+	if err := m.defaultCollection().FindOne(ctx, bson.M{"_id": id, "receiver": account}).Decode(&transaction); err != nil {
 		if err.Error() == mongo.ErrNoDocuments.Error() {
 			return nil, &store.NotFound{}
 		}
@@ -105,8 +105,8 @@ func (m MongoDB) GetReceived(account int64, id string) (*model.Transaction, erro
 	return &transaction, nil
 }
 
-func (m MongoDB) Create(transaction *model.Newtransaction) (*model.Transaction, error) {
-	res, err := m.defaultCollection().InsertOne(context.Background(), transaction)
+func (m MongoDB) Create(ctx context.Context, transaction *model.Newtransaction) (*model.Transaction, error) {
+	res, err := m.defaultCollection().InsertOne(ctx, transaction)
 	if err != nil {
 		return nil, fmt.Errorf("unable to create transaction in database: %v", err)
 	}

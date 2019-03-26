@@ -43,7 +43,7 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 	transactionStore = mongodb.NewMongoDB()
 
 	api.TransactionsCreateTransactionHandler = transactions.CreateTransactionHandlerFunc(func(params transactions.CreateTransactionParams) middleware.Responder {
-		res, err := transactionStore.Create(params.Body)
+		res, err := transactionStore.Create(params.HTTPRequest.Context(), params.Body)
 		if err != nil {
 			api.Logger("Unable to create transaction: %v", err)
 			return transactions.NewCreateTransactionInternalServerError().WithVersion(*version)
@@ -52,7 +52,7 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 		return transactions.NewCreateTransactionCreated().WithPayload(res).WithVersion(*version)
 	})
 	api.TransactionsListTransactionsReceivedHandler = transactions.ListTransactionsReceivedHandlerFunc(func(params transactions.ListTransactionsReceivedParams) middleware.Responder {
-		res, err := transactionStore.ListReceived(params.Receiver)
+		res, err := transactionStore.ListReceived(params.HTTPRequest.Context(), params.Receiver)
 		if err != nil {
 			if _, ok := err.(*store.NotFound); ok {
 				return transactions.NewListTransactionsReceivedNotFound().WithVersion(*version)
@@ -64,7 +64,7 @@ func configureAPI(api *restapi.TransactionLogAPI) http.Handler {
 		return transactions.NewListTransactionsReceivedOK().WithPayload(res).WithVersion(*version)
 	})
 	api.TransactionsListTransactionsSentHandler = transactions.ListTransactionsSentHandlerFunc(func(params transactions.ListTransactionsSentParams) middleware.Responder {
-		res, err := transactionStore.ListSent(params.Sender)
+		res, err := transactionStore.ListSent(params.HTTPRequest.Context(), params.Sender)
 		if err != nil {
 			if _, ok := err.(*store.NotFound); ok {
 				return transactions.NewListTransactionsSentNotFound().WithVersion(*version)

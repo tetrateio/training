@@ -1,3 +1,16 @@
+parameters:
+- type: string
+  description: Owner of the account
+  name: owner
+  in: query
+  required: true
+- $ref: "./tracing/x-request-id.yaml"
+- $ref: "./tracing/x-b3-flags.yaml"
+- $ref: "./tracing/x-b3-parentspanid.yaml"
+- $ref: "./tracing/x-b3-sampled.yaml"
+- $ref: "./tracing/x-b3-spanId.yaml"
+- $ref: "./tracing/x-b3-traceid.yaml"
+- $ref: "./tracing/b3.yaml"
 post:
   tags:
   - "accounts"
@@ -7,11 +20,6 @@ post:
   produces:
   - "application/json"
   parameters:
-  - type: string
-    description: Owner of the account
-    name: owner
-    in: query
-    required: true
   - enum:
     - cash
     - saving
@@ -42,12 +50,6 @@ get:
   operationId: "listAccounts"
   produces:
   - "application/json"
-  parameters:
-  - in: "query"
-    name: "owner"
-    description: "Owner of the accounts"
-    required: true
-    type: string
   responses:
     200:
       description: "Success!"
