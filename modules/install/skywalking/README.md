@@ -33,65 +33,9 @@ oap             ClusterIP      10.47.251.115   <none>         12800/TCP,11800/TC
 ui              LoadBalancer   10.47.243.220   <YOUR IP>      80:30845/TCP          1h
 ```
 
-Keep note of this IP address, we'll want to open it in a browser later.
-
-Finally, we also installed a bit a Istio configuration to point Mixer at SkyWalking:
-
-```yaml
-apiVersion: "config.istio.io/v1alpha2"
-kind: adapter
-metadata:
-  name: skywalking-adapter
-  namespace: istio-system
-spec:
-  description:
-  session_based: false
-  templates:
-  - metric
----
-apiVersion: "config.istio.io/v1alpha2"
-kind: handler
-metadata:
- name: skywalking-handler
- namespace: istio-system
-spec:
- adapter: skywalking-adapter
- connection:
-   address: "oap.skywalking.svc.cluster.local:11800"
----
-apiVersion: "config.istio.io/v1alpha2"
-kind: instance
-metadata:
- name: skywalking-metric
- namespace: istio-system
-spec:
- template: metric
- params:
-   value: request.size | 0
-   dimensions:
-     sourceService: source.workload.name | ""
-     sourceNamespace: source.workload.namespace | ""
-     sourceUID: source.uid | ""
-     destinationService: destination.workload.name | ""
-     destinationNamespace: destination.workload.namespace | ""
-     destinationUID: destination.uid | ""
-     requestMethod: request.method | ""
-     requestPath: request.path | ""
-     requestScheme: request.scheme | ""
-     requestTime: request.time
-     responseTime: response.time
-     responseCode: response.code | 200
-     reporter: conditional((context.reporter.kind | "inbound") == "outbound", "source", "destination")
-     apiProtocol: api.protocol | ""
----
-apiVersion: "config.istio.io/v1alpha2"
-kind: rule
-metadata:
- name: skywalking-rule
- namespace: istio-system
-spec:
- actions:
- - handler: skywalking-handler
-   instances:
-   - skywalking-metric
+Keep note of this IP address, we'll want to open it in a browser later. The easiest way is to store it as an environment variable:
+```shell
+export SKYWALKING_UI=$(kubectl -n skywalking get svc ui -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 ```
+
+Finally, we also installed a bit a Istio configuration to point Mixer at SkyWalking. We'll cover this in depth in the Observability section.

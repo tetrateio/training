@@ -150,9 +150,9 @@ spec:
         # NOTE: you can increase this resources
         resources:
           requests:
-            memory: 1Gi
-          limits:
             memory: 2Gi
+          limits:
+            memory: 6Gi
         env:
           # NOTE: the cluster name; update this
           - name: cluster.name
@@ -283,8 +283,8 @@ spec:
      requestMethod: request.method | ""
      requestPath: request.path | ""
      requestScheme: request.scheme | ""
-     requestTime: request.time
-     responseTime: response.time
+     requestTime: request.time | timestamp("2018-03-25T00:00:00Z")
+     responseTime: response.time | timestamp("2018-03-25T00:00:00Z")
      responseCode: response.code | 200
      reporter: conditional((context.reporter.kind | "inbound") == "outbound", "source", "destination")
      apiProtocol: api.protocol | ""
@@ -803,6 +803,14 @@ spec:
         app: oap
     spec:
       serviceAccountName: skywalking-oap
+      initContainers:
+      # HACK: the elastic search statefulset takes some time to spin up and OAP
+      # attempts to contact elastic search at startup and fails, causing it to crash.
+      # To avoid excessive crash-looping, we sleep for a bit during initialization
+      # to give elastic search's controller time to spin up instances. 
+      - name: sleep-for-elasticsearch
+        image: busybox:1.28
+        command: ['sh', '-c', "sleep 30;"]
       containers:
       - name: oap
         image: docker.io/smddemo/oap:c0c54a08c950ed112e7825dfac857203870e2f05

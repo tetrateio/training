@@ -7,7 +7,7 @@ In this section we’ll get started with Istio on Kubernetes (K8s). Istio is inf
 Let’s install Istio.
 
 ```bash
-kubectl apply -f config/istio-demo-auth.yaml --as=admin --as-group=system:masters
+kubectl apply -f config/istio-demo.yaml --as=admin --as-group=system:masters
 ```
 
 > We use `--as=admin --as-group=system:masters` to escalate our privilege while installing Istio, which is required to configure the webhook Istio uses to automate sidecar injection. We'll talk about sidecar injection in depth later.
