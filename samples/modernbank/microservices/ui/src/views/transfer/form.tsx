@@ -113,7 +113,8 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
       body: {
         amount: Number(amount),
         receiver: parseInt(toAccount, 10),
-        sender: parseInt(fromAccount, 10)
+        sender: parseInt(fromAccount, 10),
+        timestamp: Date.now()
       }
     });
 
