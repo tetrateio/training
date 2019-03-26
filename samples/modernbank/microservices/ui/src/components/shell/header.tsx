@@ -85,10 +85,10 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   );
 
   function emoji(version: string): string {
-    if (version === 'v1') {
-      return '😆';
+    if (version === 'v2') {
+      return '1️⃣';
     }
-    return '👻';
+    return '2️⃣';
   }
 
   return (

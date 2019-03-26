@@ -66,25 +66,13 @@ const initialAccount: Account = {
 export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const authContext = React.useContext(AuthContext);
   const [account, setAccount] = React.useState<Account>(initialAccount);
-
   const accountNumber = parseInt(props.match.params.accountNumber, 10);
-  const { setVersion } = React.useContext(VersionContext);
-
-  // TODO(jiajesse): GET .../accounts/{number} doesn't work. Use GET .../accounts and filter for now.
-  // const fetchAccount = async () => {
-  //     const resp: Account = await accountsApi.getAccountByNumber(authContext.user!.username, accountNumber);
-  //     setAccount(resp);
-  // };
-  // React.useEffect(() => {
-  //     fetchAccount();
-  // }, []);
 
   const fetchAccounts = async () => {
     const resp = await accountsApi.listAccountsRaw({
       username: authContext.user!.username
     });
     const accounts = await resp.value();
-    setVersion(resp.raw.headers.get('version'));
     const acc = accounts.find(a => a.number === accountNumber);
     setAccount(acc);
   };
