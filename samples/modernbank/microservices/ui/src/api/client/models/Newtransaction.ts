@@ -18,58 +18,57 @@ import { exists } from '../runtime';
  * @interface Newtransaction
  */
 export interface Newtransaction {
-    /**
-     *
-     * @type {number}
-     * @memberof Newtransaction
-     */
-    amount: number;
-    /**
-     *
-     * @type {number}
-     * @memberof Newtransaction
-     */
-    receiver: number;
-    /**
-     *
-     * @type {number}
-     * @memberof Newtransaction
-     */
-    sender: number;
+  /**
+   *
+   * @type {number}
+   * @memberof Newtransaction
+   */
+  amount: number;
+  /**
+   *
+   * @type {number}
+   * @memberof Newtransaction
+   */
+  receiver: number;
+  /**
+   *
+   * @type {number}
+   * @memberof Newtransaction
+   */
+  sender: number;
 
-    /**
-     *
-     * @type {number}
-     * @memberof Newtransaction
-     */
-    timestamp: number;
+  /**
+   *
+   * @type {number}
+   * @memberof Newtransaction
+   */
+  timestamp: number;
 
-    /**
-     *
-     * @type {number}
-     * @memberof Newtransaction
-     */
-    balance?: number;
+  /**
+   *
+   * @type {number}
+   * @memberof Newtransaction
+   */
+  balance?: number;
 }
 
 export function NewtransactionFromJSON(json: any): Newtransaction {
-    return {
-        'amount': json['amount'],
-        'receiver': json['receiver'],
-        'sender': json['sender'],
-        'timestamp': json['timestamp'],
-    };
+  return {
+    amount: json['amount'],
+    receiver: json['receiver'],
+    sender: json['sender'],
+    timestamp: json['timestamp']
+  };
 }
 
 export function NewtransactionToJSON(value?: Newtransaction): any {
-    if (value === undefined) {
-        return undefined;
-    }
-    return {
-        'amount': value.amount,
-        'receiver': value.receiver,
-        'sender': value.sender,
-    };
+  if (value === undefined) {
+    return undefined;
+  }
+  return {
+    amount: value.amount,
+    receiver: value.receiver,
+    sender: value.sender,
+    timestamp: value.timestamp
+  };
 }
-
-

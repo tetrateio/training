@@ -54,6 +54,14 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
     });
   }
 
+  function renderDate(currentDate) {
+    var date = currentDate.getDate();
+    var month = currentDate.getMonth(); //Be careful! January is 0 not 1
+    var year = currentDate.getFullYear() + '';
+
+    return date + '/' + (month + 1) + '/' + year.substr(2, 2);
+  }
+
   const fetchTransactions = async () => {
     const accounts: any = await accountsApi.listAccounts({
       username: JSON.parse(value).username
@@ -67,23 +75,25 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
       sender: accountNumber
     });
 
-    const currentAccount: any = accounts
-      .filter(account => {
-        return account.number === accountNumber;
-      })
-      .pop();
-
-    const merged = merge(received, sent).map((trx, index) => {
-      if (trx.receiver === accountNumber) {
-        currentAccount.balance -= trx.amount;
-      } else {
-        currentAccount.balance += trx.amount;
-      }
-      trx.balance = currentAccount.balance;
-      return trx;
+    const currentAccounts: any = accounts.filter(account => {
+      return account.number === accountNumber;
     });
 
-    setTrxs(merged);
+    if (currentAccounts.length > 0) {
+      const currentAccount = currentAccounts.pop();
+      const merged = merge(received, sent).map(trx => {
+        if (trx.receiver === accountNumber) {
+          currentAccount.balance -= trx.amount;
+          trx.balance = currentAccount.balance + trx.amount;
+        } else {
+          currentAccount.balance += trx.amount;
+          trx.balance = currentAccount.balance - trx.amount;
+        }
+        return trx;
+      });
+
+      setTrxs(merged);
+    }
   };
 
   React.useEffect(() => {
@@ -98,6 +108,7 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
       <Table>
         <TableHead className={props.classes.tableHead}>
           <TableRow>
+            <TableCell className={props.classes.tableHeadCell}>Date</TableCell>
             <TableCell className={props.classes.tableHeadCell}>From</TableCell>
             <TableCell className={props.classes.tableHeadCell}>
               Deposits
@@ -114,6 +125,11 @@ export const Component: React.FunctionComponent<IProps> = (props: IProps) => {
         <TableBody>
           {transactions.map((transaction, index) => (
             <TableRow key={index}>
+              <TableCell component="th" scope="row" align="left">
+                <Typography>
+                  {renderDate(new Date(transaction.timestamp * 1000))}
+                </Typography>
+              </TableCell>
               <TableCell component="th" scope="row" align="left">
                 <Typography>{transaction.sender}</Typography>
               </TableCell>
