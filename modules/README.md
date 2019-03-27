@@ -1,5 +1,5 @@
-# Modules
+# Workshop Modules
 
-Each module should contain a README.md at the root and be entirely self contained. This means it should not rely on config in other directories or repos.
+This directory contains the primary content of this workshop. In each of the directories you'll see a README file with explanation, and either submodules or a `config` directory with Kubernete's configuration you can apply directly to your cluster.
 
-Each module must also be standalone. Meaning that it shouldn't rely on other modules being completed for it to work. For example, telemetry modules shouldn't rely on security or traffic routing modules to have been completed already. The only exception to this is that all modules will rely on the installation of Istio and the demo application.
+See the [repo's root README](/) for a survey of the information in each module and the order we recommend for the modules.

@@ -1,6 +1,11 @@
-TODO: flesh out
+Installation
+===
 
-This section covers initial cluster creation and the deployment of Istio, SkyWalking, and our victim (err, demo) App. You can dive into the directory for each section to see detailed explanations for each installation, including how to check that the installation was successful.
+This section covers initial cluster creation and the deployment of Istio, SkyWalking, and our victim (err, demo) App. You can dive into the directory for each section to see detailed explanations for each installation, including how to check that the installation was successful. You should approach them in the order:
+1. [Cluster](cluster/)
+2. [Istio](istio/)
+3. [SkyWalking](skywalking/)
+4. [App](app/)
 
 If you want to skip all of that, you can use the abbreviated guide below to create and initialize a cluster that's ready to start the workshop.
 
