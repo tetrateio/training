@@ -77,7 +77,7 @@ spec:
 Our handler describes a specific instance of `skywalking-adapter` which we can send `metric` data to. In this case, we'll forward metric data to the SkyWalking collector we deployed as the `oap.skywalking` service.
 
 ```shell
-kubectl get handlerskywalking-handler -n istio-system -o yaml
+kubectl get handler skywalking-handler -n istio-system -o yaml
 ```
 
 ```yaml
@@ -94,7 +94,7 @@ spec:
 
 Next we need to configure what data we'll send to SkyWalking; this is called an `instance`. Typically an adapter is built to expect certain instances and they'll be provided alongside the adapter's other configuration. We can the single metric that SkyWalking consumes, which is a metric instance with a bunch of dimensions: 
 ```shell
-kubectl get instanceskywalking-metric -n istio-system -o yaml
+kubectl get instance skywalking-metric -n istio-system -o yaml
 ```
 ```yaml
 apiVersion: "config.istio.io/v1alpha2"
