@@ -29,7 +29,7 @@ The connection is refused because nothing is binding to this port at this addres
 Let’s tell Istio to bind a Gateway to the Istio Ingress.
 
 ```shell
-kubectl apply -f ./module/traffic/ingress/config/gateway.yaml
+kubectl apply -f modules/traffic/ingress/config/gateway.yaml
 ```
 
 > Note: This action will make the application accessible on the public internet. In some situations, you might consider alternative configurations for privacy:
@@ -77,7 +77,7 @@ $ curl -v $INGRESS_IP
 It's returning 404 error because once the gateway receives the request we haven’t told it where it needs to send it! To do this we need to attach a `VirtualService` (or two) to the gateway.
 
 ```shell
-kubectl apply -f config/virtualservice.yaml
+kubectl apply -f modules/traffic/ingress/config/virtualservice.yaml
 ```
 
 A `VirtualService` defines the rules that control how requests for a service are routed within an Istio service mesh. For example, a `VirtualService` can route requests to different versions of a service or to a completely different service than was requested. Requests can be routed based on the request source and destination, HTTP paths and header fields, and weights associated with individual service versions.
