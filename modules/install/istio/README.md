@@ -16,7 +16,7 @@ There were a lot of things deployed there so we will break down the important pa
 
 Istio extends Kubernetes using Custom Resource Definitions (CRDs). These enable Kubernetes to store configuration for Istio routing, security and telemetry. Let’s verify they were successfully added. Note, this is an abbreviated list covering the more frequently used CRDs, yours will contain a few more.
 
-```bash
+```shell
 $ kubectl get crds | grep istio | head
 authorizations.config.istio.io          2019-03-19T20:41:53Z
 clusterrbacconfigs.rbac.istio.io        2019-03-19T20:41:44Z
@@ -35,7 +35,7 @@ virtualservices.networking.istio.io     2019-03-19T20:41:42Z
 
 Next, let’s verify the Istio control plane has installed successfully.
 
-```bash
+```shell
 $ kubectl get pods -n istio-system
 NAME                                      READY   STATUS      RESTARTS   AGE
 grafana-7b46bf6b7c-hbr74                  1/1     Running     0          11m
@@ -63,7 +63,7 @@ Istio also has its own command line tool for debugging, verifying configuration,
 
 Download Istio CLI.
 
-```bash
+```shell
 cd ~/
 export ISTIO_VERSION=1.1.0
 curl -L https://git.io/getLatestIstio | sh -
@@ -72,7 +72,7 @@ ln -sf istio-$ISTIO_VERSION istio
 
 Add Istio binary path to `$PATH`.
 
-```bash
+```shell
 export PATH=~/istio/bin:$PATH
 echo 'export PATH=~/istio/bin:$PATH' >> ~/.bashrc
 source ~/.bashrc
@@ -80,7 +80,7 @@ source ~/.bashrc
 
 We can use the experimental `verify-install` command to fully validate that Istio successfully installed. This command may take up to a minute to complete.
 
-```bash
+```shell
 $ istioctl experimental verify-install -f config/istio-demo-auth.yaml
 Istio is installed successfully
 ```

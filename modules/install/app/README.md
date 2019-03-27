@@ -2,7 +2,7 @@
 
 Let’s take a look at the user microservice deployment.
 
-```bash
+```shell
 # fancy sed command to print from the last `---` to the end of the file
 $ sed -n '/---/h;/---/!H;$!b;x;p' ./modules/install/app/config/user-v1.yaml
 ---
@@ -46,7 +46,7 @@ For Istio to intercept and proxy the requests, an Istio sidecar must be installe
 
 Use `istioctl` to see what using manual sidecar injection will add to the deployment.
 
-```bash
+```shell
 $ istioctl kube-inject -f modules/install/app/config/user-v1.yaml | grep "image:" -A1
 ...
         image: gcr.io/tetratelabs/modernbank/user:v1.0.0
@@ -69,13 +69,13 @@ If you want to use manual Istio sidecar injection, then you would always filter 
 
 You can turn on Automatic Sidecar Injection on a per Kubernetes namespace level by setting the label istio-injection to enabled.
 
-```bash
+```shell
 kubectl label namespace default istio-injection=enabled
 ```
 
 Deploy the entire application.
 
-```bash
+```shell
 kubectl apply -f modules/install/app/config
 ```
 
@@ -91,7 +91,7 @@ This will:
 
 Check that all components have the Running status, and that Ready column shows 2/2. This signifies that there are 2 containers running in each of the pods (the application container and the Istio Proxy container) and that both of these are running.
 
-```bash
+```shell
 $ kubectl get pods
 NAME                                       READY   STATUS        RESTARTS   AGE
 account-mongodb-6757fb69c5-cg7hd           2/2     Running       0          1m
@@ -108,7 +108,7 @@ user-v1-86d76998b8-hwh7b                   2/2     Running       0          1m
 
 Istio has automatically injected the sidecar proxy into the pod. You can see this here:
 
-```bash
+```shell
 kubectl get pods -l app=user -o yaml | grep "image:" -A1
 ...
 image: istio/proxyv2:1.1.0
