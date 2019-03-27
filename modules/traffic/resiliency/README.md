@@ -9,7 +9,7 @@ Istio makes fault injection simple because it’s decoupled from your applicatio
 Now that you’re logged in to the banking application, you can see your accounts. You’re now going to inject an HTTP fault to simulate a transient failure in your accounts service, causing the accounts to fail to load. To do this, you’ll add a fault stanza to the account `VirtualService` causing an HTTP 500 response code for 50% of calls to the accounts service. This stanza configures Envoy to return a 500 response code immediately when a client calls the account service instead of forwarding the request to the service itself.
 
 ```shell
-kubectl apply -f ./modules/traffic/resiliency/config/account-abort.yaml
+kubectl apply -f modules/traffic/resiliency/config/account-abort.yaml
 ```
 
 Now if you refresh your account list a couple of times, sometimes you won’t see any accounts because we received a 500 from the backend. You can check the console in your browser’s developer tools in order to verify the response code. Let’s query the `VirtualService` to see the configuration we just added.
@@ -44,7 +44,7 @@ Retries refer to the act of retrying a failed HTTP request to guard against tran
 Outlier detection and ejection, a form of passive health checking, is the act of determining if some of the endpoints to which we're sending traffic are performing differently than the others and avoiding sending traffic to the outliers. We say that the endpoints we avoid have been "ejected from the active load balancing set." For any given service, Envoy always maintains a set of healthy endpoints for that service: the active load balancing set. Typically, endpoints are ejected from the active load balancing set based on consecutive error responses. With HTTP services this would be consecutive 5xx failures. With TCP services, connect timeouts and connection errors/failures would lead to ejection. Over time, Envoy will attempt to add ejected endpoints back into the active load balancing set by sending traffic to them. If the endpoint responds successfully, it's reintroduced to the active load balancing set. Otherwise, it remains in the ejected set. Typically, outlier detection and retries are used in conjunction to improve resiliency. Outlier detection will increase success rate by ejecting endpoints that are deemed unhealthy, and retries mask any failures to users calling our application. Let’s turn on retries.
 
 ```shell
-kubectl apply -f ./modules/traffic/resiliency/config/account-abort-retry.yaml
+kubectl apply -f modules/traffic/resiliency/config/account-abort-retry.yaml
 ```
 
 If we inspect the account `VirtualService`, now we can see there is a retry stanza alongside the existing abort fault injection.
@@ -93,7 +93,7 @@ spec:
 Next, we will inject an HTTP latency fault to simulate a transient latency into requests sent to the accounts service. This will instruct the sidecar Envoy of the calling service to hold onto the request for the configured amount of time before proxying the request on to its intended target. This is also done using a VirtualService in a similar manner to the abort fault.
 
 ```shell
-kubectl apply -f ./modules/traffic/resiliency/config/account-delay.yaml
+kubectl apply -f modules/traffic/resiliency/config/account-delay.yaml
 ```
 
 Now our `VirtualService` has a delay stanza that will cause 50% of requests to have 10 seconds of latency.
@@ -125,7 +125,7 @@ If we refresh our accounts page you will notice that now sometimes accounts appe
 Networks are unreliable. Consequently, transient request latency is a common occurance in a distributed system. So how can we protect our users from this? Well, we can combine retries and timeouts. Rather than wait the 10s for the request to complete, we will timeout after 0.5s and then retry, repeating until one of our requests succeed or we fail 3 consecutive times. Let’s apply that configuration to the microservice that calls the accounts service, the user service.
 
 ```shell
-kubectl apply -f ./modules/traffic/resiliency/config/user-retry.yaml
+kubectl apply -f modules/traffic/resiliency/config/user-retry.yaml
 ```
 
 ```shell

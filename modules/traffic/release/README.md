@@ -23,7 +23,7 @@ DestinationRules are in fact all about configuring clients. They allow a service
 In this case, we have two versions of the user microservice, indicated by the `version` labels. Let’s add a `DestinationRule` to tell Istio how to identify the different versions we have deployed.
 
 ```shell
-kubectl apply -f config/user-subset.yaml
+kubectl apply -f modules/traffic/release/config/user-subset.yaml
 ```
 
 The `DestinationRule` we just created describes two versions of the user service and how to identify which is which by creating a subset.
@@ -48,7 +48,7 @@ spec:
 Now that we have subsets defined we can pin all traffic to version 1 of the user service in its `VirtualService`.
 
 ```shell
-kubectl apply -f config/user-v1-100.yaml
+kubectl apply -f modules/traffic/release/config/user-v1-100.yaml
 ```
 
 If we take a look at the changes we just made to the `VirtualService`, we can see that there are now two destinations, one for each subset. However, we are weighting 100% of requests to version 1.
@@ -85,7 +85,7 @@ spec:
 
 Now if we refresh the accounts page several times we can see that we always get the same version with the 1️⃣ emoji.
 
-We can also go in a change the weighting. Let’s edit the VirtualService to route 25% of traffic to version two. Note that the weight’s have to add up to 100 otherwise they will fail validation.
+We can also go in a change the weighting. Let’s edit the `VirtualService` to route 25% of traffic to version two. Note that the weight’s have to add up to 100 otherwise they will fail validation.
 
 ```shell
 $ kubectl edit virtualservice user-gateway
@@ -120,7 +120,7 @@ spec:
 This enables you to release new versions to increments of a single percent of users. Istio also allows you to route traffic based on headers, URI or HTTP method. This enables you to do things like releasing to a single browser. Let’s release v2 to Chrome users only.
 
 ```shell
-kubectl apply -f config/user-v2-chrome.yaml
+kubectl apply -f modules/traffic/release/config/user-v2-chrome.yaml
 ```
 
 If we look at the configuration we just created we can see that we added a stanza to the path match to search for the word `Chrome` anywhere in the user-agent. Note that ordering of the matches matters. Envoy will route to the first match it sees, not the most specific.
@@ -165,5 +165,5 @@ Now if you visit the application from Chrome you will always be routed to versio
 Let’s reset our VirtualService back to the default behavior.
 
 ```shell
-kubectl apply -f config/vs-reset.yaml
+kubectl apply -f modules/traffic/release/config/vs-reset.yaml
 ```
