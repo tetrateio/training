@@ -11,6 +11,7 @@ Exploring the UI
 Using these consistent metrics, we can build powerful dashboards and visualizations. Let's start by taking a look at our system with RocketBot, the SkyWalking UI we installed at the beginning.
 
 This service is exposed on our cluster, and we can get the address from Kubernetes:
+
 ```sh
 export SKYWALKING_UI=$(kubectl -n skywalking get svc ui -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 echo $SKYWALKING_UI
@@ -31,12 +32,11 @@ And configure the metrics we want to see:
 ![Use the RocketBot edit mode to show per-service metrics, then leave edit mode to view the stats](/assets/rocketbot-editmode-selectmetrics.png)
 
 > Unfortunately, RocketBot doesn't support importing/exporting profiles. However, these views are stored client side in your browser as a Cookie. If you create a cookie named "dashboard" with the contents:
-> 
+>
 > ```[{"name":"Service Dashboard","type":"service","query":{"service":{},"endpoint":{},"instance":{}},"children":[{"name":"service","children":[{"o":"Service","name":"Service Avg Response","comp":"ChartAvgResponse","title":"Service Avg Response","type":"serviceInfo","width":3},{"o":"Service","name":"Service Avg Throughput","comp":"ChartAvgThroughput","title":"Service Avg Throughput","type":"serviceInfo","width":3},{"o":"Service","name":"Service Avg SLA","comp":"ChartAvgSLA","title":"Service Avg SLA","type":"serviceInfo","width":3},{"o":"Service","name":"Service Percent Response","comp":"ChartResponse","title":"Service Percent Response","type":"serviceInfo","width":3},{"o":"Service","name":"Service Top Slow Endpoint","comp":"ChartSlow","title":"Service Top Slow Endpoint","type":"serviceInfo.getSlowEndpoint","width":3},{"o":"Service","name":"Running ServiceInstance","comp":"ChartTroughput","title":"Running ServiceInstance","type":"serviceInfo.getInstanceThroughput","width":3}]}]},{"name":"Database Dashboard","type":"database","query":{"service":{}},"children":[{"name":"Database","children":[]}]}]```
 > 
 > you'll have a view that matches mine.
 > ![Using the Chrome developer console to set the cookie value for the RocketBot UI](/assets/rocketbot-chromeconsole-cookie.png)
-
 
 When we're done, exit edit mode by clicking on it and view the stats:
 > You may need to adjust the time settings in the bottom right to see data.
@@ -56,9 +56,11 @@ Mixer is called by every sidecar in the mesh for policy (the sidecar asks Mixer 
 
 
 We configured all of this when we installed SkyWalking. To see the config, we can query Kubernetes about each of the types we list above. First, we can view the `adapter` config, which states that `skywalking-adapter` implements the `metric` template and is called per-request (`session_based: false`):
+
 ```shell
 kubectl get adapter skywalking-adapter -n istio-system -o yaml
 ```
+
 ```yaml
 apiVersion: "config.istio.io/v1alpha2"
 kind: adapter
@@ -73,9 +75,11 @@ spec:
 ```
 
 Our handler describes a specific instance of `skywalking-adapter` which we can send `metric` data to. In this case, we'll forward metric data to the SkyWalking collector we deployed as the `oap.skywalking` service.
+
 ```shell
 kubectl get handlerskywalking-handler -n istio-system -o yaml
 ```
+
 ```yaml
 apiVersion: "config.istio.io/v1alpha2"
 kind: handler

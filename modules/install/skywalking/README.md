@@ -5,8 +5,9 @@ Skywalking is an open source Application Performance Management (APM) system own
 First we'll install SkyWalking in three deployments: its collector, storage (Elastic Search), and the RocketBot UI.
 
 ```shell
-$ kubectl apply -f config/skywalking.yaml --as=admin --as-group=system:masters
+kubectl apply -f config/skywalking.yaml --as=admin --as-group=system:masters
 ```
+
 > We need to execute this command as an admin to allow the creation of SkyWalking's RBAC role, which allows SkyWalking to monitor pods in the cluster.
 
 This creates a new namespace, `skywalking`:
@@ -34,6 +35,7 @@ ui              LoadBalancer   10.47.243.220   <YOUR IP>      80:30845/TCP      
 ```
 
 Keep note of this IP address, we'll want to open it in a browser later. The easiest way is to store it as an environment variable:
+
 ```shell
 export SKYWALKING_UI=$(kubectl -n skywalking get svc ui -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 ```
