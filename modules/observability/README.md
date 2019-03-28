@@ -83,7 +83,7 @@ spec:
 
 > A Handler is where we provide configuration specific to the adapter. For Prometheus, we need to configure the shape of the metrics we'll be emitting. The `prometheus` handler does exactly this.
 
-Next we need to configure what data we'll send to the Prometheus adapter. This is called an `instance` in general, but there are a few special `instances` that have a proper name; `metric` is one of those. Typically an adapter is built to expect certain instances and the configuration for those instances will be provided alongside the adapter's other configuration. We can the set of instances that the Prometheus adapter consumes:
+Next we need to configure what data we'll send to the Prometheus adapter. This is called an `instance` in general, but there are a few special `instances` that have a proper name; `metric` is one of those. Typically an adapter is built to expect certain instances and the configuration for those instances will be provided alongside the adapter's other configuration. We can see the set of instances that the Prometheus adapter consumes:
 
 ```shell
 $ kubectl -n istio-system get metrics
@@ -136,7 +136,7 @@ spec:
   value: "1"
 ```
 
-Finally, Mixer needs to know when to generate this metric data and send it to Prometheus. This is defined as a `rule`. Every `rule` has a `match` condition that is evaluated; it the `match` is true, the `rule` is triggered. For example, we could use the `match` to receive only HTTP data, or only TCP data, etc. Prometheus does exactly this, and defines a rule for each set of protocols it has metric descriptions for:
+Finally, Mixer needs to know when to generate this metric data and send it to Prometheus. This is defined as a `rule`. Every `rule` has a `match` condition that is evaluated; if the `match` is true, the `rule` is triggered. For example, we could use the `match` to receive only HTTP data, or only TCP data, etc. Prometheus does exactly this, and defines a rule for each set of protocols it has metric descriptions for:
 
 ```shell
 $ kubectl -n istio-system get rules
