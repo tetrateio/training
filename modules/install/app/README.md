@@ -1,15 +1,34 @@
-# Installing Demo Application and Istio Proxy Injection 
+# Installing Demo Application and Istio Proxy Injection
+
+Let's deploy our entire application.
+
+```shell
+kubectl apply -f modules/install/app/config
+```
+
+This will:
+
+- Deploy our microservices:
+  - User (manages customer information)
+  - Account (manages customer accounts)
+  - Transaction (orchestrates customer transactions)
+  - Transaction-Log (append only log of transactions)
+  - UI (serves user interface)
+- Deploy MongoDB instances for microservices that store state (user, account, transaction-log)
+- Create a Kubernetes Service for each microservice
+- Create a Kubernetes Service Account for each microservice to be used to prove it's identity later in the security section.
+- Create Istio config to expose our service (we will go into more detail on this in a later section).
 
 Let’s take a look at the user microservice deployment.
 
 ```shell
-# fancy sed command to print from the last `---` to the end of the file
-$ sed -n '/---/h;/---/!H;$!b;x;p' ./modules/install/app/config/user-v1.yaml
----
-apiVersion: apps/v1beta2
+$ kubectl get deployment user-v1
+kubectl get deployment user-v1 -o yaml
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: user-v1
+  namespace: default
   labels:
     app: user
     version: v1
@@ -24,15 +43,20 @@ spec:
         app: user
         version: v1
     spec:
-      serviceAccountName: user
       containers:
-        - name: user
-          image: "gcr.io/tetratelabs/modernbank/user:v1.0.0"
-          imagePullPolicy: Always
-          args: ["--port", "8080", "--version", "v1"]
-          ports:
-          - name: http
-            containerPort: 8080
+      - args:
+        - --port
+        - "8080"
+        - --version
+        - v1
+        image: gcr.io/tetratelabs/modernbank/user:v1.0.0
+        imagePullPolicy: Always
+        name: user
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+...
 ```
 
 This is a typical Kubernetes deployment, there is nothing here specific to Istio.
@@ -67,29 +91,19 @@ If you want to use manual Istio sidecar injection, then you would always filter 
 
 ## Automatic Sidecar Injection
 
-You can turn on Automatic Sidecar Injection on a per Kubernetes namespace level by setting the label istio-injection to enabled.
+You can turn on Automatic Sidecar Injection on a per Kubernetes namespace level by setting the label `istio-injection` to enabled.
 
 ```shell
 kubectl label namespace default istio-injection=enabled
 ```
 
-Deploy the entire application.
+This instructs Istio to mutate all new pods with an injected sidecar via Kubernetes' Mutating Admission Webhooks. In order to trigger this mutation and inject our Envoy sidecars delete all the application's pods.
 
 ```shell
-kubectl apply -f modules/install/app/config
+kubectl delete pods --all
 ```
 
-This will:
-
-- Deploy our microservices:
-  - User (manages customer information)
-  - Account (manages customer accounts)
-  - Transaction (orchestrates customer transactions)
-  - Transaction-Log (append only log of transactions)
-  - UI (serves user interface)
-- Deploy MongoDB instances for microservices that store state (user, account, transaction-log)
-
-Check that all components have the Running status, and that Ready column shows 2/2. This signifies that there are 2 containers running in each of the pods (the application container and the Istio Proxy container) and that both of these are running.
+Check that all components have the Running status, and that Ready column shows 2/2. This signifies that there are now 2 containers running in each of the pods (the application container and the Istio Proxy container) and that both of these are running.
 
 ```shell
 $ kubectl get pods
@@ -106,7 +120,7 @@ user-mongodb-7867988d7c-nv6xr              2/2     Running       0          1m
 user-v1-86d76998b8-hwh7b                   2/2     Running       0          1m
 ```
 
-Istio has automatically injected the sidecar proxy into the pod. You can see this here:
+Istio has now automatically injected the sidecar proxy into the pod. You can see this here:
 
 ```shell
 kubectl get pods -l app=user -o yaml | grep "image:" -A1
