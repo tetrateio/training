@@ -5,6 +5,15 @@ To manage microservice architecture, which can involve dozens of microservices a
 
 Istio comes with out-of-the-box monitoring features - like generating consistent application metrics for every service in your mesh - and can be used with an array of backend systems to report telemetry about the mesh. It helps us solve some of the trickiest problems we face: identifying why and where a request is slow, distinguishing normal from deviant system performance, comparing apples-to-apples metrics across services regardless of programming language, and attaining a meaningful view of system performance.
 
+Let's generate some traffic to observe. Get the application IP.
+
+```shell
+export INGRESS_IP=$(kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+echo $INGRESS_IP
+```
+
+Navigate to that IP and sign up to receive some free ~~virtual~~ fake money. Then send some of that money between accounts. It doesn't really matter what you do here just generate some traffic!
+
 Exploring the UI
 ----
 
@@ -34,7 +43,7 @@ And configure the metrics we want to see:
 > Unfortunately, RocketBot doesn't support importing/exporting profiles. However, these views are stored client side in your browser as a Cookie. If you create a cookie named "dashboard" with the contents:
 >
 > ```[{"name":"Service Dashboard","type":"service","query":{"service":{},"endpoint":{},"instance":{}},"children":[{"name":"service","children":[{"o":"Service","name":"Service Avg Response","comp":"ChartAvgResponse","title":"Service Avg Response","type":"serviceInfo","width":3},{"o":"Service","name":"Service Avg Throughput","comp":"ChartAvgThroughput","title":"Service Avg Throughput","type":"serviceInfo","width":3},{"o":"Service","name":"Service Avg SLA","comp":"ChartAvgSLA","title":"Service Avg SLA","type":"serviceInfo","width":3},{"o":"Service","name":"Service Percent Response","comp":"ChartResponse","title":"Service Percent Response","type":"serviceInfo","width":3},{"o":"Service","name":"Service Top Slow Endpoint","comp":"ChartSlow","title":"Service Top Slow Endpoint","type":"serviceInfo.getSlowEndpoint","width":3},{"o":"Service","name":"Running ServiceInstance","comp":"ChartTroughput","title":"Running ServiceInstance","type":"serviceInfo.getInstanceThroughput","width":3}]}]},{"name":"Database Dashboard","type":"database","query":{"service":{}},"children":[{"name":"Database","children":[]}]}]```
-> 
+>
 > you'll have a view that matches mine.
 > ![Using the Chrome developer console to set the cookie value for the RocketBot UI](/assets/rocketbot-chromeconsole-cookie.png)
 
@@ -45,15 +54,14 @@ We can also view our service graph, via the `Topology` tab at the top.
 
 ![Graph of our deployment via RocketBot's Topology view](/assets/rocketbot-graph.png)
 
-Finally, we can view traces of individual requests. (These traces are used to color the slow nodes red in the Topology view.)
+<!-- Finally, we can view traces of individual requests. (These traces are used to color the slow nodes red in the Topology view.)
 
-![Trace screen, which shows a trace through the service graph as a tree](TODO: get graph)
+![Trace screen, which shows a trace through the service graph as a tree](TODO: get graph) -->
 
 How it works
 ---
 
 Mixer is called by every sidecar in the mesh for policy (the sidecar asks Mixer if each request is allowed) and to report telemetry about each request. We'll cover the policy side in detail in the security section, but for now lets dig into telemetry. Mixer is Istio's intetgration point with external systems. A backend, for example SkyWalking, can implement an integration with Mixer (called an "adapter"). Using Mixer's configuration, we can instantiate the adapter (called a "handler"), describe the data about each request we want to provide the adapter (an "instance") and when Mixer should call the handler with instances (a "rule").
-
 
 We configured all of this when we installed SkyWalking. To see the config, we can query Kubernetes about each of the types we list above. First, we can view the `adapter` config, which states that `skywalking-adapter` implements the `metric` template and is called per-request (`session_based: false`):
 
@@ -92,10 +100,12 @@ spec:
    address: "oap.skywalking.svc.cluster.local:11800"
 ```
 
-Next we need to configure what data we'll send to SkyWalking; this is called an `instance`. Typically an adapter is built to expect certain instances and they'll be provided alongside the adapter's other configuration. We can the single metric that SkyWalking consumes, which is a metric instance with a bunch of dimensions: 
+Next we need to configure what data we'll send to SkyWalking; this is called an `instance`. Typically an adapter is built to expect certain instances and they'll be provided alongside the adapter's other configuration. We can the single metric that SkyWalking consumes, which is a metric instance with a bunch of dimensions:
+
 ```shell
 kubectl get instance skywalking-metric -n istio-system -o yaml
 ```
+
 ```yaml
 apiVersion: "config.istio.io/v1alpha2"
 kind: instance
@@ -128,6 +138,7 @@ Finally, Mixer needs to know when to generate this metric data and send it to Sk
 ```shell
 kubectl get rule skywalking-rule -n istio-system -o yaml
 ```
+
 ```yaml
 apiVersion: "config.istio.io/v1alpha2"
 kind: rule
