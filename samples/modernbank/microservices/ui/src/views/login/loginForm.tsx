@@ -41,7 +41,7 @@ const Component: React.FunctionComponent<IProps> = (props: IProps) => {
   const [loginFailed, setLoginFailed] = React.useState<boolean>(false);
   const authContext = React.useContext(AuthContext);
   const { setVersion } = React.useContext(VersionContext);
-  const { value, set } = useSessionstorage('user', '');
+  const { set } = useSessionstorage('user', '');
 
   const signInHandler = async () => {
     let authenticatedUser = await authenticationCheck(
