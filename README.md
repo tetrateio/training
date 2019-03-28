@@ -10,9 +10,8 @@ We'll go over the content in the following order:
 1. [Installation](modules/install/), where we'll:
     1. [Create a cluster](modules/install/cluster/)
     2. [Deploy Istio](modules/install/istio/)
-    3. [Deploy SkyWalking](modules/install/skywalking/)
     4. [Deploy our demo App](modules/install/app/)
-2. [Look at Istio's observability features via SkyWalking](modules/observability/)
+2. [Look at Istio's observability features](modules/observability/)
 3. [Learn about Istio's traffic management capabilities](modules/traffic)
     1. [Setting up ingress with Gateways](modules/traffic/ingress)
     2. [Explore resiliency features](modules/traffic/resiliency)
