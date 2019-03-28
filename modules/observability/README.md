@@ -54,9 +54,9 @@ We can also view our service graph, via the `Topology` tab at the top.
 
 ![Graph of our deployment via RocketBot's Topology view](/assets/rocketbot-graph.png)
 
-Finally, we can view traces of individual requests. (These traces are used to color the slow nodes red in the Topology view.)
+<!-- Finally, we can view traces of individual requests. (These traces are used to color the slow nodes red in the Topology view.)
 
-![Trace screen, which shows a trace through the service graph as a tree](TODO: get graph)
+![Trace screen, which shows a trace through the service graph as a tree](TODO: get graph) -->
 
 How it works
 ---
