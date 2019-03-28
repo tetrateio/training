@@ -7,10 +7,11 @@ In this section we’ll get started with Istio on Kubernetes. Istio is infrastru
 Let’s install Istio.
 
 ``` bash
-kubectl apply -f ./modules/install/istio/config/istio-demo.yaml --as=admin --as-group=system:masters
+kubectl apply -f modules/install/istio/config/istio-demo.yaml --as=admin --as-group=system:masters
 ```
 
 > We use `--as=admin --as-group=system:masters` to escalate our privilege while installing Istio, which is required to configure the webhook Istio uses to automate sidecar injection. We'll talk about sidecar injection in depth later.
+> If you get a message like `unable to recognize "./modules/install/istio/config/istio-demo.yaml": no matches for kind "DestinationRule" in version "networking.istio.io/v1alpha3"` you need to run the command again. Kubernetes didn't register the CRD fast enough!
 
 There were a lot of things deployed there so we will break down the important parts and verify that they installed successfully.
 
@@ -81,6 +82,6 @@ source ~/.bashrc
 We can use the experimental `verify-install` command to fully validate that Istio successfully installed. This command may take up to a minute to complete.
 
 ```shell
-$ istioctl experimental verify-install -f config/istio-demo-auth.yaml
+$ istioctl experimental verify-install -f modules/install/istio/config/istio-demo.yaml
 Istio is installed successfully
 ```
