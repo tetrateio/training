@@ -6,6 +6,11 @@ Throughout this workshop, we will be deploying onto, and interacting with Kubern
 
 A basic understanding of Kubernetes is a prerequisite to these labs. For background on Kubernetes or additional sources on service mesh, we recommend labs like [Kubernetes 101](http://saturnism.me/talk/kubernetes-101) and [Kubernetes Code Lab](http://bit.ly/k8s-lab) by [Ray Tsang](https://saturnism.me/about/), the [Kubernetes website for background](https://kubernetes.io/docs/tutorials/kubernetes-basics/), and environments like the [Play with Kubernetes Classroom](https://training.play-with-kubernetes.com/) to play with a live system. We also recommend and gratefully acknowledge [Ryan Knight's](https://twitter.com/knight_cloud) [Istio Workshop](https://github.com/retroryan/istio-workshop), as well as Ray Tsang's.
 
+Before you begin, install the following tools
+- [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- [Install Google Cloud SDK](https://cloud.google.com/sdk/install)
+  - For mac users: ```brew cask install google-cloud-sdk```
+
 We'll go over the content in the following order:
 1. [Installation](modules/install/), where we'll:
     1. [Create a cluster](modules/install/cluster/)
