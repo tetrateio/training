@@ -8,10 +8,16 @@ Note that Istio Gateway only configures the L4-L6 functions (e.g., ports to expo
 
 We say a `VirtualService` binds to a `Gateway` if the `VirtualService` lists the Gateway’s name in its gateways field and at least one host claimed by the `VirtualService` is exposed by the `Gateway`.
 
-First, let's find the Istio Ingress IP address.
+First, lets clean up the Istio config we have already created in previous sections so we can learn by building it back up again!
 
 ```shell
-kubectl get svc istio-ingressgateway -n istio-system
+kubectl delete virtualservices --all
+kubectl delete gateway --all
+```
+
+Now, find the Istio Ingress IP address.
+
+```shell
 export INGRESS_IP=$(kubectl -n istio-system get svc istio-ingressgateway \
       -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 echo $INGRESS_IP
@@ -124,6 +130,6 @@ Find the Ingress IP again, and open it up in the browser.
 echo http://$INGRESS_IP
 ```
 
-Click Join Now and sign up to receive our free (definitely not real) $1,000.
+While we're here sign up for another account and more free fake money.
 
 ![Banking App Home Screen](/assets/banking-app-home.png)
