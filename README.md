@@ -15,7 +15,7 @@ We'll go over the content in the following order:
 3. [Learn about Istio's traffic management capabilities](modules/traffic)
     1. [Setting up ingress with Gateways](modules/traffic/ingress)
     2. [Explore resiliency features](modules/traffic/resiliency)
-    3. [See fine-grained traffic splitting by canarying a release](modules/traffic/release)
+    3. [See fine-grained traffic splitting by canarying a release](modules/traffic/routing)
 4. [Use Istio's security features](modules/security) to:
     1. [Terminate TLS at ingress](modules/security/ingress)
     2. [Establish mTLS throughout the mesh](modules/security/mtls)
