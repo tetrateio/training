@@ -5,7 +5,7 @@ Skywalking is an open source Application Performance Management (APM) system own
 First we'll install SkyWalking in three deployments: its collector, storage (Elastic Search), and the RocketBot UI.
 
 ```shell
-kubectl apply -f config/skywalking.yaml --as=admin --as-group=system:masters
+kubectl apply -f modules/install/skywalking/config/skywalking.yaml --as=admin --as-group=system:masters
 ```
 
 > We need to execute this command as an admin to allow the creation of SkyWalking's RBAC role, which allows SkyWalking to monitor pods in the cluster.
