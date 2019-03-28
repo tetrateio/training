@@ -22,9 +22,7 @@ gcloud config set compute/zone us-west1-b
 
 Finally, we can create our Cluster:
 ```shell
-gcloud container clusters create --machine-type n1-standard-2 --num-nodes 4 workshop
+gcloud container clusters create --machine-type n1-standard-2 workshop
 
 gcloud container clusters get-credentials workshop
 ```
-
-> We create a larger cluster than most demos, 4 standard-2 nodes, because some of the SkyWalking deployments require a decent bit of RAM (as they're JVM based).

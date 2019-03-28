@@ -14,140 +14,161 @@ echo $INGRESS_IP
 
 Navigate to that IP and sign up to receive some free ~~virtual~~ fake money. Then send some of that money between accounts. It doesn't really matter what you do here just generate some traffic!
 
+> Or, to make things a bit more interesting we can `curl` in a loop: `watch -n 0.1 curl http://$INGRESS_IP`
+
 Exploring the UI
 ----
 
-Using these consistent metrics, we can build powerful dashboards and visualizations. Let's start by taking a look at our system with RocketBot, the SkyWalking UI we installed at the beginning.
+Using these consistent metrics, we can build powerful dashboards and visualizations. Let's start by taking a look at our system with Grafana, which we installed alongside Istio.
 
-This service is exposed on our cluster, and we can get the address from Kubernetes:
-
+This service is not exposed on our cluster, so we'll need to port-forward it to our local machine:
 ```sh
-export SKYWALKING_UI=$(kubectl -n skywalking get svc ui -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-echo $SKYWALKING_UI
+kubectl -n istio-system port-forward $(kubectl -n istio-system get pod \
+    -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
+```
+> We start the port-forwarding command in the background as we'll want to port-forward a few different services in the workshop.
+
+We can go check out Grafana, and the default dashboards that Istio ships with, at http://localhost:3000/
+
+While metrics are awesome, for understanding a new system nothing beats seeing a graph of the services in the system communicating. We also installed [Kiali](https://www.kiali.io/) alongside Istio; it comes with some nice visualizations, including a graph. Like Grafana, it's not exposed outside of the cluster, so we'll need to port-forward it locally:
+```sh
+kubectl -n istio-system port-forward $(kubectl -n istio-system get pod \
+    -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001 &
 ```
 
-Let's take that address and paste it into our browsers to see the RocketBot UI. We'll be promted to login, and we can use the default credentials **admin / admin**.
+We can see the UI at http://localhost:20001/kiali with the username / password **admin / admin**.
 
-> Of course, we could just use `kubectl get svc ui -n skywalking` and copy and paste out the address manually.
+Finally, we _also_ installed Jaeger, which we can view in the same way:
+```sh
+kubectl -n istio-system port-forward $(kubectl -n istio-system get pod \
+    -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 16686:16686 &
+```
 
-![RocketBot UI Login screen, with username admin and password admin](/assets/rocketbot-login.png)
-
-Once we're logged in, we're greeted with an empty screen. We can enter the admin view (bottom left) and select the elements to show in the UI.
-
-![RocketBot UI has an edit button in the bottom left corner that we use to set up the metric display](/assets/rocketbot-editmode.png)
-
-And configure the metrics we want to see:
-
-![Use the RocketBot edit mode to show per-service metrics, then leave edit mode to view the stats](/assets/rocketbot-editmode-selectmetrics.png)
-
-> Unfortunately, RocketBot doesn't support importing/exporting profiles. However, these views are stored client side in your browser as a Cookie. If you create a cookie named "dashboard" with the contents:
->
-> ```[{"name":"Service Dashboard","type":"service","query":{"service":{},"endpoint":{},"instance":{}},"children":[{"name":"service","children":[{"o":"Service","name":"Service Avg Response","comp":"ChartAvgResponse","title":"Service Avg Response","type":"serviceInfo","width":3},{"o":"Service","name":"Service Avg Throughput","comp":"ChartAvgThroughput","title":"Service Avg Throughput","type":"serviceInfo","width":3},{"o":"Service","name":"Service Avg SLA","comp":"ChartAvgSLA","title":"Service Avg SLA","type":"serviceInfo","width":3},{"o":"Service","name":"Service Percent Response","comp":"ChartResponse","title":"Service Percent Response","type":"serviceInfo","width":3},{"o":"Service","name":"Service Top Slow Endpoint","comp":"ChartSlow","title":"Service Top Slow Endpoint","type":"serviceInfo.getSlowEndpoint","width":3},{"o":"Service","name":"Running ServiceInstance","comp":"ChartTroughput","title":"Running ServiceInstance","type":"serviceInfo.getInstanceThroughput","width":3}]}]},{"name":"Database Dashboard","type":"database","query":{"service":{}},"children":[{"name":"Database","children":[]}]}]```
->
-> you'll have a view that matches mine.
-> ![Using the Chrome developer console to set the cookie value for the RocketBot UI](/assets/rocketbot-chromeconsole-cookie.png)
-
-When we're done, exit edit mode by clicking on it and view the stats:
-> You may need to adjust the time settings in the bottom right to see data.
-
-We can also view our service graph, via the `Topology` tab at the top.
-
-![Graph of our deployment via RocketBot's Topology view](/assets/rocketbot-graph.png)
-
-<!-- Finally, we can view traces of individual requests. (These traces are used to color the slow nodes red in the Topology view.)
-
-![Trace screen, which shows a trace through the service graph as a tree](TODO: get graph) -->
+Which we can see at http://localhost:16686/.
 
 How it works
 ---
 
-Mixer is called by every sidecar in the mesh for policy (the sidecar asks Mixer if each request is allowed) and to report telemetry about each request. We'll cover the policy side in detail in the security section, but for now lets dig into telemetry. Mixer is Istio's intetgration point with external systems. A backend, for example SkyWalking, can implement an integration with Mixer (called an "adapter"). Using Mixer's configuration, we can instantiate the adapter (called a "handler"), describe the data about each request we want to provide the adapter (an "instance") and when Mixer should call the handler with instances (a "rule").
+Mixer is called by every sidecar in the mesh for policy (the sidecar asks Mixer if each request is allowed) and to report telemetry about each request. We'll cover the policy side in detail in the security section, but for now lets dig into telemetry. Mixer is Istio's intetgration point with external systems. A backend, for example Prometheus, can implement an integration with Mixer (called an "adapter"). Using Mixer's configuration, we can instantiate the adapter (called a "handler"), describe the data about each request we want to provide the adapter (an "instance") and when Mixer should call the handler with instances (a "rule").
 
-We configured all of this when we installed SkyWalking. To see the config, we can query Kubernetes about each of the types we list above. First, we can view the `adapter` config, which states that `skywalking-adapter` implements the `metric` template and is called per-request (`session_based: false`):
+The Prometheus adapter is compiled in to Mixer. The `prometheus` handler describes a specific instance of Mixer Prometheus adapter, which we can send `metric` data to.
 
 ```shell
-kubectl get adapter skywalking-adapter -n istio-system -o yaml
+kubectl -n istio-system get handler prometheus -o yaml
 ```
 
 ```yaml
-apiVersion: "config.istio.io/v1alpha2"
-kind: adapter
-metadata:
-  name: skywalking-adapter
-  namespace: istio-system
-spec:
-  description:
-  session_based: false
-  templates:
-  - metric
-```
-
-Our handler describes a specific instance of `skywalking-adapter` which we can send `metric` data to. In this case, we'll forward metric data to the SkyWalking collector we deployed as the `oap.skywalking` service.
-
-```shell
-kubectl get handler skywalking-handler -n istio-system -o yaml
-```
-
-```yaml
-apiVersion: "config.istio.io/v1alpha2"
+apiVersion: config.istio.io/v1alpha2
 kind: handler
 metadata:
- name: skywalking-handler
- namespace: istio-system
+  name: prometheus
+  namespace: istio-system
 spec:
- adapter: skywalking-adapter
- connection:
-   address: "oap.skywalking.svc.cluster.local:11800"
+  compiledAdapter: prometheus
+  params:
+    metrics:
+    - instance_name: requestcount.metric.istio-system
+      kind: COUNTER
+      label_names:
+      - reporter
+      - source_app
+      - source_principal
+      - source_workload
+      - source_workload_namespace
+      - source_version
+      - destination_app
+      - destination_principal
+...
 ```
 
-Next we need to configure what data we'll send to SkyWalking; this is called an `instance`. Typically an adapter is built to expect certain instances and they'll be provided alongside the adapter's other configuration. We can the single metric that SkyWalking consumes, which is a metric instance with a bunch of dimensions:
+> A Handler is where we provide configuration specific to the adapter. For Prometheus, we need to configure the shape of the metrics we'll be emitting. The `prometheus` handler does exactly this.
+
+Next we need to configure what data we'll send to the Prometheus adapter. This is called an `instance` in general, but there are a few special `instances` that have a proper name; `metric` is one of those. Typically an adapter is built to expect certain instances and the configuration for those instances will be provided alongside the adapter's other configuration. We can the set of instances that the Prometheus adapter consumes:
 
 ```shell
-kubectl get instance skywalking-metric -n istio-system -o yaml
+$ kubectl -n istio-system get metrics
+NAME                   AGE
+requestcount           17m
+requestduration        17m
+requestsize            17m
+responsesize           17m
+tcpbytereceived        17m
+tcpbytesent            17m
+tcpconnectionsclosed   17m
+tcpconnectionsopened   17m
 ```
 
+And we can inspect one to see what it looks like:
+```shell
+kubectl -n istio-system get metrics requestcount -o yaml
+```
 ```yaml
-apiVersion: "config.istio.io/v1alpha2"
-kind: instance
+apiVersion: config.istio.io/v1alpha2
+kind: metric
 metadata:
- name: skywalking-metric
- namespace: istio-system
+  name: requestcount
+  namespace: istio-system
 spec:
- template: metric
- params:
-   value: request.size | 0
-   dimensions:
-     sourceService: source.workload.name | ""
-     sourceNamespace: source.workload.namespace | ""
-     sourceUID: source.uid | ""
-     destinationService: destination.workload.name | ""
-     destinationNamespace: destination.workload.namespace | ""
-     destinationUID: destination.uid | ""
-     requestMethod: request.method | ""
-     requestPath: request.path | ""
-     requestScheme: request.scheme | ""
-     requestTime: request.time
-     responseTime: response.time
-     responseCode: response.code | 200
-     reporter: conditional((context.reporter.kind | "inbound") == "outbound", "source", "destination")
-     apiProtocol: api.protocol | ""
+  dimensions:
+    connection_security_policy: conditional((context.reporter.kind | "inbound") ==
+      "outbound", "unknown", conditional(connection.mtls | false, "mutual_tls", "none"))
+    destination_app: destination.labels["app"] | "unknown"
+    destination_principal: destination.principal | "unknown"
+    destination_service: destination.service.host | "unknown"
+    destination_service_name: destination.service.name | "unknown"
+    destination_service_namespace: destination.service.namespace | "unknown"
+    destination_version: destination.labels["version"] | "unknown"
+    destination_workload: destination.workload.name | "unknown"
+    destination_workload_namespace: destination.workload.namespace | "unknown"
+    permissive_response_code: rbac.permissive.response_code | "none"
+    permissive_response_policyid: rbac.permissive.effective_policy_id | "none"
+    reporter: conditional((context.reporter.kind | "inbound") == "outbound", "source",
+      "destination")
+    request_protocol: api.protocol | context.protocol | "unknown"
+    response_code: response.code | 200
+    response_flags: context.proxy_error_code | "-"
+    source_app: source.labels["app"] | "unknown"
+    source_principal: source.principal | "unknown"
+    source_version: source.labels["version"] | "unknown"
+    source_workload: source.workload.name | "unknown"
+    source_workload_namespace: source.workload.namespace | "unknown"
+  monitored_resource_type: '"UNSPECIFIED"'
+  value: "1"
 ```
 
-Finally, Mixer needs to know when to generate this metric data and send it to SkyWalking. This is defined as a `rule`. Every `rule` has a `match` condition that is evaluated; it the `match` is true, the `rule` is triggered. For example, we could use the `match` to receive only HTTP data, or only TCP data, etc. In our rule we omit the `match` because it defaults to `true` - we'll get data for every request. So this rule fires for every request, and constructs a `skywalking-metric` value it passes to the `skywalking-handler` (our `oap` service).
+Finally, Mixer needs to know when to generate this metric data and send it to Prometheus. This is defined as a `rule`. Every `rule` has a `match` condition that is evaluated; it the `match` is true, the `rule` is triggered. For example, we could use the `match` to receive only HTTP data, or only TCP data, etc. Prometheus does exactly this, and defines a rule for each set of protocols it has metric descriptions for:
 
 ```shell
-kubectl get rule skywalking-rule -n istio-system -o yaml
+$ kubectl -n istio-system get rules
+NAME                      AGE
+kubeattrgenrulerule       19m
+promhttp                  19m
+promtcp                   19m
+promtcpconnectionclosed   19m
+promtcpconnectionopen     19m
+stdio                     19m
+stdiotcp                  19m
+tcpkubeattrgenrulerule    19m
 ```
 
+And again we can inspect one to see what it looks like:
+```shell
+kubectl -n istio-system get rules promhttp -o yaml
+```
 ```yaml
-apiVersion: "config.istio.io/v1alpha2"
+apiVersion: config.istio.io/v1alpha2
 kind: rule
 metadata:
- name: skywalking-rule
- namespace: istio-system
+  name: promhttp
+  namespace: istio-system
 spec:
- actions:
- - handler: skywalking-handler
-   instances:
-   - skywalking-metric
+  match: (context.protocol == "http" || context.protocol == "grpc") &&
+            (match((request.useragent| "-"), "kube-probe*") == false)
+  actions:
+  - handler: prometheus
+    instances:
+    - requestcount.metric
+    - requestduration.metric
+    - requestsize.metric
+    - responsesize.metric
 ```
