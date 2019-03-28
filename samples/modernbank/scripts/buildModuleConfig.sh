@@ -20,6 +20,7 @@ do
 done
 
 # Default Istio Gateway
+cp -R ${DIR}/../networking/ingress/ ${DEMO_APP_DIR}/config/
 cp -R ${DIR}/../networking/ingress/ ${TRAFFIC_MAN_DIR}/ingress/config/
 cp -R ${DIR}/../networking/ingress/virtualservice.yaml ${TRAFFIC_MAN_DIR}/release/config/virtualservice-reset.yaml
 
