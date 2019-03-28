@@ -1,4 +1,4 @@
-# Release
+# Routing
 
 Traffic splitting allows you to distribute specific percentages of traffic across two or more versions of a service. This allows you to conduct A/B testing between versions and also allows for controlled, paced roll-out of untested features (i.e., canary deployment). Traffic splitting is achieved using routing rules that identify at least one weighted backend that corresponds to a specific version of the destination service that is expressed using labels.
 
@@ -165,5 +165,5 @@ Now if you visit the application from Chrome you will always be routed to versio
 Let’s reset our VirtualService back to the default behavior.
 
 ```shell
-kubectl apply -f modules/traffic/routing/config/vs-reset.yaml
+kubectl apply -f modules/traffic/routing/config/virtualservice-reset.yaml
 ```
