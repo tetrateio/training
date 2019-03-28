@@ -6,7 +6,11 @@ Istio makes fault injection simple because it’s decoupled from your applicatio
 
 ## Fault Injection - Aborts
 
-Now that you’re logged in to the banking application, you can see your accounts. You’re now going to inject an HTTP fault to simulate a transient failure in your accounts service, causing the accounts to fail to load. To do this, you’ll add a fault stanza to the account `VirtualService` causing an HTTP 500 response code for 50% of calls to the accounts service. This stanza configures Envoy to return a 500 response code immediately when a client calls the account service instead of forwarding the request to the service itself.
+Log into the Banking application if you aren't logged in already. Navigate to your account list. 
+
+![Banking App Accounts List](/assets/banking-app-accounts.png)
+
+We're going to inject an HTTP fault to simulate a transient failure in your accounts service, causing the accounts to fail to load. To do this, you’ll add a fault stanza to the account `VirtualService` causing an HTTP 500 response code for 50% of calls to the accounts service. This stanza configures Envoy to return a 500 response code immediately when a client calls the account service instead of forwarding the request to the service itself.
 
 ```shell
 kubectl apply -f modules/traffic/resiliency/config/account-abort.yaml
@@ -41,7 +45,9 @@ Retries refer to the act of retrying a failed HTTP request to guard against tran
 
 ### Outlier Detection
 
-Outlier detection and ejection, a form of passive health checking, is the act of determining if some of the endpoints to which we're sending traffic are performing differently than the others and avoiding sending traffic to the outliers. We say that the endpoints we avoid have been "ejected from the active load balancing set." For any given service, Envoy always maintains a set of healthy endpoints for that service: the active load balancing set. Typically, endpoints are ejected from the active load balancing set based on consecutive error responses. With HTTP services this would be consecutive 5xx failures. With TCP services, connect timeouts and connection errors/failures would lead to ejection. Over time, Envoy will attempt to add ejected endpoints back into the active load balancing set by sending traffic to them. If the endpoint responds successfully, it's reintroduced to the active load balancing set. Otherwise, it remains in the ejected set. Typically, outlier detection and retries are used in conjunction to improve resiliency. Outlier detection will increase success rate by ejecting endpoints that are deemed unhealthy, and retries mask any failures to users calling our application. Let’s turn on retries.
+Outlier detection and ejection, a form of passive health checking, is the act of determining if some of the endpoints to which we're sending traffic are performing differently than the others and avoiding sending traffic to the outliers. We say that the endpoints we avoid have been "ejected from the active load balancing set." For any given service, Envoy always maintains a set of healthy endpoints for that service: the active load balancing set. Typically, endpoints are ejected from the active load balancing set based on consecutive error responses. With HTTP services this would be consecutive 5xx failures. With TCP services, connect timeouts and connection errors/failures would lead to ejection. Over time, Envoy will attempt to add ejected endpoints back into the active load balancing set by sending traffic to them. If the endpoint responds successfully, it's reintroduced to the active load balancing set. Otherwise, it remains in the ejected set.
+
+Typically, outlier detection and retries are used in conjunction to improve resiliency. Outlier detection will increase success rate by ejecting endpoints that are deemed unhealthy, and retries mask any failures to users calling our application. Let’s turn on retries.
 
 ```shell
 kubectl apply -f modules/traffic/resiliency/config/account-abort-retry.yaml

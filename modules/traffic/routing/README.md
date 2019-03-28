@@ -1,4 +1,4 @@
-# Release
+# Routing
 
 Traffic splitting allows you to distribute specific percentages of traffic across two or more versions of a service. This allows you to conduct A/B testing between versions and also allows for controlled, paced roll-out of untested features (i.e., canary deployment). Traffic splitting is achieved using routing rules that identify at least one weighted backend that corresponds to a specific version of the destination service that is expressed using labels.
 
@@ -23,7 +23,7 @@ DestinationRules are in fact all about configuring clients. They allow a service
 In this case, we have two versions of the user microservice, indicated by the `version` labels. Let’s add a `DestinationRule` to tell Istio how to identify the different versions we have deployed.
 
 ```shell
-kubectl apply -f modules/traffic/release/config/user-subset.yaml
+kubectl apply -f modules/traffic/routing/config/user-subset.yaml
 ```
 
 The `DestinationRule` we just created describes two versions of the user service and how to identify which is which by creating a subset.
@@ -45,10 +45,10 @@ spec:
       version: v2
 ```
 
-Now that we have subsets defined we can pin all traffic to version 1 of the user service in its `VirtualService`.
+Now that we have subsets defined we can pin all traffic to version 1 of the user service in its `VirtualService` (we will go over Virtual Services in a bit more detail in the resiliency section).
 
 ```shell
-kubectl apply -f modules/traffic/release/config/user-v1-100.yaml
+kubectl apply -f modules/traffic/routing/config/user-v1-100.yaml
 ```
 
 If we take a look at the changes we just made to the `VirtualService`, we can see that there are now two destinations, one for each subset. However, we are weighting 100% of requests to version 1.
@@ -120,7 +120,7 @@ spec:
 This enables you to release new versions to increments of a single percent of users. Istio also allows you to route traffic based on headers, URI or HTTP method. This enables you to do things like releasing to a single browser. Let’s release v2 to Chrome users only.
 
 ```shell
-kubectl apply -f modules/traffic/release/config/user-v2-chrome.yaml
+kubectl apply -f modules/traffic/routing/config/user-v2-chrome.yaml
 ```
 
 If we look at the configuration we just created we can see that we added a stanza to the path match to search for the word `Chrome` anywhere in the user-agent. Note that ordering of the matches matters. Envoy will route to the first match it sees, not the most specific.
@@ -165,5 +165,5 @@ Now if you visit the application from Chrome you will always be routed to versio
 Let’s reset our VirtualService back to the default behavior.
 
 ```shell
-kubectl apply -f modules/traffic/release/config/vs-reset.yaml
+kubectl apply -f modules/traffic/routing/config/virtualservice-reset.yaml
 ```
