@@ -22,8 +22,7 @@ This will:
 Let’s take a look at the user microservice deployment.
 
 ```shell
-$ kubectl get deployment user-v1
-kubectl get deployment user-v1 -o yaml
+$ kubectl get deployment user-v1 -o yaml
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
