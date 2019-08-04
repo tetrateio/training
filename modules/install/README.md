@@ -8,14 +8,53 @@ This section covers initial cluster creation and the deployment of Istio and our
 
 If you want to skip all of that, you can use the abbreviated guide below to create and initialize a cluster that's ready to start the workshop.
 
-1. Create your cluster:
+1. Configure `kubectl` to use our credentials:
     
     ```shell
-    # Create the cluster
-    gcloud container clusters create --machine-type n1-standard-2 workshop
-    
-    # Get the credentials for kubectl
-    gcloud container clusters get-credentials workshop
+    # point kubectl at this config file
+    export KUBECONFIG=${PWD}/k8s-01/config
+
+    # ensure it works
+    kubectl get ns
+    NAME          STATUS   AGE
+    default       Active   31m
+    kube-public   Active   31m
+    kube-system   Active   31m
+    ```
+
+    > Yours won't be literally `k8s-01`, but some number 1-25, e.g. `k8s-25`.
+
+    If you get an error like:
+    ```
+    Error in configuration:
+    * unable to read client-cert /home/ubuntu/cloud-native-summit/k8s-01/cert.pem for admin due to open /home/ubuntu/cloud-native-summit/k8s-01/cert.pem: no such file or directory
+    * unable to read client-key /home/ubuntu/cloud-native-summit/k8s-01/key.pem for admin due to open /home/ubuntu/cloud-native-summit/k8s-01/key.pem: no such file or directory
+    * unable to read certificate-authority /home/ubuntu/cloud-native-summit/k8s-01/ca.pem for k8s-01 due to open /home/ubuntu/cloud-native-summit/k8s-01/ca.pem: no such file or directory
+    ```
+    Then you'll need to update the configuration file's certificate paths. You can set the paths in the config file to be relative, so your final config should look like:
+    ```
+    apiVersion: v1
+    clusters:
+    - cluster:
+        server: ""
+    name: cloud-native-summit
+    - cluster:
+        certificate-authority: ca.pem
+        server: -
+    name: k8s-01
+    contexts:
+    - context:
+        cluster: k8s-01
+        user: admin
+    name: default
+    current-context: default
+    kind: Config
+    preferences: {}
+    users:
+    - name: admin
+    user:
+        client-certificate: cert.pem
+        client-key: key.pem
     ```
 
 1. Deploy Istio
