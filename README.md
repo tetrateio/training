@@ -8,8 +8,6 @@ A basic understanding of Kubernetes is a prerequisite to these labs. For backgro
 
 Before you begin, install the following tools
 - [Install and Set Up kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-- [Install Google Cloud SDK](https://cloud.google.com/sdk/install)
-  - For mac users: ```brew cask install google-cloud-sdk```
 
 We'll go over the content in the following order:
 1. [Installation](modules/install/), where we'll:
