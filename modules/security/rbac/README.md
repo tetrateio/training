@@ -5,83 +5,95 @@ Istio provides every workload with a strong identity - in Kubernetes, the pod's 
 
 This config comes in three parts: a cluster wide `ClusterRbacConfig` which sets the mesh's RBAC mode (on, off, inclusive list, exclusive list). We'll start by creating one which requires RBAC for the `default` namespace:
 
-```yaml
-$ cat modules/security/rbac/config/clusterrbacconfig.yaml
-apiVersion: "rbac.istio.io/v1alpha1"
-kind: ClusterRbacConfig
-metadata:
-  name: default
-spec:
-  mode: 'ON_WITH_INCLUSION'
-  inclusion:
-    namespaces:
-    - "default"
-```
 
-Let's apply the rule and see what happens:
+1. Require RBAC
 
-```shell
-kubectl apply -f modules/security/rbac/config/clusterrbacconfig.yaml
-```
+    First we'll configure Istio to require RBAC in the mesh:
+    ```sh
+    $ kubectl apply -f modules/security/rbac/config/clusterrbacconfig.yaml
+    ```
 
-> The other `mode`s are `ON`, `OFF`, and `ON_WITH_EXCLUSION`
+    We can see the policy 
 
-If we go to the UI, we should see it fail to load with an RBAC related error. We can confirm this by looking at our graphs too.
+    ```yaml
+    $ kubectl describe -n istio-system clusterrbacconfig.rbac.istio.io/default
 
-```shell
-$ curl $INGRESS_IP
-RBAC: access denied
-```
+    apiVersion: "rbac.istio.io/v1alpha1"
+    kind: ClusterRbacConfig
+    metadata:
+      name: default
+    spec:
+      mode: 'ON_WITH_INCLUSION'
+      inclusion:
+        namespaces:
+        - "default"
+    ```
 
-So, let's create a `Role` that allows read to use the UI:
+    > The other `mode`s are `ON`, `OFF`, and `ON_WITH_EXCLUSION`
 
-```shell
-$ cat modules/security/rbac/config/ui-viewer.yaml
-apiVersion: "rbac.istio.io/v1alpha1"
-kind: ServiceRole
-metadata:
-  name: ui-viewer
-  namespace: default
-spec:
-  rules:
-  - services: ["ui.default.svc.cluster.local"]
-    methods: ["GET"]
-```
+    If we go to the UI, we should see it fail to load with an RBAC related error. We can confirm this by looking at our graphs too.
 
-And apply that as well:
-```shell
-kubectl apply -f modules/security/rbac/config/ui-viewer.yaml
-```
+    ```shell
+    $ curl $INGRESS_IP
+    RBAC: access denied
+    ```
 
-Of course, a `Role` alone doesn't do us any good, we have to assign the role to ourselves so it applies. We'll do this by creating a `ServiceRoleBinding` which lets anyone see the UI:
-```yaml
-$ cat modules/security/rbac/config/allow-all-ui-access.yaml
-apiVersion: "rbac.istio.io/v1alpha1"
-kind: ServiceRoleBinding
-metadata:
-  name: bind-ui-viewer
-  namespace: default
-spec:
-  subjects:
-  - user: "*"
-  roleRef:
+1. Create the `ui-viewer` `Role`
+
+    Now, let's create a `Role` that allows read to use the UI:
+    ```shell
+    $ kubectl apply -f modules/security/rbac/config/ui-viewer.yaml
+    ```
+
+    We can describe the object to see what `Role`s look like in Istio:
+    ```shell
+    $ kubectl describe servicerole.rbac.istio.io/ui-viewer
+    apiVersion: "rbac.istio.io/v1alpha1"
     kind: ServiceRole
-    name: "ui-viewer"
-```
+    metadata:
+      name: ui-viewer
+      namespace: default
+    spec:
+      rules:
+      - services: ["ui.default.svc.cluster.local"]
+        methods: ["GET"]
+    ```
 
-Which we'll apply like the others:
-```shell
-kubectl apply -f modules/security/rbac/config/allow-all-ui-access.yaml
-```
+1. Bind the `Role` to Users with a `ServiceRoleBinding`
 
-We should see that we can now access the UI:
-```shell
-$ curl $INGRESS_IP
-...<html>
-```
+    A `Role` by itself doesn't do us any good, we have to assign the role to ourselves to get the permissions it lists. We'll do this by creating a `ServiceRoleBinding` which lets anyone see the UI:
 
-Of course, the traffic in the rest of our app is still broken, so the UI page that gets rendered is incomplete. We'd need to describe a full set of RBAC policies for the application to allow all traffic. For now, lets clean up our Cluster RBAC Config so we can carry on with the rest of the lab:
+    ```shell
+    kubectl apply -f modules/security/rbac/config/allow-all-ui-access.yaml
+    ```
 
-```shell
-kubectl delete -f modules/security/rbac/config
-```
+    And we can look at the `ServiceRoleBinding` to see how it assigned our `ui-viewer` role to all users:
+
+    ```yaml
+    $ kubectl describe servicerolebinding.rbac.istio.io/bind-ui-viewer
+    apiVersion: "rbac.istio.io/v1alpha1"
+    kind: ServiceRoleBinding
+    metadata:
+      name: bind-ui-viewer
+      namespace: default
+    spec:
+      subjects:
+      - user: "*"
+      roleRef:
+        kind: ServiceRole
+        name: "ui-viewer"
+    ```
+
+    We should see that we can now access the UI:
+    ```shell
+    $ curl $INGRESS_IP
+    ...<html>
+    ```
+
+1. Cleanup
+
+    Unfortunately, traffic in the rest of our app is still broken by our `clusterrbacconfig` so the UI page that gets rendered is incomplete. We'd need to describe a full set of RBAC policies for the application to allow all traffic. For now, lets clean up our Cluster RBAC Config so we can carry on with the rest of the lab:
+
+    ```shell
+    kubectl delete -f modules/security/rbac/config
+    ```
