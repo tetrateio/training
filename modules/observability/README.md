@@ -21,14 +21,17 @@ Exploring the UI
 
 Using these consistent metrics, we can build powerful dashboards and visualizations. Let's start by taking a look at our system with Grafana, which we installed alongside Istio.
 
-This service is not exposed on our cluster, so we'll need to port-forward it to our local machine:
+This service is not exposed on our cluster, so we'll need to port-forward:
 ```sh
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod \
     -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
 ```
 > We start the port-forwarding command in the background as we'll want to port-forward a few different services in the workshop.
+> If you're in Google Cloud Shell you access it via the web preview feature in the top right hand corner. You may need to change the port to 3000.
 
 We can go check out Grafana, and the default dashboards that Istio ships with, at http://localhost:3000/
+
+> If you're in Google Cloud Shell you access it via the web preview feature in the top right hand corner. You may need to change the port to 3000.
 
 While metrics are awesome, for understanding a new system nothing beats seeing a graph of the services in the system communicating. We also installed [Kiali](https://www.kiali.io/) alongside Istio; it comes with some nice visualizations, including a graph. Like Grafana, it's not exposed outside of the cluster, so we'll need to port-forward it locally:
 ```sh
@@ -38,13 +41,15 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod \
 
 We can see the UI at http://localhost:20001/kiali with the username / password **admin / admin**.
 
+> If you're in Google Cloud Shell you access it via the web preview feature in the top right hand corner.
+
 Finally, we _also_ installed Jaeger, which we can view in the same way:
 ```sh
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod \
-    -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 16686:16686 &
+    -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 28080:16686 &
 ```
 
-Which we can see at http://localhost:16686/.
+Which we can see at http://localhost:28080/.
 
 How it works
 ---
