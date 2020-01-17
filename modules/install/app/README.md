@@ -3,6 +3,7 @@
 Let's deploy our entire application.
 
 ```shell
+cd training
 kubectl apply -f modules/install/app/config
 ```
 
@@ -70,15 +71,18 @@ For Istio to intercept and proxy the requests, an Istio sidecar must be installe
 Use `istioctl` to see what using manual sidecar injection will add to the deployment.
 
 ```shell
-$ istioctl kube-inject -f modules/install/app/config/user-v1.yaml | grep "image:" -A1
+$ istioctl kube-inject -f modules/install/app/config/user-v1.yaml | grep "image:" -A2
 ...
         image: gcr.io/tetratelabs/modernbank/user:v1.0.0
+        imagePullPolicy: Always
         name: user
 ...
-        image: docker.io/istio/proxyv2:1.1.0
+        image: docker.io/istio/proxyv2:1.4.3
+        imagePullPolicy: IfNotPresent
         name: istio-proxy
 ...
-        image: docker.io/istio/proxy_init:1.1.0
+        image: docker.io/istio/proxyv2:1.4.3
+        imagePullPolicy: IfNotPresent
         name: istio-init
 ```
 
@@ -122,15 +126,15 @@ user-v1-86d76998b8-hwh7b                   2/2     Running       0          1m
 Istio has now automatically injected the sidecar proxy into the pod. You can see this here:
 
 ```shell
-kubectl get pods -l app=user -o yaml | grep "image:" -A1
+kubectl get pods -l app=user -o yaml | grep "image:" -A2
 ...
-image: istio/proxyv2:1.1.0
+      image: istio/proxyv2:1.4.3
       name: istio-proxy
 ...
    -  image: gcr.io/tetratelabs/modernbank/user:v1.0.0
       name: user
 ...
-    - image: istio/proxy_init:1.1.0
+    - image: istio/proxyv2:1.4.3
       name: istio-init
 ...
 ```
