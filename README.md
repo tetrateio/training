@@ -19,3 +19,4 @@ We'll go over the content in the following order:
 4. [Use Istio's security features](modules/security) to:
     1. [Terminate TLS at ingress](modules/security/ingress)
     2. [Establish mTLS throughout the mesh](modules/security/mtls)
+    3. [Use Istio RBAC](modules/security/rbac)
