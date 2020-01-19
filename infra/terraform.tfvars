@@ -13,4 +13,4 @@ participant_count = 65
 
 # Number of kube clusters to spin up. If unset will spin down to 0.
 # Use this to keep other infra but spin down Kube clusters to save on $$$ when they aren't needed.
-cluster_count = 1
+cluster_count = 2

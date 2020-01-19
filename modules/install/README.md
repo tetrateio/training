@@ -1,27 +1,26 @@
-Installation
-===
+# Installation
 
 This section covers initial cluster creation and the deployment of Istio and our victim (err, demo) App. You can dive into the directory for each section to see detailed explanations for each installation, including how to check that the installation was successful. You should approach them in the order:
 
 1. [Cluster](cluster/)
-1. [Istio](istio/)
-1. [App](app/)
+2. [Istio](istio/)
+3. [App](app/)
 
 If you want to skip all of that, you can use the abbreviated guide below to create and initialize a cluster that's ready to start the workshop.
 
-1. Configure `kubectl` to use our credentials:
+## Abbreviated Guide
+
+Configure `kubectl` to use our credentials:
 
 - [Google Cloud Platform](cluster/gcp.md)
 
-1. Deploy Istio
-See [the detailed guide](istio/README.md) or skip it and just:
+Deploy Istio. See [the detailed guide](istio/README.md) or skip it and just:
 
 ```shell
 istioctl manifest apply --set values.global.mtls.enabled=true --set values.global.controlPlaneSecurityEnabled=true
 ```
 
-1. Deploy our demo app
-See [the detailed guide](app/README.md) or skip it and just:
+Deploy our demo app. See [the detailed guide](app/README.md) or skip it and just:
 
 ```shell
 cd training
