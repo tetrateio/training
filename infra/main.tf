@@ -3,20 +3,64 @@ provider "google" {
 
   project = var.project_id
   region  = var.region
-  zone    = var.zone
+}
+
+resource "google_folder" "training" {
+  display_name = "nist-training"
+  parent       = "organizations/775566979306"
+}
+
+resource "google_project" "training" {
+  name       = format("%s-%03d", var.workshop_name, count.index)
+  count = var.participant_count
+
+  project_id = format("%s-%03d", var.workshop_name, count.index)
+  folder_id  = google_folder.training.name
+  billing_account = "014595-E74614-87FCAC"
+}
+
+resource "google_project_service" "container" {
+  project = google_project.training[count.index].project_id
+  count = var.participant_count
+
+  service = "container.googleapis.com"
+  disable_dependent_services = true
+}
+
+resource "google_service_account" "compute" {
+  account_id = "compute"
+  count = var.participant_count
+
+  project = format("%s-%03d", var.workshop_name, count.index)
+}
+
+resource "google_project_iam_member" "project" {
+  project = format("%s-%03d", var.workshop_name, count.index)
+  count = var.participant_count
+
+  role    = "roles/editor"
+  member  = format("serviceAccount:%s", google_service_account.compute[count.index].email)
 }
 
 resource "google_container_cluster" "k8s" {
-  name     = format("%s-%03d", var.cluster_prefix, count.index)
+  name     = format("%s-%03d", var.workshop_name, count.index)
+  count    = min(var.cluster_count, var.participant_count)
+  
+  project = google_project.training[count.index].project_id
   location = var.zone
-  count = var.cluster_count
-
-  # Manage node pools in separate resource
-  remove_default_node_pool = true
-  initial_node_count       = 1
 
   logging_service = "none"
   monitoring_service = "none"
+
+  initial_node_count       = 3
+  node_config {
+    machine_type = "n1-standard-2"
+    service_account = google_service_account.compute[count.index].email
+
+    metadata = {
+      disable-legacy-endpoints = "true"
+    }
+  }
 
   master_auth {
     username = ""
@@ -26,21 +70,8 @@ resource "google_container_cluster" "k8s" {
       issue_client_certificate = false
     }
   }
-}
 
-resource "google_container_node_pool" "k8s_nodes" {
-  name       = "nodes"
-  location   = var.zone
-  count = var.cluster_count
-
-  cluster    = google_container_cluster.k8s[count.index].name
-  node_count = 4
-
-  node_config {
-    machine_type = "n1-standard-2"
-
-    metadata = {
-      disable-legacy-endpoints = "true"
-    }
-  }
+  depends_on = [
+    google_project_service.container,
+  ]
 }
