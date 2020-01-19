@@ -4,6 +4,7 @@ metadata:
   name: {{ .Values.microservice.name }}
   labels:
     app: {{ .Values.microservice.name }}
+    service: {{ .Values.microservice.name }}
 spec:
   type: ClusterIP
   ports:

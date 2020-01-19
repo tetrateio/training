@@ -13,6 +13,8 @@ First, lets clean up the Istio config we have already created in previous sectio
 ```shell
 kubectl delete virtualservices --all
 kubectl delete gateway --all
+kubectl delete gateway --all -n istio-system
+kubectl delete destinationrules --all
 ```
 
 Now, find the Istio Ingress IP address.
@@ -93,11 +95,11 @@ Note that within a `VirtualService`, the match conditions are checked at runtime
 Let’s take a look at our user `VirtualService`.
 
 ```shell
-$ kubectl get virtualservice user -o yaml
+$ kubectl get virtualservice transaction -o yaml
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: transaction-gateway
+  name: transaction
 spec:
   hosts:
   - "*"

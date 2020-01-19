@@ -45,9 +45,11 @@ Retries refer to the act of retrying a failed HTTP request to guard against tran
 
 ### Outlier Detection
 
-Outlier detection and ejection, a form of passive health checking, is the act of determining if some of the endpoints to which we're sending traffic are performing differently than the others and avoiding sending traffic to the outliers. We say that the endpoints we avoid have been "ejected from the active load balancing set." For any given service, Envoy always maintains a set of healthy endpoints for that service: the active load balancing set. Typically, endpoints are ejected from the active load balancing set based on consecutive error responses. With HTTP services this would be consecutive 5xx failures. With TCP services, connect timeouts and connection errors/failures would lead to ejection. Over time, Envoy will attempt to add ejected endpoints back into the active load balancing set by sending traffic to them. If the endpoint responds successfully, it's reintroduced to the active load balancing set. Otherwise, it remains in the ejected set.
+Outlier detection and ejection, a form of passive health checking, is the act of determining if some of the endpoints to which we're sending traffic are performing differently than the others and avoiding sending traffic to the outliers. We say that the endpoints we avoid have been "ejected from the active load balancing set." For any given service, Envoy always maintains a set of healthy endpoints for that service: the active load balancing set.
 
-Typically, outlier detection and retries are used in conjunction to improve resiliency. Outlier detection will increase success rate by ejecting endpoints that are deemed unhealthy, and retries mask any failures to users calling our application. Let’s turn on retries.
+Typically, endpoints are ejected from the active load balancing set based on consecutive error responses. With HTTP services this would be consecutive 5xx failures. With TCP services, connect timeouts and connection errors/failures would lead to ejection. Over time, Envoy will attempt to add ejected endpoints back into the active load balancing set by sending traffic to them. If the endpoint responds successfully, it's reintroduced to the active load balancing set. Otherwise, it remains in the ejected set.
+
+Outlier detection and retries are used in conjunction to improve resiliency. Outlier detection will increase success rate by ejecting endpoints that are deemed unhealthy, and retries mask any failures to users calling our application. Let’s turn on retries.
 
 ```shell
 kubectl apply -f modules/traffic/resiliency/config/account-abort-retry.yaml
@@ -78,6 +80,8 @@ spec:
 ```
 
 Now you should see your accounts almost every time you refresh. In fact, we reduced the failure rate our users experience from ~50% to ~3%.
+
+> There is currently a [bug](https://github.com/istio/istio/issues/13705) in Istio where if you set fault injection AND retries then the retries do not take effect. If you set only one or the other then they work.
 
 We can also add outlier detection by adding a `DestinationRule` (more on those in later sections). However, in this case it is the entire service rather than individual service instances seeing the errors so it won’t help us! An example of how we would configure outlier detection is below. In it, a service instance will be ejected if it returns a 5xx on 5 consecutive attempts. It will only be allowed back in after 5 minutes multiplied by the number of times it has been ejected.
 
@@ -155,6 +159,8 @@ spec:
 ```
 
 Now when you refresh the page you will notice that account load time will fluctuate but it has reduced from the 10s on half of requests previously. It’s safe to leave the user retry change we made, but we should clean up the latency injection.
+
+> There is currently a [bug](https://github.com/istio/istio/issues/13705) in Istio where if you set fault injection AND retries then the retries do not take effect. If you set only one or the other then they work.
 
 ```shell
 kubectl delete virtualservice account

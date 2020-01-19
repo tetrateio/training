@@ -10,6 +10,7 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.microservice.name }}
+      version: {{ .Values.microservice.version }}
   template:
     metadata:
       labels:

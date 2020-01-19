@@ -13,14 +13,14 @@ do
 
     if [[ ${FILENAME} != *"-v2"* ]]
     then
-        helm template --name ${SERVICE_NAME} ${DIR}/../kubernetes/helm/microservice -f $VALUES_YAML > ${DEMO_APP_DIR}/config/${SERVICE_NAME}-v1.yaml
+        helm template ${SERVICE_NAME} ${DIR}/../kubernetes/helm/microservice -f $VALUES_YAML > ${DEMO_APP_DIR}/config/${SERVICE_NAME}-v1.yaml
     else
-        helm template --name ${SERVICE_NAME} ${DIR}/../kubernetes/helm/microservice -f $VALUES_YAML > ${DEMO_APP_DIR}/config/${SERVICE_NAME}-v2.yaml
+        helm template ${SERVICE_NAME} ${DIR}/../kubernetes/helm/microservice -f $VALUES_YAML > ${DEMO_APP_DIR}/config/${SERVICE_NAME}-v2.yaml
     fi
 done
 
 # Default Istio Gateway
 cp -R ${DIR}/../networking/ingress/ ${DEMO_APP_DIR}/config/
 cp -R ${DIR}/../networking/ingress/ ${TRAFFIC_MAN_DIR}/ingress/config/
-cp -R ${DIR}/../networking/ingress/virtualservice.yaml ${TRAFFIC_MAN_DIR}/release/config/virtualservice-reset.yaml
+cp -R ${DIR}/../networking/ingress/virtualservice.yaml ${TRAFFIC_MAN_DIR}/routing/config/virtualservice-reset.yaml
 

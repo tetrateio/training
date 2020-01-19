@@ -4,7 +4,6 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: user
-
 ---
 # Source: microservice/templates/service.yaml
 apiVersion: v1
@@ -13,6 +12,7 @@ metadata:
   name: user
   labels:
     app: user
+    service: user
 spec:
   type: ClusterIP
   ports:
@@ -22,7 +22,6 @@ spec:
       name: http-user
   selector:
     app: user
-
 ---
 # Source: microservice/templates/deployment.yaml
 apiVersion: apps/v1beta2
@@ -37,6 +36,7 @@ spec:
   selector:
     matchLabels:
       app: user
+      version: v2
   template:
     metadata:
       labels:
@@ -52,4 +52,3 @@ spec:
           ports:
           - name: http
             containerPort: 8080
-
