@@ -31,7 +31,7 @@ istioctl manifest apply --set profile=demo --set values.global.mtls.enabled=true
 
 There were a lot of things deployed there so we will break down the important parts and verify that they installed successfully.
 
-Istio extends Kubernetes using Custom Resource Definitions (CRDs). These enable Kubernetes to store configuration for Istio routing, security and telemetry. Let’s verify they were successfully added. Note, this is an abbreviated list covering the more frequently used CRDs, yours will contain a few more.
+Istio extends Kubernetes using Custom Resource Definitions (CRDs). These enable Kubernetes to store configuration for Istio routing, security and telemetry. Let’s verify they were successfully added.
 
 ```shell
 $ kubectl get crds | grep istio
@@ -79,12 +79,15 @@ kiali-767f877b4-zbl54                     1/1     Running   0          4m17s
 prometheus-5d56488ff6-5fkm6               1/1     Running   0          4m18s
 ```
 
+> Some components may a couple of minutes to become fully ready. Re-run the command until everything is ready.
+
 This includes all the of Istio control-plane components (including Istio Sidecar Injector and Istio Gateways), as well as some Istio addons like Prometheus (metric collection), Grafana (metrics dashboard) and Kiali (to visualize how microservices on Istio service mesh are connected).
 
 We can use the experimental `verify-install` command to fully validate that Istio successfully installed. This command may take up to a minute to complete.
 
 ```shell
 $ istioctl manifest generate --set profile=demo --set values.global.mtls.enabled=true --set values.global.controlPlaneSecurityEnabled=true | istioctl verify-install -f -
+...
 Checked 23 crds
 Checked 9 Istio Deployments
 Istio is installed successfully

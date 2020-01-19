@@ -1,6 +1,6 @@
 # Installing Demo Application and Istio Proxy Injection
 
-Let's deploy our entire application.
+Let's deploy our entire microservices application.
 
 ```shell
 cd training
@@ -88,7 +88,7 @@ $ istioctl kube-inject -f modules/install/app/config/user-v1.yaml | grep "image:
 
 In addition to an application container, this output now has an `istio-init` container and an `istio-proxy` container.
 
-The `istio-init` container will set up the IP table rules in the pod’s network namespace to intercept incoming and outgoing connections and direct them to the `istio-proxy` container. The `istio-proxy` container is an Envoy binary wrapped with Pilot-Agent to manage its lifecycle.
+The `istio-init` container will set up the IP table rules in the pod’s network namespace to intercept incoming and outgoing connections and direct them to the `istio-proxy` container. The `istio-proxy` container is an Envoy binary wrapped with `pilot-agent` to manage its lifecycle.
 
 If you want to use manual Istio sidecar injection, then you would always filter your Kubernetes deployment file through the `istioctl` utility, and deploy the resulting deployment specification. However, most users tend to take advantage of Istio’s automatic sidecar injection.
 
@@ -106,7 +106,7 @@ This instructs Istio to mutate all new pods with an injected sidecar via Kuberne
 kubectl delete pods --all
 ```
 
-Check that all components have the Running status, and that Ready column shows 2/2. This signifies that there are now 2 containers running in each of the pods (the application container and the Istio Proxy container) and that both of these are running.
+Check that all components have the Running status, and that Ready column shows 2/2. This signifies that there are now 2 containers running in each of the pods (the application container and the Istio Proxy container) and that both of these are ready.
 
 ```shell
 $ kubectl get pods
@@ -139,4 +139,4 @@ kubectl get pods -l app=user -o yaml | grep "image:" -A2
 ...
 ```
 
-You should see the `istio-init` container, and well as a container named `istio-proxy` automatically injected into the pod. Awesome. Now that we have installed Istio, we can start to check out what it can do.
+You should see the `istio-init` container, and well as a container named `istio-proxy` automatically injected into the pod. Awesome. Now that we have installed Istio and integrated it with our application, we can start to check out what it can do.
