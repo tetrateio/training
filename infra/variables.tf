@@ -39,6 +39,3 @@ variable "cluster_count" {
   default = 0
   description = "Kube Clusters to deploy. Set this when you want to deploy the clusters and unset to spin down to save $$$ but keep the projects around."
 }
-
-
-
