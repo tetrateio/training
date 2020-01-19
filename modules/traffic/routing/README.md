@@ -43,6 +43,9 @@ spec:
   - name: v2
     labels:
       version: v2
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
 ```
 
 Now that we have subsets defined we can pin all traffic to version 1 of the user service in its `VirtualService` (we will go over Virtual Services in a bit more detail in the resiliency section).
@@ -54,11 +57,11 @@ kubectl apply -f modules/traffic/routing/config/user-v1-100.yaml
 If we take a look at the changes we just made to the `VirtualService`, we can see that there are now two destinations, one for each subset. However, we are weighting 100% of requests to version 1.
 
 ```shell
-$ kubectl get virtualservice user-gateway -o yaml
+$ kubectl get virtualservice user -o yaml
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: user-gateway
+  name: user
 spec:
   gateways:
   - ingress
@@ -88,11 +91,11 @@ Now if we refresh the accounts page several times we can see that we always get 
 We can also go in a change the weighting. Let’s edit the `VirtualService` to route 25% of traffic to version two. Note that the weight’s have to add up to 100 otherwise they will fail validation.
 
 ```shell
-$ kubectl edit virtualservice user-gateway
+$ kubectl edit virtualservice user
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: user-gateway
+  name: user
 spec:
   gateways:
   - ingress

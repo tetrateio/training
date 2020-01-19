@@ -4,17 +4,14 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: user-mongodb
-
 ---
 # Source: microservice/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: user
-
 ---
 # Source: microservice/charts/mongodb/templates/svc-standalone.yaml
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -23,7 +20,7 @@ metadata:
     app: user-mongodb
     chart: mongodb-5.3.2
     release: "user"
-    heritage: "Tiller"
+    heritage: "Helm"
 spec:
   type: ClusterIP
   ports:
@@ -33,7 +30,6 @@ spec:
   selector:
     app: user-mongodb
     release: "user"
-
 ---
 # Source: microservice/templates/service.yaml
 apiVersion: v1
@@ -42,6 +38,7 @@ metadata:
   name: user
   labels:
     app: user
+    service: user
 spec:
   type: ClusterIP
   ports:
@@ -51,10 +48,8 @@ spec:
       name: http-user
   selector:
     app: user
-
 ---
 # Source: microservice/charts/mongodb/templates/deployment-standalone.yaml
-
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -63,7 +58,7 @@ metadata:
     app: user-mongodb
     chart: mongodb-5.3.2
     release: "user"
-    heritage: "Tiller"
+    heritage: "Helm"
 spec:
   selector:
     matchLabels:
@@ -118,7 +113,6 @@ spec:
           mountPath: /bitnami/mongodb
         resources:
           {}
-          
       volumes:
       - name: data
         emptyDir: {}
@@ -136,6 +130,7 @@ spec:
   selector:
     matchLabels:
       app: user
+      version: v1
   template:
     metadata:
       labels:
@@ -151,55 +146,3 @@ spec:
           ports:
           - name: http
             containerPort: 8080
-
----
-# Source: microservice/charts/mongodb/templates/configmap.yaml
-
----
-# Source: microservice/charts/mongodb/templates/headless-svc-rs.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/initialization-configmap.yaml
-
----
-# Source: microservice/charts/mongodb/templates/poddisruptionbudget-arbiter-rs.yaml
-
----
-# Source: microservice/charts/mongodb/templates/poddisruptionbudget-primary-rs.yaml
-
----
-# Source: microservice/charts/mongodb/templates/poddisruptionbudget-secondary-rs.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/prometheus-alerting-rule.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/prometheus-service-monitor.yaml
-      
-
----
-# Source: microservice/charts/mongodb/templates/pvc-standalone.yaml
-
----
-# Source: microservice/charts/mongodb/templates/secrets.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/statefulset-arbiter-rs.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/statefulset-primary-rs.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/statefulset-secondary-rs.yaml
-
-
----
-# Source: microservice/charts/mongodb/templates/svc-primary-rs.yaml
-
-
