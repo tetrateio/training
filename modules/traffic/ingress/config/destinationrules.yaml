@@ -4,9 +4,17 @@ metadata:
   name: transaction
 spec:
   host: transaction
-  trafficPolicy:
-    tls:
-      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: transaction-log
+spec:
+  host: transaction-log
   subsets:
   - name: v1
     labels:
@@ -18,9 +26,6 @@ metadata:
   name: user
 spec:
   host: user
-  trafficPolicy:
-    tls:
-      mode: ISTIO_MUTUAL
   subsets:
   - name: v1
     labels:
@@ -35,9 +40,17 @@ metadata:
   name: ui
 spec:
   host: ui
-  trafficPolicy:
-    tls:
-      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: account
+spec:
+  host: account
   subsets:
   - name: v1
     labels:

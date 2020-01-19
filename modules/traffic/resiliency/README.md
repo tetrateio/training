@@ -139,11 +139,11 @@ kubectl apply -f modules/traffic/resiliency/config/user-retry.yaml
 ```
 
 ```shell
-$ kubectl get virtualservice user-gateway -o yaml
+$ kubectl get virtualservice user -o yaml
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: user-gateway
+  name: user
 spec:
   hosts:
   - "*"
