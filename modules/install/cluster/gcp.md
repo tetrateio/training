@@ -1,7 +1,7 @@
 Kubernetes Cluster Access
 ===
 
-For this training we'll be using a Kubernetes cluster in GKE that we control in cloud shell. We will provide credentials and a cluster name that you can use.
+For this, we'll be using a Kubernetes cluster in GKE that we control in cloud shell. We'll provide credentials and a cluster name that you can use.
 
 Log in to [Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor) with the provided credentials.
 
@@ -13,13 +13,13 @@ Set the project for the Cloud Shell session to the provided project ID:
 gcloud config set project <assigned-project-id>
 ```
 
-Now we can get access to our Cluster:
+Now you can access your Cluster:
 
 ```shell
 gcloud container clusters get-credentials <assigned-project-id> --zone <assigned-zone>
 ```
 
-Verify we have access via `kubectl`:
+Verify you have access via `kubectl`:
 
 ```shell
 $ kubectl get pods --all-namespaces
