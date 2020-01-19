@@ -1,7 +1,6 @@
-Observability
-=====
+# Observability
 
-To manage microservice architecture, which can involve dozens of microservices and complex dependencies, you need to be able to see what’s going on.
+To manage a microservice architecture, which can involve dozens of microservices and complex dependencies, you need to be able to see what’s going on.
 
 Istio comes with out-of-the-box monitoring features - like generating consistent application metrics for every service in your mesh - and can be used with an array of backend systems to report telemetry about the mesh. It helps us solve some of the trickiest problems we face: identifying why and where a request is slow, distinguishing normal from deviant system performance, comparing apples-to-apples metrics across services regardless of programming language, and attaining a meaningful view of system performance.
 
@@ -12,46 +11,65 @@ export INGRESS_IP=$(kubectl -n istio-system get svc istio-ingressgateway -o json
 echo $INGRESS_IP
 ```
 
-Navigate to that IP and sign up to receive some free ~~virtual~~ fake money. Then send some of that money between accounts. It doesn't really matter what you do here just generate some traffic!
+You can navigate to that IP and sign up to receive some free ~~virtual~~ fake money. Then send some of that money between accounts. It doesn't really matter what you do here just generate some traffic!
 
-> Or, to make things a bit more interesting we can `curl` in a loop: `watch -n 0.1 curl http://$INGRESS_IP`
+Alternatively, if we have Go installed we can use a tool to automatically generate traffic. This will run perpetually so remember to open a new shell.
 
-Exploring the UI
-----
+```shell
+export GO111MODULE=on
+cd training/samples/modernbank/tools/trafficGen
+go run cmd/main.go --host $(kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+```
+<!-- DON'T change this to just go run training/samples/modernbank/tools/trafficGen/cmd/main.go as this doesn't work! Go gets confused about which modules to use! -->
+
+## Exploring the UIs
+
+### Grafana
 
 Using these consistent metrics, we can build powerful dashboards and visualizations. Let's start by taking a look at our system with Grafana, which we installed alongside Istio.
 
 This service is not exposed on our cluster, so we'll need to port-forward:
-```sh
+
+```shell
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod \
     -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
 ```
+
 > We start the port-forwarding command in the background as we'll want to port-forward a few different services in the workshop.
 
-We can go check out Grafana, and the default dashboards that Istio ships with, at http://localhost:3000/
+We can go check out Grafana, and the default dashboards that Istio ships with, at http://localhost:3000/. Once there navigate to `Istio Service Dashboard` and select the Transaction service from the dropdown.
 
 > If you're in Google Cloud Shell you access it via the web preview feature in the top right hand corner. You may need to change the port to 3000.
 
+### Kiali
+
 While metrics are awesome, for understanding a new system nothing beats seeing a graph of the services in the system communicating. We also installed [Kiali](https://www.kiali.io/) alongside Istio; it comes with some nice visualizations, including a graph. Like Grafana, it's not exposed outside of the cluster, so we'll need to port-forward it:
-```sh
+
+```shell
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod \
-    -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001 &
+    -l app=kiali -o jsonpath='{.items[0].metadata.name}') 8081:20001 &
 ```
 
-We can see the UI at http://localhost:20001/kiali with the username / password **admin / admin**.
+We can see the UI at http://localhost:8081/kiali with the username / password **admin / admin**. Once there navigate to `Graph` and select the `default` namespace from the dropdown.
 
-> If you're in Google Cloud Shell you access it via the web preview feature in the top right hand corner.
+> If you're in Google Cloud Shell you access it via the web preview feature in the top right hand corner. You may need to change the port to 8081.
 
-Finally, we _also_ installed Jaeger, which we can view in the same way:
+### Tracing
+
+Finally, we _also_ installed a tracing tool called Jaeger, which we can view in the same way:
+
 ```sh
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod \
-    -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 28080:16686 &
+    -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 8082:16686 &
 ```
 
-Which we can see at http://localhost:28080/.
+> If you're in Google Cloud Shell you access it via the web preview feature in the top right hand corner. You may need to change the port to 8082.
 
-How it works
----
+Which we can see at http://localhost:8082/. Set the service to `istio-ingressgateway` and run a search. We should see our account transactions in the traces.
+
+## How It Works
+
+<!-- TODO: This section needs updating -->
 
 Mixer is called by every sidecar in the mesh for policy (the sidecar asks Mixer if each request is allowed). Prometheus scrapes telemetry from Envoy about each request. We'll cover the policy side in detail in the security section, but for now lets dig into telemetry. Mixer is Istio's intetgration point with external systems. A backend, for example Prometheus, can implement an integration with Mixer (called an "adapter"). Using Mixer's configuration, we can instantiate the adapter (called a "handler"), describe the data about each request we want to provide the adapter (an "instance") and when Mixer should call the handler with instances (a "rule").
 
