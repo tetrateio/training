@@ -26,7 +26,7 @@ source ~/.bashrc
 Let’s install Istio.
 
 ``` bash
-istioctl manifest apply --set profile=demo --set values.global.mtls.enabled=true --set values.global.controlPlaneSecurityEnabled=true
+istioctl manifest apply --set profile=demo --set values.global.mtls.enabled=false --set values.global.controlPlaneSecurityEnabled=true
 ```
 
 There were a lot of things deployed there so we will break down the important parts and verify that they installed successfully.
@@ -86,7 +86,7 @@ This includes all the of Istio control-plane components (including Istio Sidecar
 We can use the experimental `verify-install` command to fully validate that Istio successfully installed. This command may take up to a minute to complete.
 
 ```shell
-$ istioctl manifest generate --set profile=demo --set values.global.mtls.enabled=true --set values.global.controlPlaneSecurityEnabled=true | istioctl verify-install -f -
+$ istioctl manifest generate --set profile=demo --set values.global.mtls.enabled=false --set values.global.controlPlaneSecurityEnabled=true | istioctl verify-install -f -
 ...
 Checked 23 crds
 Checked 9 Istio Deployments

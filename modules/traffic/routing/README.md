@@ -35,17 +35,14 @@ kind: DestinationRule
 metadata:
   name: user
 spec:
-  host: user
-  subsets:
+  host: user  subsets:
   - name: v1
     labels:
       version: v1
   - name: v2
     labels:
       version: v2
-  trafficPolicy:
-    tls:
-      mode: ISTIO_MUTUAL
+
 ```
 
 Now that we have subsets defined we can pin all traffic to version 1 of the user service in its `VirtualService` (we will go over Virtual Services in a bit more detail in the resiliency section).
@@ -129,11 +126,11 @@ kubectl apply -f modules/traffic/routing/config/user-v2-chrome.yaml
 If we look at the configuration we just created we can see that we added a stanza to the path match to search for the word `Chrome` anywhere in the user-agent. Note that ordering of the matches matters. Envoy will route to the first match it sees, not the most specific.
 
 ```shell
-$ kubectl get virtualservice user-gateway -o yaml
+$ kubectl get virtualservice user -o yaml
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: user-gateway
+  name: user
 spec:
   gateways:
   - ingress

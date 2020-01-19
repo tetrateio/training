@@ -91,4 +91,4 @@ Apply strict policy
     command terminated with exit code 56
     ```
 
-    If everything worked correctly, we should see curl return an error code 56, indicating if failed to establish a TSL connection.
+    If everything worked correctly, we should see curl return an error code 56, indicating if failed to establish a TLS connection.
