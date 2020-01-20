@@ -13,7 +13,7 @@ echo $INGRESS_IP
 
 You can navigate to that IP and sign up to receive some free ~~virtual~~ fake money. Then send some of that money between accounts. It doesn't really matter what you do here just generate some traffic!
 
-Alternatively, if we have Go installed we can use a tool to automatically generate traffic. This will run perpetually so remember to open a new shell.
+Alternatively, if we have Go installed we can use a tool to automatically generate traffic. **This will run perpetually so remember to open a new shell**.
 
 ```shell
 export GO111MODULE=on
