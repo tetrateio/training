@@ -35,7 +35,8 @@ kind: DestinationRule
 metadata:
   name: user
 spec:
-  host: user  subsets:
+  host: user  
+  subsets:
   - name: v1
     labels:
       version: v1
