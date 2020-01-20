@@ -17,7 +17,7 @@ Alternatively, if we have Go installed we can use a tool to automatically genera
 
 ```shell
 export GO111MODULE=on
-cd samples/modernbank/tools/trafficGen
+cd training/samples/modernbank/tools/trafficGen
 go run cmd/main.go --host $(kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 ```
 <!-- DON'T change this to just go run training/samples/modernbank/tools/trafficGen/cmd/main.go as this doesn't work! Go gets confused about which modules to use! -->
