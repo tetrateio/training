@@ -7,6 +7,13 @@ variable "credz_file" {
 variable "organization_id" {
   type = string
   description = "The GCP organization to deploy the infra into"
+  default = "775566979306"
+}
+
+variable "billing_account" {
+  type = string
+  description = "The GCP billing account"
+  default = "014595-E74614-87FCAC"
 }
 
 variable "region" {
