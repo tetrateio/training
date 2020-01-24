@@ -3,6 +3,12 @@
 # Download download the terraform GCP service account key (JSON) for the training-infra-owner project.
 credz_file = "/Users/liam/Downloads/training-infra-owner-70f84aa3c556.json"
 
+# Organization ID to place the project folder and projects under
+organization_id = ""
+
+# GCP Billing account to bill for the infra
+billing_account = ""
+
 # The name of the workshop or conference you'll be delivering at.
 # WARNING: This is used in IDs with a count suffix so must be unique across all GCP.
 workshop_name = "nist-2020"

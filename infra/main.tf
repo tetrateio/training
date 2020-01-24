@@ -16,7 +16,7 @@ resource "google_project" "training" {
 
   project_id = format("%s-%03d", var.workshop_name, count.index)
   folder_id  = google_folder.training.name
-  billing_account = "014595-E74614-87FCAC"
+  billing_account = var.billing_account
 }
 
 resource "google_project_service" "container" {
