@@ -1,7 +1,17 @@
 # Workshop
 variable "credz_file" {
-    type = string
-    description = "The fully qualified location of the terraform JSON GCP service account key for the training-infra-owner project."
+  type = string
+  description = "The fully qualified location of the terraform JSON GCP service account key for the training-infra-owner project."
+}
+
+variable "organization_id" {
+  type = string
+  description = "The GCP organization to deploy the infra into"
+}
+
+variable "billing_account" {
+  type = string
+  description = "The GCP billing account"
 }
 
 variable "region" {
