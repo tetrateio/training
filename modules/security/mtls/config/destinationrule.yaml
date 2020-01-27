@@ -12,7 +12,9 @@ metadata:
     release: istio
 spec:
   host: "*.local"
-
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
 ---
 # Destination rule to disable (m)TLS when talking to API server, as API server doesn't have sidecar.
 # Customer should add similar destination rules for other services that dont' have sidecar.
