@@ -1,9 +1,13 @@
 # Installing Demo Application and Istio Proxy Injection
 
+## Overview
+
 The Demo application is using the [microservice-demo](https://github.com/tetratelabs/microservices-demo) app, also known as the Hipstershop app.
 It's an application composed of many micro-services, developped using many different languages and protocols.
 
 [![Architecture of microservices](/assets/hipstershop-arch.svg)](/assets/hipstershop-arch.svg)
+
+## Deployment
 
 Let's deploy our entire microservices application.
 
@@ -200,3 +204,13 @@ kubectl -n hipstershopv1v2 get pods -l app=apiservice -o yaml | grep "image:" -A
 ```
 
 You should see the `istio-init` container as well as a container named `istio-proxy` automatically injected into the pod. Awesome. Now that we have installed Istio and integrated it with our application, we can start to check out what it can do.
+
+## Testing the application
+
+Now that the Hipstershop app is deployed, we can connect to it using our browser. For the moment the shop is not opened to the world and can only be reached internally to the Kubernetes cluster. We can still access it by forwarding the traffic to our local computer. 
+We can do this by using the `port-forward` command of `kubectl`:
+
+```shell
+kubectl -n hipstershopv1v2 port-forward deployment/frontend 8080
+```
+You can now open your browser at [http://localhost:8080](http://localhost:8080). Play around to see how the Hipstershop application works. You're done installing the application.
