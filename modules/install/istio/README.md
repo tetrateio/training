@@ -26,6 +26,9 @@ source ~/.bashrc
 You have two ways to install Istio: Using the Istio Operator or using `istioctl`.
 We will start by using the `istioctl` command line.
 
+
+### Istio install using Istioctl
+
 Istio Install is based on `profiles` that defines a set of options to apply during the deployment. In the training we will deploy using the `demo` profile. Note that it is strongly advised NOT to use the `demo` profile for anything else than a demo (even on a dev or pre-prod env, you're better using a `default` profile and add the needed resources if needed).
 
 
@@ -95,3 +98,115 @@ Checked 23 crds
 Checked 3 Istio Deployments
 Istio is installed successfully
 ```
+
+### Istio install using Istio-Operator
+
+You can install the Istio-Operator at anytime. The Operator will install a CRD named `IstioOperator` which we will use to configure the Istio deployment.
+In the case where you already installed Istio with `istioctl`, like we did previously, an `IstioOperator` resource was created for us: `installed-state`. This is a full dump of the configuration used by `istioctl` to create the cluster. When the Operator start, it will read the CR and onboard the cluster. That means you have a transparent transition from `istioctl` to `IstioOperator`.
+
+```shell
+istioctl operator init
+
+Using operator Deployment image: docker.io/istio/operator:1.6.3
+✔ Istio operator installed
+✔ Installation complete
+```
+
+Check that the Operator is running:
+
+```shell
+kubectl get pods -n istio-operator
+
+NAME                              READY   STATUS    RESTARTS   AGE
+istio-operator-8494bc7758-pj6jv   1/1     Running   0          45s
+```
+
+If you already installed Istio using `istioctl`, the Operator will bootstrap using auto-generated CR and you have nothing esle to do. You can look at the Operator's log:
+
+```shell
+info	ControlZ available at 127.0.0.1:9876
+info	Registering Components.
+info	Adding controller for IstioOperator
+info	Controller added
+info	Starting the Cmd.
+info	attempting to acquire leader lease  istio-operator/istio-operator-lock...
+info	successfully acquired lease istio-operator/istio-operator-lock
+
+info	Reconciling IstioOperator
+
+...
+
+info	installer	Processing resources from manifest: IstiodRemote for CR installed-state-istio-system-IstiodRemote
+info	installer	AddonComponents is waiting on dependency...
+info	installer	Generated manifest objects are the same as cached for component IstiodRemote.
+info	installer	Policy is waiting on dependency...
+info	installer	Processing resources from manifest: Base for CR installed-state-istio-system-Base
+info	installer	Pilot is waiting on dependency...
+info	installer	Telemetry is waiting on dependency...
+info	installer	Cni is waiting on dependency...
+info	installer	IngressGateways is waiting on dependency...
+info	installer	EgressGateways is waiting on dependency...
+info	installer	The following objects differ between generated manifest and cache:
+        - ClusterRole::istiod-istio-system
+        - ClusterRole::istio-reader-istio-system
+        - ClusterRoleBinding::istio-reader-istio-system
+        - ClusterRoleBinding::istiod-pilot-istio-system
+        - ServiceAccount:istio-system:istio-reader-service-account
+        - ServiceAccount:istio-system:istiod-service-account
+        - ValidatingWebhookConfiguration::istiod-istio-system
+        - CustomResourceDefinition::httpapispecs.config.istio.io
+        - CustomResourceDefinition::httpapispecbindings.config.istio.io
+        - CustomResourceDefinition::quotaspecs.config.istio.io
+        - CustomResourceDefinition::quotaspecbindings.config.istio.io
+        - CustomResourceDefinition::destinationrules.networking.istio.io
+        - CustomResourceDefinition::envoyfilters.networking.istio.io
+        - CustomResourceDefinition::gateways.networking.istio.io
+        - CustomResourceDefinition::serviceentries.networking.istio.io
+        - CustomResourceDefinition::sidecars.networking.istio.io
+        - CustomResourceDefinition::virtualservices.networking.istio.io
+        - CustomResourceDefinition::workloadentries.networking.istio.io
+        - CustomResourceDefinition::attributemanifests.config.istio.io
+        - CustomResourceDefinition::handlers.config.istio.io
+        - CustomResourceDefinition::instances.config.istio.io
+        - CustomResourceDefinition::rules.config.istio.io
+        - CustomResourceDefinition::clusterrbacconfigs.rbac.istio.io
+        - CustomResourceDefinition::rbacconfigs.rbac.istio.io
+        - CustomResourceDefinition::serviceroles.rbac.istio.io
+        - CustomResourceDefinition::servicerolebindings.rbac.istio.io
+        - CustomResourceDefinition::authorizationpolicies.security.istio.io
+        - CustomResourceDefinition::peerauthentications.security.istio.io
+        - CustomResourceDefinition::requestauthentications.security.istio.io
+        - CustomResourceDefinition::adapters.config.istio.io
+        - CustomResourceDefinition::templates.config.istio.io
+        - CustomResourceDefinition::istiooperators.install.istio.io
+...
+```
+
+If you never installed Istio, you can now create the IstioOperator resouce to create the Istio deployment:
+
+```yaml
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: istio
+spec:
+  profile: demo
+EOF
+```
+
+This is pretty straightforward. Let's create the `istio-system` namespace and apply the the manifest:
+
+```shell
+kubectl create ns istio-system
+kubectl apply -f - <<EOF
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: istio
+spec:
+  profile: demo
+EOF
+```
+

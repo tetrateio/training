@@ -1,5 +1,10 @@
 # Installing Demo Application and Istio Proxy Injection
 
+The Demo application is using the (microservice-demo)[https://github.com/tetratelabs/microservices-demo] app, also known as the Hipstershop app.
+It's an application composed of many micro-services, developped using many different languages and protocols.
+
+[![Architecture of microservices](./assets/hipstershop-arch.svg)](./assets/hipstershop-arch.svg)
+
 Let's deploy our entire microservices application.
 
 ```shell
