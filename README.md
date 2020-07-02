@@ -11,6 +11,7 @@ We'll go over the content in the following order:
     1. [Setup your cluster](modules/install/cluster/)
     2. [Deploy Istio](modules/install/istio/)
     3. [Deploy our demo App](modules/install/app/)
+    4. [Setup Ingress Gateway](modules/ingressGateway/)
 2. [Look at Istio's observability features](modules/observability/)
 3. [Learn about Istio's traffic management capabilities](modules/traffic)
     1. [Setting up ingress with Gateways](modules/traffic/ingress)
