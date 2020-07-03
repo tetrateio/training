@@ -23,7 +23,7 @@ source ~/.bashrc
 
 ## Installing Istio
 
-You have two ways to install Istio: Using the Istio Operator or using `istioctl`.
+You have two ways to install Istio: Using the `Istio Operator` or using `istioctl`.
 We will start by using the `istioctl` command line.
 
 

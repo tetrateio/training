@@ -1,9 +1,15 @@
 # Routing
 
+## Overview
 Traffic splitting allows you to distribute specific percentages of traffic across two or more versions of a service. This allows you to conduct A/B testing between versions and also allows for controlled, paced roll-out of untested features (i.e., canary deployment). Traffic splitting is achieved using routing rules that identify at least one weighted backend that corresponds to a specific version of the destination service that is expressed using labels.
 
 If there are multiple registered instances associated with the label/s, routing will be based on the load balancing policy configured for the service, or round-robin by default. There are different load balancing methods you can configure via Destination Rule's Load Balancer Setting, e.g., Round Robin, Least Connection, and Random. It can also load balance with consistent hashing to achieve affinity by using Cookie, Header, or Source IP.
 
+In the module we are going to use the `VirtualService` and the `DestinationRule` CRD to route traffic between two versions of a microservice.
+
+[![Hipstershop Routing](/assets/hipstershop-istio-routing.svg)](/assets/hipstershop-istio-routing.svg)
+
+## Routing
 You may have noticed in previous sections two different banner color, one grey and one red. If you did not noticed, go back to the Hipstershop and reload the page multiple time.
 We actually deployed two versions of the `frontend` microservice, a `v1` and a `v2`:
 
@@ -175,6 +181,8 @@ If we look at the configuration we just created we can see that we added a stanz
 
 Now if you visit the application from Chrome you will always be routed to version 2 of the frontend service, with the red banner, but if you visit from any other browser you will be routed to version 1 with the grey banner.
 
+[![Hipstershop V2](/assets/Hipster_Shop_v2.png)](/assets/Hipster_Shop_v2.png)
+
 Let’s reset our VirtualService back to the default behavior, with a 50/50 between v1 and v2.
 
 ```shell
@@ -231,7 +239,7 @@ In this scenario, Envoy still send 50% requests to the `v2` destination, as requ
 To further diagnose, we can check the `hipstershop-ingressgateway logs`:
 
 ```yaml
-hipstershop-ingressgateway-7c95d4fbd6-xzs47 istio-proxy [2020-07-02T17:07:07.619Z] "GET /product/2ZYFJ3GM2N HTTP/1.1" 503 UH "-" "-" 0 19 0 - "10.56.0.1" "python-requests/2.21.0" "1fe3d871-4b0d-4e6d-b568-23195b67c7c6" "hipstershop.35.245.245.42.sslip.io" "-" - - 10.56.0.46:8443 10.56.0.1:39760 hipstershop.35.245.245.42.sslip.io -
+"GET /product/2ZYFJ3GM2N HTTP/1.1" 503 UH "-" "-" 0 19 0 - "10.56.0.1" "python-requests/2.21.0" "1fe3d871-4b0d-4e6d-b568-23195b67c7c6" "hipstershop.35.245.245.42.sslip.io" "-" - - 10.56.0.46:8443 10.56.0.1:39760 hipstershop.35.245.245.42.sslip.io -
 ```
 Envoy is reporting a `503` error code with a `UF` flag. Envoy always add a respose flag in case of error. In this case:
 - UH: No healthy upstream hosts in upstream cluster in addition to 503 response code.
