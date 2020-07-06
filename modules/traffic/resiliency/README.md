@@ -14,7 +14,11 @@ Connect to the Hipstershop application, and select one item in the shop, like th
 
 This page contains a detailed view of the product you selected, a button to buy the product then 4 other items that the shop propose, and a text advertisment.
 
-We're going to inject an HTTP fault to simulate a transient failure in your `adservice` service, causing the ads to fail to load. To do this, you’ll add a fault stanza to the account `VirtualService` causing an HTTP 500 response code for 50% of calls to the accounts service. This stanza configures Envoy to return a 500 response code immediately when a client calls the account service instead of forwarding the request to the service itself.
+We're going to inject an HTTP fault to simulate a transient failure in your `adservice` service, causing the ads to fail to load. To do this, you’ll add a fault stanza to the account `VirtualService` causing an HTTP 500 response code for 50% of calls to the accounts service. 
+
+![Abort](/assets/hipstershop-istio-ingress-abort.svg)
+
+This stanza configures Envoy to return a 500 response code immediately when a client calls the account service instead of forwarding the request to the service itself.
 
 ```shell
 kubectl apply -n hipstershopv1v2 -f - <<EOF
@@ -47,7 +51,11 @@ To ensure users aren't impacted by these request failures we have a couple tools
 
 ### Delays
 
-Like `Aborts`, `Delays` are a way to introduce unsusual behaviour inside the mesh by adding a delay before sending the request to the upstream. Like `aborts`, they are enforced on the client side. Let's add a 4s delay to the request:
+Like `abort`, the `delay` is a way to introduce unsusual behaviour inside the mesh by adding a delay before sending the request to the upstream. Like `aborts`, they are enforced on the client side. 
+
+![Abort](/assets/hipstershop-istio-ingress-delay.svg)
+
+Let's add a 4s delay to the request:
 
 ```shell
 kubectl apply -n hipstershopv1v2 -f - <<EOF
@@ -87,6 +95,8 @@ We clearly see that we waited for 4s before calling the upstream.
 ### Retries
 
 Retries refer to the act of retrying a failed HTTP request to guard against transient failures. They can be used for any safe (GET) or idempotent (PUT/DELETE) requests.
+
+![Abort](/assets/hipstershop-istio-ingress-retry.svg)
 
 > There is currently a [bug](https://github.com/istio/istio/issues/13705) in Istio where if you set fault injection AND retries then the retries do not take effect. If you set only one or the other then they work.
 
@@ -187,6 +197,7 @@ Here, from the `adservice` perspective, 3 requests came in and the first two fai
 Networks are unreliable. Consequently, transient request latency is a common occurance in a distributed system. So how can we protect our users from this? Well, we can combine retries and timeouts. Rather than wait the 2s for the request to complete, we will timeout after 1s and then retry, repeating until one of our requests succeed or we fail 3 consecutive times. Let’s apply that configuration to the microservice that calls the `adservice` service, the frontend service.
 
 Let's recall what we have so far: the `adservice` is answering with a 2s delay, and 2 requests out of 3 are 503 errors. We added a retry policy, so we do 2 more attempts if we get a 5xx error.
+
 In the logs that means:
 
 ```yaml
@@ -228,6 +239,8 @@ If you do a single requests, you get in the `frontend` logs:
 UT means `Upstream request timeout in addition to 504 response code.`, which also explain the 504 error code.
 URX means `The request was rejected because the upstream retry limit (HTTP) or maximum connect attempts (TCP) was reached.`, which says that the first try plus the 2 retries failed. You can also see this from the two last part of the log: request took 3015 ms (3 times 1s timeout) and there was no upstream duration, as we never waited for it, we closed the connection after 1s.
 
+![Abort](/assets/hipstershop-istio-ingress-timeout1.svg)
+
 Looking at the `adservice` logs:
 
 ```yaml
@@ -246,34 +259,7 @@ To be closer to reallity, let's start the `adservice-v2` service. It's the same 
 kubectl -n hipstershopv1v2  scale --replicas=1 deployment adservice-v2
 ```
 
-
-```shell
-kubectl apply -n hipstershopv1v2 -f - <<EOF
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: user
-spec:
-  hosts:
-  - "*"
-  gateways:
-  - ingress
-  http:
-...
-    timeout: 3s
-    retries:
-      attempts: 3
-      perTryTimeout: 0.5s
-      retryOn: gateway-error,connect-failure,unavailable
-```
-
-Now when you refresh the page you will notice that account load time will fluctuate but it has reduced from the 10s on half of requests previously. It’s safe to leave the user retry change we made, but we should clean up the latency injection.
-
-> There is currently a [bug](https://github.com/istio/istio/issues/13705) in Istio where if you set fault injection AND retries then the retries do not take effect. If you set only one or the other then they work.
-
-```shell
-kubectl delete virtualservice account
-```
+![Abort](/assets/hipstershop-istio-ingress-timeout2.svg)
 
 After doing some requests, you should see in the frontend logs that some requests are answered right away and some others are answered, but with a 1s delay:
 
@@ -318,6 +304,8 @@ You can use the following `curl` command to do one query per second:
 while true ; do curl -s  -o /dev/null http://hipstershop.35.245.245.42.sslip.io/ ; sleep 1s ; done
 ```
 
+![Abort](/assets/hipstershop-istio-ingress-outlier1.svg)
+
 We can now add outlier detection by creating a `DestinationRule` (more on those in later sections). An example of how we would configure outlier detection is below. In it, a service instance will be ejected if it returns a 5xx on 2 consecutive attempts. It will only be allowed back in after 5 minutes multiplied by the number of times it has been ejected.
 
 ```shell
@@ -336,6 +324,9 @@ EOF
 ```
 
 It won't be long before you only see requests going to `adservice-v2`.
+
+![Abort](/assets/hipstershop-istio-ingress-outlier2.svg)
+
 By using an Outlier-Detection we were able to guaranty a perfect quality of service.
 
 ## Clean-up
