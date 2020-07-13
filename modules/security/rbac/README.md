@@ -1,7 +1,22 @@
 Istio RBAC for Service to Service Communication
 ===
 
-Istio provides every workload with a strong identity - in Kubernetes, the pod's ServiceAccount - which is used to establish mTLS connections between services in the mesh. While establishing mTLS connections, sidecars in the mesh will validate certificates according to [SPIFFE's X.509 SVID spec](https://github.com/spiffe/spiffe/blob/master/standards/X509-SVID.md), which means that after the connection is established we have an authenticated identity of the other party. Istio allows you to write access control policies using those identities to describe which services can communicate.
+Istio provides every workload with a strong identity - in Kubernetes, the pod's ServiceAccount is used to establish mTLS connections between services in the mesh. While establishing mTLS connections, sidecars in the mesh will validate certificates according to [SPIFFE's X.509 SVID spec](https://github.com/spiffe/spiffe/blob/master/standards/X509-SVID.md), which means that after the connection is established we have an authenticated identity of the other party. Istio allows you to write access control policies using those identities to describe which services can communicate.
+
+
+1. Setup a deny-all policy
+    ```sh
+    kubectl apply -f - <<EOF
+    apiVersion: security.istio.io/v1beta1
+    kind: AuthorizationPolicy
+    metadata:
+      name: deny-all
+      namespace: hipstershopv1v2
+    spec:
+      {}
+    EOF
+    ```
+
 
 This config comes in three parts: a cluster wide `ClusterRbacConfig` which sets the mesh's RBAC mode (on, off, inclusive list, exclusive list). We'll start by creating one which requires RBAC for the `default` namespace:
 
