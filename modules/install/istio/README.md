@@ -8,7 +8,7 @@ Download Istio CLI.
 
 ```shell
 cd ~/
-export ISTIO_VERSION=1.4.3
+export ISTIO_VERSION=1.6.5
 curl -L https://git.io/getLatestIstio | sh -
 ln -sf istio-$ISTIO_VERSION istio
 ```
