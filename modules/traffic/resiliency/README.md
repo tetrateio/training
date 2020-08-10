@@ -327,7 +327,7 @@ It won't be long before you only see requests going to `adservice-v2`.
 
 ![Abort](/assets/hipstershop-istio-ingress-outlier2.svg)
 
-By using an Outlier-Detection we were able to guaranty a perfect quality of service.
+By using an *Outlier-Detection* rule we were able to guaranty a near-perfect quality of service.
 
 Do you remember how we used the *Traffic Routing* features of Istio to load-balance traffic between the `v1` and `v2` versions of the `frontend` application ? The traffic split happen before we send the request to the destination, so if no `v2` frontend pods are deployed, we will still send requests to it and get errors.
 This is exactly where the Outlier Detection can come in play. By updating the `DestinationRule` of the `frontend` application, we can ensure that no traffic will be sent to the `v2` service if no pods can answer. 
