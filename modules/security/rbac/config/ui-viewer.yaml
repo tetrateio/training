@@ -1,9 +1,0 @@
-apiVersion: "rbac.istio.io/v1alpha1"
-kind: ServiceRole
-metadata:
-  name: ui-viewer
-  namespace: default
-spec:
-  rules:
-  - services: ["ui.default.svc.cluster.local"]
-    methods: ["GET"]

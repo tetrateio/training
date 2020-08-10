@@ -68,7 +68,7 @@ HTTP Status: 500 Internal Server Error
 
 If we look at the logs of the `frontend` service, we can see we still have a DENY: `could not retrieve currencies: rpc error: code = PermissionDenied desc = RBAC: access denied`
 
-Let's add another policy for the `currency` service. This time it's an `HTTP POST` request:
+Let's add another policy for the `currency` service. This time it's an `HTTP POST` request (all GRPC requests are made using `POST`):
 
 ```sh
 kubectl apply -n hipstershopv1v2 -f - <<EOF
