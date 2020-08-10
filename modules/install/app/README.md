@@ -45,8 +45,9 @@ Here we have a bunch of micro-services, all having 1 pod ready out of 1. (Load-g
 
 Now let’s take a look at the frontend microservice deployment.
 
-```shell
+```yaml
 $ kubectl -n hipstershopv1v2 get deployment frontend -o yaml
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -162,6 +163,11 @@ You can turn on Automatic Sidecar Injection on a per Kubernetes namespace level 
 kubectl label namespace hipstershopv1v2 istio-injection=enabled
 ```
 
+Injection will depend on the global Injection Policy defined when installing Istio. You can configure it by changing the value `values.global.proxy.autoInject` from the profile:
+- `enabled`: all deployments inside a namespace with the label `istio-injection=enabled` will have a sidecar. Setting `sidecar.istio.io/inject = "false"` will prevent the injection. 
+- `disabled`: NO sidcar will be added even if a namespace have the label `istio-injection=enabled` set. To enable sidecar auto-injection you need to set *both* `istio-injection=enabled` label on the namespace *and* `sidecar.istio.io/inject = "true"` annotation on the Pod/Deployment.
+
+
 This instructs Istio to mutate all new pods with an injected sidecar via Kubernetes' Mutating Admission Webhooks. In order to trigger this mutation and inject our Envoy sidecars delete all the application's pods.
 
 ```shell
@@ -214,3 +220,6 @@ We can do this by using the `port-forward` command of `kubectl`:
 kubectl -n hipstershopv1v2 port-forward deployment/frontend 8080
 ```
 You can now open your browser at [http://localhost:8080](http://localhost:8080). Play around to see how the Hipstershop application works. You're done installing the application.
+
+---
+Next step: [Traffic Management](/modules/traffic)

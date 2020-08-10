@@ -210,3 +210,5 @@ spec:
 EOF
 ```
 
+---
+Next step: [Install Hipstershop Application](/modules/install/app)

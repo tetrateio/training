@@ -52,3 +52,6 @@ Finally, let's clone the training repository:
 ```shell
 git clone https://github.com/tetrateio/training.git
 ```
+
+---
+Next step: [Install Istio](/modules/install/istio)

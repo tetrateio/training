@@ -32,3 +32,6 @@ kubectl create namespace hipstershopv1v2
 kubectl label namespace hipstershopv1v2 istio-injection=enabled
 kubectl apply -f https://raw.githubusercontent.com/tetratelabs/microservices-demo/master/release/hipstershop-v1-v2.yaml
 ```
+
+---
+Next step: [Observability](/modules/observability)
