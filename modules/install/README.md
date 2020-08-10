@@ -34,4 +34,4 @@ kubectl apply -f https://raw.githubusercontent.com/tetratelabs/microservices-dem
 ```
 
 ---
-Next step: [Observability](/modules/observability)
+Next step: [Traffic Management](/modules/traffic)

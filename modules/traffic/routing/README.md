@@ -9,7 +9,7 @@ In the module we are going to use the `VirtualService` and the `DestinationRule`
 
 [![Hipstershop Routing](/assets/hipstershop-istio-routing.svg)](/assets/hipstershop-istio-routing.svg)
 
-## Routing
+## Route management
 You may have noticed in previous sections two different banner color, one grey and one red. If you did not noticed, go back to the Hipstershop and reload the page multiple time.
 We actually deployed two versions of the `frontend` microservice, a `v1` and a `v2`:
 
@@ -30,7 +30,7 @@ DestinationRules are in fact all about configuring clients. They allow a service
 In this case, we have two versions of the `frontend` microservice, indicated by the `version` labels. Let’s add a `DestinationRule` to tell Istio how to identify the different versions we have deployed.
 
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
@@ -59,7 +59,7 @@ kubectl apply -f modules/traffic/routing/config/user-v1-100.yaml
 
 If we take a look at the changes we just made to the `VirtualService`, we can see that there are now two destinations, one for each subset. However, we are weighting 100% of requests to version 1.
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -99,7 +99,7 @@ Now if we refresh the Hipstershop page several times we can see that we always g
 
 We can also go in a change the weighting. Let’s edit the `VirtualService` again to route 25% of traffic to version two. Note that the weight’s have to add up to 100 otherwise they will fail validation.
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -137,7 +137,7 @@ EOF
 
 This enables you to release new versions to increments of a single percent of users. Istio also allows you to route traffic based on headers, URI or HTTP method. This enables you to do things like releasing to a single browser. Let’s release v2 to Chrome users only.
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -185,7 +185,7 @@ Now if you visit the application from Chrome you will always be routed to versio
 
 Let’s reset our VirtualService back to the default behavior, with a 50/50 between v1 and v2.
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -251,3 +251,10 @@ Once you're done playing, don't forget to restart the `v2` frontend:
 ```shell
 kubectl -n hipstershopv1v2  scale --replicas=1 deployment/frontend-v2
 ```
+
+## Takeaway
+
+In this module you leveraged the `virtualService` and `DestinationRule` Custom Resources to split traffic between versions of the same micro-service.
+
+---
+Next step: [Traffic Resiliency](/modules/traffic/resiliency)

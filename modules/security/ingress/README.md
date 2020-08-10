@@ -85,7 +85,7 @@ Here we have an issue negociating the SSL handshake. This is because we're askin
 
 1.  Define a `Gateway` with an HTTPS port and redirect traffic
 
-    ```shell
+    ```yaml
     kubectl apply -n hipstershopv1v2 -f - <<EOF
     apiVersion: networking.istio.io/v1alpha3
     kind: Gateway
@@ -162,7 +162,7 @@ Here we have an issue negociating the SSL handshake. This is because we're askin
 
     As we did before, we need a `VirtualService` to be added to make the link between the traffic reveived by the Gateway and the Service:
 
-    ```shell
+    ```yaml
     kubectl apply -n hipstershopv1v2 -f - <<EOF
     apiVersion: networking.istio.io/v1alpha3
     kind: VirtualService
@@ -199,7 +199,7 @@ Here we have an issue negociating the SSL handshake. This is because we're askin
 
     We could have edited the `hipstershop` resources and just added the new name in them:
 
-    ```shell
+    ```yaml
     apiVersion: networking.istio.io/v1alpha3
     kind: Gateway
     metadata:
@@ -269,3 +269,10 @@ Here we have an issue negociating the SSL handshake. This is because we're askin
     curl -kvs https://storefront.$INGRESSIP.sslip.io
     ...
     ```
+
+## Takeaway
+
+Once again, we used the Istio Ingress Gateway to demonstrate how to accept and route traffic for two different applications.
+
+---
+Next step: [Mutual TLS](/modules/security/mtls)

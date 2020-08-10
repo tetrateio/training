@@ -5,3 +5,6 @@ Using Istio’s traffic management features decouple traffic flow from your appl
 1. [Ingress Traffic](ingress/)
 2. [Routing](routing/)
 3. [Improving Resiliency](resiliency/)
+
+---
+Next step: [Ingress Traffic](ingress)

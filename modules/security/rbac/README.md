@@ -1,11 +1,12 @@
 # Istio RBAC for Service to Service Communication
 
-Istio provides every workload with a strong identity - in Kubernetes, the pod's ServiceAccount is used to establish mTLS connections between services in the mesh. While establishing mTLS connections, sidecars in the mesh will validate certificates according to [SPIFFE's X.509 SVID spec](https://github.com/spiffe/spiffe/blob/master/standards/X509-SVID.md), which means that after the connection is established we have an authenticated identity of the other party. Istio allows you to write access control policies using those identities to describe which services can communicate.
+Istio provides every workload with a strong identity - in Kubernetes, the pod's `ServiceAccount` is used to establish mTLS connections between services in the mesh. While establishing mTLS connections, sidecars in the mesh will validate certificates according to [SPIFFE's X.509 SVID spec](https://github.com/spiffe/spiffe/blob/master/standards/X509-SVID.md), which means that after the connection is established we have an authenticated identity of the other party. Then, Istio allows you to write access control policies using those identities to describe which services can communicate.
 
+Note that it means that you have to enforce mTLS between your apps for the Authorization Policies to work.
 
 ## Setup a deny-all policy
 
-```sh
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -23,7 +24,7 @@ At this moment, no traffic can go through the Mesh. If you try to browser the Hi
 
 We set ourselfs out by applying a very restrictive policy. Now we need to clear communications we want to allow inside the mesh. As the policy is enforced at every Istio Proxy, we need two new policies: from outside to the Ingress Gateway and from the Ingress Gateway to the Frontend service. We are going to only allow `HTTP GET` requests first:
 
-```sh
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -70,7 +71,7 @@ If we look at the logs of the `frontend` service, we can see we still have a DEN
 
 Let's add another policy for the `currency` service. This time it's an `HTTP POST` request (all GRPC requests are made using `POST`):
 
-```sh
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -101,7 +102,7 @@ kubectl -n hipstershopv1v2 delete AuthorizationPolicy frontend-policy-to-currenc
 And let's add a global one
 
 
-```sh
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -190,7 +191,7 @@ Oh ohhhhhh, Could it be that we broke the production while adding security rules
 
 As the production is broken, let's quickly add a policy to allow `cartservice` to call the Redis port `6379`:
 
-```sh
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
@@ -210,10 +211,17 @@ EOF
 
 Once applied the `cartservice` pod should be back up. If not, you can kill it to recycle it: `kubectl -n hipstershopv1v2 delete pod -l app=cartservice`. Few seconds later your should have a running pod, and the Hipstershop should be back online.
 
-# Cleanup
+## Cleanup
 
     For now, lets clean up our Cluster Policy Config so we can carry on with the rest of the lab:
 
     ```shell
     kubectl -n hipstershopv1v2 delete AuthorizationPolicy deny-all ingress-policy policy-for-hipstershop redis-policy
     ```
+
+## Takeaway
+
+Once mTLS is enforced, we can use Istio create RBAC policies to tontrol the traffic in the mesh. While this is powerfull, it may also lead to unattended traffic break. Plane, review and tests your rules before applying them in production.
+
+---
+This is the end of the Istio Workshop for now.

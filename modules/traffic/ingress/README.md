@@ -1,10 +1,10 @@
 # Ingress Gateway
 
-By default, the components deployed on the service mesh are not exposed outside the cluster. In this section, you’ll configure Istio to expose our example UI service outside of the service mesh via the Istio Ingress.
+By default, the components deployed on the service mesh are not exposed outside of the cluster. In this section, you’ll configure Istio to expose our example UI service outside of the service mesh via the Istio Ingress.
 
 You won’t configure Istio Ingress with the Kubernetes Ingress definitions you would be using in the absence of Istio. The Istio Ingress uses a different configuration model, the `Istio Gateway`, to allow features such as monitoring and route rules to be applied to traffic entering the cluster.
 
-Note that Istio Gateway only configures the L4-L6 functions (e.g., ports to expose, TLS configuration). Users can then use standard Istio rules to control HTTP requests as well as TCP traffic entering a Gateway by binding it to a `VirtualService`.
+Note that Istio `Gateway` resource only configures the L4-L6 functions (e.g., ports to expose, TLS configuration). Users can then use standard Istio rules to control HTTP requests as well as TCP traffic entering a Gateway by binding it to a `VirtualService`.
 
 We say a `VirtualService` binds to a `Gateway` if the `VirtualService` lists the Gateway’s name in its gateways field and at least one host claimed by the `VirtualService` is exposed by the `Gateway`.
 
@@ -63,7 +63,7 @@ Let’s tell Istio to bind a Gateway to the Istio Ingress.
 
 We can apply the Gateway manifest:
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
@@ -111,7 +111,7 @@ Note that within a `VirtualService`, the match conditions are checked at runtime
 
 Let's create a `VirtualService` that will link the Ingress Gateway to the Hipstershop `frontend` and `apiservice` services
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -147,6 +147,8 @@ You can open your browser at [http://hipstershop.${INGRESSIP}.sslip.io/](http://
 ![Hipstershop App Home Screen](/assets/Hipster_Shop.png)
 
 
+## Configuring HTTPS
+
 Now that we have a working HTTP gateway, let's add SSL.
 To do that we are going to use Cert-Manager, an application that can generate SSL certificates into Kubernetes secrets. Istio-proxies will then requests the SSL certificates to Istiod using the SDS protocol. Istiod will read the secrets and send the certificate to the proxies.
 
@@ -159,7 +161,7 @@ kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/relea
 
 We will use Self-Signed certificates for this training, but Cert-Manager is able to handle a lot of other Issuers, like ACME/Let's Encrypt:
 
-```shell
+```yaml
 kubectl apply -n cert-manager -f - <<EOF
 apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
@@ -173,7 +175,7 @@ EOF
 
 Now, request an SSL certificate for the Hipstershop deployment:
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
@@ -230,7 +232,7 @@ data:
 
 We can now update the Gateway resource to add support for HTTPS protocol on port 443:
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
@@ -280,7 +282,7 @@ While the error message does not offer the solution to our problem, it points ou
 
 Let's move it:
 
-```shell
+```yaml
 kubectl -n hipstershopv1v2 delete  secret hipstershop-cert
 
 kubectl apply -n istio-system -f - <<EOF
@@ -399,7 +401,7 @@ echo $INGRESSIP
 
 Now re-create the `Certificate` in our shop Namespace:
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
@@ -431,7 +433,7 @@ EOF
 
 Then, re-create the `Gateway` and change the `selector` to target the local `Gateway`. To do so, we use one of the specific `Labels` of the service (which we can list using `kubectl get pods --show-labels`):
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
@@ -462,7 +464,7 @@ EOF
 
 Finaly we re-create the `VirtualService`:
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -491,3 +493,10 @@ EOF
 
 echo "you can now connect to http://hipstershop.${INGRESSIP}.sslip.io/"
 ```
+
+## Takeaway
+
+In this module you leveraged the Cert-Manager application to create SSL certificates for public URLs and you configured a gateway to allow traffic to your applications.
+
+---
+Next step: [Traffic Routing](/modules/traffic/routing)

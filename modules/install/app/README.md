@@ -222,4 +222,4 @@ kubectl -n hipstershopv1v2 port-forward deployment/frontend 8080
 You can now open your browser at [http://localhost:8080](http://localhost:8080). Play around to see how the Hipstershop application works. You're done installing the application.
 
 ---
-Next step: [Traffic Management](/modules/traffic)
+Next step: [Observability](modules/observability/)

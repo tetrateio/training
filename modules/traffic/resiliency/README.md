@@ -20,7 +20,7 @@ We're going to inject an HTTP fault to simulate a transient failure in your `ads
 
 This stanza configures Envoy to return a 500 response code immediately when a client calls the account service instead of forwarding the request to the service itself.
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -57,7 +57,7 @@ Like `abort`, the `delay` is a way to introduce unsusual behaviour inside the me
 
 Let's add a 4s delay to the request:
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -152,7 +152,7 @@ We see both requests beeing arount 2000ms of response-time. This is on par with 
 
 Let's add 2 retries on errors. We also add `retryOn` configuration to add, beside default cases, the `5xx`, which will retry on any `500, 501, 502...` errors. We need this as a `500` error is not retriable by default:
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -209,7 +209,7 @@ first 2 are 503 errors, then a 200. All these requests share the same `RequestID
 
 Now, add an overal 6s timeout and a 1s timeout per retry. Note that the 6s timeout is a global timeout for the requests. The request will *never* be longer than 6s. If we configure 7 retries with a 1s delay, we will never retry 7 times, as the global 6s timeout will kick-in before the exhaust the number of retries. Here's our test yaml:
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -308,7 +308,7 @@ while true ; do curl -s  -o /dev/null http://hipstershop.35.245.245.42.sslip.io/
 
 We can now add outlier detection by creating a `DestinationRule` (more on those in later sections). An example of how we would configure outlier detection is below. In it, a service instance will be ejected if it returns a 5xx on 2 consecutive attempts. It will only be allowed back in after 5 minutes multiplied by the number of times it has been ejected.
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
@@ -339,3 +339,6 @@ kubectl -n hipstershopv1v2  delete vs adservice
 ## Takeaway
 
 In this module we demonstrated how to use Istio Service Mesh bricks to improve reliability of our service without touching at our application's code.
+
+---
+Next step: [Security](/modules/security)
