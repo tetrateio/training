@@ -323,9 +323,11 @@ If we look at the logs, we now see:
 
 You have just opened your Hipstershop to the world with HTTPS support.
 
-## Creating a specific Ingress Gateway
+## Creating a dedicated Ingress Gateway
 
-To ensure separation of concerns and isolate teams in their `namespace`, it is possible to create one Ingress Gateway per application. 
+To ensure separation of concerns and isolate teams in their `namespace`, it is possible to create one Ingress Gateway per application.
+By restricting each team into it's own namespace and Gateway you prevent one team to steal or block other's team ingress traffic.
+
 We are going to create a new Ingress Gateway in the `hipstershopv1v2` namespace.
 
 As we are using the IstioOperator, we need to update it and add our Gateway definition:

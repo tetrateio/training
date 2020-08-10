@@ -112,3 +112,6 @@ You can extend the metrics exported by Istio by using an `EnvoyFiler` resource. 
 Istio Sidecar also generate Opentracing traces. Many protocols are supported, including Jaeger and Zipkin. When Envoy process inside the sidecar receive a request, a trace is sent to the tracing agent with the required informations. 
 If the trace already have a `traceID` header, it is used by the next Envoy Proxy to add a new span. You can configure Istio's sampling rate during installation and it defaults to 1% of the requests. 
 Demo profile is set to 100%, which can have a huge performance impact on a loaded system.
+
+---
+Next step: [Traffic Management](/modules/traffic)

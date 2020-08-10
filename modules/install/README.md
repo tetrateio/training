@@ -34,4 +34,4 @@ kubectl apply -f https://raw.githubusercontent.com/tetratelabs/microservices-dem
 ```
 
 ---
-Next step: [Traffic Management](/modules/traffic)
+Next step: [Create your Kubernetes cluster](cluster/)

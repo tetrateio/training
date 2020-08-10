@@ -157,18 +157,18 @@ If you want to use manual Istio sidecar injection, then you would always filter 
 
 ## Automatic Sidecar Injection
 
-You can turn on Automatic Sidecar Injection on a per Kubernetes namespace level by setting the label `istio-injection` to enabled.
+Auto-Injection will depend on the global `Injection Policy` defined when installing Istio. You can configure it by changing the value `values.global.proxy.autoInject` from the profile:
+- `enabled`: all deployments inside a namespace with the label `istio-injection=enabled` will have a sidecar. Setting `sidecar.istio.io/inject = "false"` will prevent the injection. This is the default option in all profiles
+- `disabled`: NO sidcar will be added even if a namespace have the label `istio-injection=enabled` set. To enable sidecar auto-injection you need to set *both* `istio-injection=enabled` label on the namespace *and* `sidecar.istio.io/inject = "true"` annotation on the Pod/Deployment
+
+
+For now we enable Automatic Sidecar Injection on a per Kubernetes namespace level by setting the label `istio-injection` to enabled:
 
 ```shell
 kubectl label namespace hipstershopv1v2 istio-injection=enabled
 ```
 
-Injection will depend on the global Injection Policy defined when installing Istio. You can configure it by changing the value `values.global.proxy.autoInject` from the profile:
-- `enabled`: all deployments inside a namespace with the label `istio-injection=enabled` will have a sidecar. Setting `sidecar.istio.io/inject = "false"` will prevent the injection. 
-- `disabled`: NO sidcar will be added even if a namespace have the label `istio-injection=enabled` set. To enable sidecar auto-injection you need to set *both* `istio-injection=enabled` label on the namespace *and* `sidecar.istio.io/inject = "true"` annotation on the Pod/Deployment.
-
-
-This instructs Istio to mutate all new pods with an injected sidecar via Kubernetes' Mutating Admission Webhooks. In order to trigger this mutation and inject our Envoy sidecars delete all the application's pods.
+This instructs Istio to mutate all new pods with an injected sidecar via Kubernetes' Mutating Admission Webhooks. In order to trigger this mutation and inject our Envoy sidecars, delete all the current application's pods (This can also be done using a rolling-restart: `kubectl rollout restart`):
 
 ```shell
 kubectl -n hipstershopv1v2 delete pods --all
