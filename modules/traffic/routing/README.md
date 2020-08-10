@@ -72,18 +72,18 @@ spec:
         prefix: /api
     route:
     - destination:
-        host: apiservice
+        host: apiservice.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
   - route:
     - destination:
-        host: frontend
+        host: frontend.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
         subset: v1
       weight: 100
     - destination:
-        host: frontend
+        host: frontend.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
         subset: v2
@@ -115,18 +115,18 @@ spec:
         prefix: /api
     route:
     - destination:
-        host: apiservice
+        host: apiservice.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
   - route:
     - destination:
-        host: frontend
+        host: frontend.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
         subset: v1
       weight: 75
     - destination:
-        host: frontend
+        host: frontend.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
         subset: v2
@@ -152,18 +152,18 @@ spec:
         prefix: /api
     route:
     - destination:
-        host: apiservice
+        host: apiservice.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
   - route:
     - destination:
-        host: frontend
+        host: frontend.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
         subset: v1
       weight: 50
     - destination:
-        host: frontend
+        host: frontend.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
         subset: v2
@@ -190,7 +190,7 @@ spec:
         prefix: /api
     route:
     - destination:
-        host: apiservice
+        host: apiservice.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
   - match:
@@ -199,13 +199,13 @@ spec:
           regex: ".*Chrome.*"
     route:
     - destination:
-        host: frontend
+        host: frontend.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
         subset: v2
   - route:
     - destination:
-        host: frontend
+        host: frontend.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
         subset: v1
@@ -238,18 +238,18 @@ spec:
         prefix: /api
     route:
     - destination:
-        host: apiservice
+        host: apiservice.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
   - route:
     - destination:
-        host: frontend
+        host: frontend.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
         subset: v1
       weight: 50
     - destination:
-        host: frontend
+        host: frontend.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
         subset: v2

@@ -10,6 +10,6 @@ spec:
   http:
   - route:
     - destination:
-        host: frontend
+        host: frontend.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080

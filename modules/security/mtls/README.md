@@ -84,7 +84,7 @@ You can enable full-mesh mTLS by setting a global `PeerAuthentication` in the Is
     spec:
       selector:
         matchLabels:
-          app: frontend
+          app: frontend.hipstershopv1v2.svc.cluster.local
       mtls:
         mode: PERMISSIVE
     EOF

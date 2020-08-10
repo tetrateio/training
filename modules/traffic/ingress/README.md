@@ -128,12 +128,12 @@ spec:
         prefix: /api
     route:
     - destination:
-        host: apiservice
+        host: apiservice.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
   - route:
     - destination:
-        host: frontend
+        host: frontend.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
 EOF
@@ -207,7 +207,7 @@ EOF
 
 If everything is working, you should have a new secret:
 
-```shell
+```yaml
 kubectl get secret hipstershop-cert -o yaml
 
 apiVersion: v1
@@ -483,12 +483,12 @@ spec:
         prefix: /api
     route:
     - destination:
-        host: apiservice
+        host: apiservice.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
   - route:
     - destination:
-        host: frontend
+        host: frontend.hipstershopv1v2.svc.cluster.local
         port:
           number: 8080
 EOF

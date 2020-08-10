@@ -176,7 +176,7 @@ Here we have an issue negociating the SSL handshake. This is because we're askin
       http:
       - route:
         - destination:
-            host: frontend
+            host: frontend.hipstershopv1v2.svc.cluster.local
             port:
               number: 8080
     EOF
@@ -243,12 +243,12 @@ Here we have an issue negociating the SSL handshake. This is because we're askin
             prefix: /api
         route:
         - destination:
-            host: apiservice
+            host: apiservice.hipstershopv1v2.svc.cluster.local
             port:
               number: 8080
       - route:
         - destination:
-            host: frontend
+            host: frontend.hipstershopv1v2.svc.cluster.local
             port:
               number: 8080
     ```

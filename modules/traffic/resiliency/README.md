@@ -32,7 +32,7 @@ spec:
   http:
   - route:
     - destination:
-        host: adservice
+        host: adservice.hipstershopv1v2.svc.cluster.local
     fault:
       abort:
         httpStatus: 500
@@ -69,7 +69,7 @@ spec:
   http:
   - route:
     - destination:
-        host: adservice
+        host: adservice.hipstershopv1v2.svc.cluster.local
     fault:
       delay:
         percentage:
@@ -120,7 +120,7 @@ The default behaviour of Istio is to retry two times, so we are going to turn it
 
 Let’s turn off retries.
 
-```shell
+```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -132,7 +132,7 @@ spec:
   http:
   - route:
     - destination:
-        host: adservice
+        host: adservice.hipstershopv1v2.svc.cluster.local
     retries:
       attempts: 0
 EOF
@@ -164,7 +164,7 @@ spec:
   http:
   - route:
     - destination:
-        host: adservice
+        host: adservice.hipstershopv1v2.svc.cluster.local
     retries:
       attempts: 2
       perTryTimeout: 5s
@@ -221,7 +221,7 @@ spec:
   http:
   - route:
     - destination:
-        host: adservice
+        host: adservice.hipstershopv1v2.svc.cluster.local
     timeout: 6s
     retries:
       attempts: 2
@@ -315,7 +315,7 @@ kind: DestinationRule
 metadata:
   name: adservice
 spec:
-  host: adservice
+  host: adservice.hipstershopv1v2.svc.cluster.local
   trafficPolicy:
    outlierDetection:
       consecutiveErrors: 2
