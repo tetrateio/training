@@ -329,6 +329,33 @@ It won't be long before you only see requests going to `adservice-v2`.
 
 By using an Outlier-Detection we were able to guaranty a perfect quality of service.
 
+Do you remember how we used the *Traffic Routing* features of Istio to load-balance traffic between the `v1` and `v2` versions of the `frontend` application ? The traffic split happen before we send the request to the destination, so if no `v2` frontend pods are deployed, we will still send requests to it and get errors.
+This is exactly where the Outlier Detection can come in play. By updating the `DestinationRule` of the `frontend` application, we can ensure that no traffic will be sent to the `v2` service if no pods can answer. 
+To be even more precise, after two consecutives errors (two requests trying to reach the `v2` that will fail), we will stop sending requests to the `v2` application. That's a 2 fail per 5 minutes:
+
+```yaml
+kubectl apply -n hipstershopv1v2 -f - <<EOF
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: frontend-subset
+  namespace: hipstershopv1v2
+spec:
+  host: frontend.hipstershopv1v2.svc.cluster.local
+  subsets:
+  - labels:
+      version: v1
+    name: v1
+  - labels:
+      version: v2
+    name: v2
+  trafficPolicy:
+    outlierDetection:
+      baseEjectionTime: 5m
+      consecutiveErrors: 2
+EOF
+```
+
 ## Clean-up
 
 ```shell

@@ -23,7 +23,7 @@ frontend-v2-76c878ff5-f5zpg   2/2     Running   0          2d20h
 
 Both are serving traffic because we are using the default Kubernetes round robin load balancing. However, with Istio we can take advantage of more meaningful release patterns such as canary deploys, and we can do so decoupled from the application code, using configuration.
 
-In order to control traffic we need to tell Istio how to distinguish between our two versions, we do this with a `DestinationRule`.
+In order to control traffic we need to tell Istio how to distinguish between our two versions. We do this with a `DestinationRule`.
 
 DestinationRules are in fact all about configuring clients. They allow a service operator to describe how a client in the mesh should call their service, including: subsets of the service (e.g. v1 and v2), the load balancing strategy the client should use, the conditions to use to mark endpoints of the service as unhealthy, L4 and L7 connection pool settings, and TLS settings for the server.
 
@@ -53,11 +53,7 @@ The `DestinationRule` we just created describes two versions of the frontend ser
 
 Now that we have subsets defined we can pin all traffic to version 1 of the user service in its `VirtualService` (we will go over Virtual Services in a bit more detail in the resiliency section).
 
-```shell
-kubectl apply -f modules/traffic/routing/config/user-v1-100.yaml
-```
-
-If we take a look at the changes we just made to the `VirtualService`, we can see that there are now two destinations, one for each subset. However, we are weighting 100% of requests to version 1.
+Let's update the `VirtualService` and define the two destinations, one for each subset. For the moment we `weight` 100% of requests to version 1:
 
 ```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
@@ -97,7 +93,10 @@ EOF
 
 Now if we refresh the Hipstershop page several times we can see that we always get the same version with the grey banner.
 
-We can also go in a change the weighting. Let’s edit the `VirtualService` again to route 25% of traffic to version two. Note that the weight’s have to add up to 100 otherwise they will fail validation.
+Let's say we just deployed the `v2` version with better code now. Let’s edit the `VirtualService` again to route 25% of traffic to version `v2`.
+In a production env, you would maybe start with only 1% of the traffic, or base the routing one another variable than the version, maybe the client's `user-agent` or another header.
+
+Note that the total weight have to add up to 100% otherwise the `VirtualService` will fail the validation.
 
 ```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
@@ -135,7 +134,44 @@ spec:
 EOF
 ```
 
-This enables you to release new versions to increments of a single percent of users. Istio also allows you to route traffic based on headers, URI or HTTP method. This enables you to do things like releasing to a single browser. Let’s release v2 to Chrome users only.
+After some time, if everything is fine with the `v2` service, we can update the `VirtualService` to send more and more traffic to it, until 100%, where you can even remove the subsets. Here is an update for 50/50 traffic split:
+```yaml
+kubectl apply -n hipstershopv1v2 -f - <<EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: hipstershop
+spec:
+  hosts:
+  - "hipstershop.${INGRESSIP}.sslip.io"
+  gateways:
+  - hipstershop
+  http:
+  - match:
+    - uri:
+        prefix: /api
+    route:
+    - destination:
+        host: apiservice
+        port:
+          number: 8080
+  - route:
+    - destination:
+        host: frontend
+        port:
+          number: 8080
+        subset: v1
+      weight: 50
+    - destination:
+        host: frontend
+        port:
+          number: 8080
+        subset: v2
+      weight: 50
+EOF
+```
+
+Istio also allows you to route traffic based on headers, URI or HTTP method. This enables you to do things like releasing the new version to a single browser. Let’s release v2 to Chrome users only.
 
 ```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
@@ -176,7 +212,7 @@ spec:
 EOF
 ```
 
-If we look at the configuration we just created we can see that we added a stanza to the headers match to search for the word `Chrome` anywhere in the user-agent. Note that ordering of the matches matters. Envoy will route to the first match it sees, not the most specific. We keep the default route at the end, which sends 100% of the traffic to the `v1` version. 
+If we look at the configuration we just created we can see that we added a stanza to the headers match to search for the word `Chrome` anywhere in the user-agent. Note that ordering of the matches matters. Envoy will route to the first match it sees, not the most specific. We keep the default route at the end, which sends 100% of the remaining traffic to the `v1` version. 
 
 
 Now if you visit the application from Chrome you will always be routed to version 2 of the frontend service, with the red banner, but if you visit from any other browser you will be routed to version 1 with the grey banner.
@@ -233,8 +269,8 @@ You should see `no healthy upstream` messages every other request.
 
 What's happening here ?
 
-Envoy manages a list of endpoints for every destination it knows. In our case, we defined two destinations, v1 and v2, then we terminated the v2 endpoints. 
-In this scenario, Envoy still send 50% requests to the `v2` destination, as requested, and then return an error.
+Envoy manages a list of endpoints for every destination it knows. In our case, we defined two destinations, v1 and v2.
+In this scenario, Envoy will send 50% requests to the `v2` destination, as requested by the traffic routing rules, even if all endpoints are failing (or not there).
 
 To further diagnose, we can check the `hipstershop-ingressgateway logs`:
 
