@@ -71,7 +71,8 @@ By allowing the `GET` requests, we changed the workflow like:
 [![Architecture of microservices](/assets/hipstershop-istio-training-authorization-1.svg)](/assets/hipstershop-istio-training-authorization-1.svg)
 
 ---
-Note that we also allowed the `loadgenerator` service to query the application. This is a side effect and happened becasue we only defined the `to` keyword, without setting a `from`. In a production scenario, it is advised to always fully define the Authorization rules to enfore the `from`, `to` and `when` parts of the rule.
+Note that we also allowed the `loadgenerator` service to query the application. This is a side effect and happened becasue we only defined the `to` keyword, without setting a `from`. In a production scenario, it is advised to always fully define the [AuthorizationPolicy](https://istio.io/latest/docs/reference/config/security/authorization-policy/) rules to enfore the `from`, `to` and `when` keywords of the rule.
+
 To only allow requests from the `IngressGateway` to the `frontend` application, we can update the rule to:
 
 ```yaml
@@ -97,7 +98,7 @@ EOF
 ```
 ---
 
-If you browser the Hipstershop store now, you can access the frontend. Sadly, you are still getting an error:
+If you browse the Hipstershop store now, you can access the frontend. Sadly, you are still getting an error:
 
 ```yaml
 Uh, oh!
