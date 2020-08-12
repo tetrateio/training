@@ -77,7 +77,7 @@ k logs deployment/frontend frontend | grep currencies
 
 If we look at the Istio-Proxy logs, on the other hand:
 
-```shell
+```sh
 k logs deployment/frontend istio-proxy| grep /GetSupportedCurrencies
 
 [2020-08-12T13:09:19.243Z] "POST /hipstershop.CurrencyService/GetSupportedCurrencies HTTP/2" 200 - "-" "-" 5 0 1 0 "-" "grpc-go/1.26.0" "0574523a-0522-4120-8917-1fae494e35f6" "currencyservice.hipstershopv1v2:7000" "10.56.2.22:7000" outbound|7000||currencyservice.hipstershopv1v2.svc.cluster.local 10.56.2.23:44334 10.122.7.139:7000 10.56.2.23:48332 - default
@@ -86,7 +86,7 @@ k logs deployment/frontend istio-proxy| grep /GetSupportedCurrencies
 We have an error code of `200`, with 0 bytes transmitted and 0 time spent on the upstream cluster. This is counter-intuitive, but GRPC calls usually embed the errors in the message and not in the status code.
 To get more insight from Istio-Proxy, we can increase the RBAC log-level to debug. This is pretty easy by using the `istioctl` command:
 
-```shell
+```sh
 frontend_POD=`kubectl get pod -l app=frontend -o jsonpath="{.items[0].metadata.name}{'.'}{.items[0].metadata.namespace}"`
 istioctl pc log $frontend_POD --level rbac:debug
 ```
@@ -150,7 +150,7 @@ But this log only deal with the incoming request to the `frontend`, not the conn
 
 We need to check the `currencyservice` application to undersdtand what is going on there. Let's turn RBAC logs to debug on this application:
 
-```shell
+```sh
 currency_POD=`kubectl get pod -l app=currencyservice -o jsonpath="{.items[0].metadata.name}{'.'}{.items[0].metadata.namespace}"`
 istioctl pc log $currency_POD --level rbac:debug
 ```
@@ -235,7 +235,7 @@ If you browse again, you'll see the error has changed: `RBAC: access denied coul
 We could go on and add one policy for each services. Some companies will require this level of control.
 For this training, let's add a global rule for our internal services. First, remove the 3 policies we just created:
 
-```shell
+```sh
 kubectl -n hipstershopv1v2 delete AuthorizationPolicy frontend-policy-to-currency ingress-policy-to-frontend ingress-policy
 ```
 
@@ -284,7 +284,7 @@ EOF
 If you browse again, you will see... another error ! What's wrong with this application ? 
 Look at the logs of the `frontend` service: `POST /hipstershop.CartService/GetCart HTTP/2" 200 UH`. `UH` stands for Upstream Health. This log is telling us the `cartservice` is not healthy. Let's look at the pod's status:
 
-```shell
+```sh
 
 kubectl -n hipstershopv1v2 get pods
 
@@ -310,7 +310,7 @@ shippingservice-76946cf5f6-s5g9j              2/2     Running            0      
 Well, Istio is right, `cartservice`'s pod keeps crashing and there is no healthy endpoint at the moment.
 Let's look at this pod's logs:
 
-```shell
+```sh
 kubectl -n hipstershopv1v2 logs cartservice-75467b59d-tft7t cartservice
 
 Started as process with id 1
@@ -355,7 +355,7 @@ Once applied the `cartservice` pod should be back up. If not, you can kill it to
 
     For now, lets clean up our Cluster Policy Config so we can carry on with the rest of the lab:
 
-    ```shell
+    ```sh
     kubectl -n hipstershopv1v2 delete AuthorizationPolicy deny-all ingress-policy policy-for-hipstershop redis-policy
     istioctl pc log $frontend_POD --level rbac:warning
     istioctl pc log $currency_POD --level rbac:warning
