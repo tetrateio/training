@@ -6,7 +6,7 @@ Note that it means that you have to enforce mTLS between your apps for Authoriza
 
 Here's the big-picture of the Hipstershop application workflow:
 
-[![Architecture of microservices](/assets/hipstershop-istio-hipstershop-all.png)](/assets/hipstershop-istio-hipstershop-all.png)
+[![Architecture of microservices](/assets/hipstershop-istio-training-hipstershop-arch.svg)](/assets/hipstershop-istio-training-hipstershop-arch.svg)
 
 ## Setup a deny-all policy
 First, let's start by locking down our application:
@@ -27,7 +27,7 @@ In this case the `AuthorizationPolicy` was applied to the `hipstershopv1v2` name
 
 After applying the above Policy the workflow is:
 
-[![Architecture of microservices](/assets/hipstershop-istio-authorization-1.png)](/assets/hipstershop-istio-authorization-1.png)
+[![Architecture of microservices](/assets/hipstershop-istio-authorization-0.svg)](/assets/hipstershop-istio-authorization-0.svg)
 
 ## Allow the Ingress Gateway to talk to the Frontend
 
@@ -67,6 +67,36 @@ spec:
 EOF
 ```
 
+By allowing the `GET` requests, we changed the workflow like:
+[![Architecture of microservices](/assets/hipstershop-istio-authorization-1.svg)](/assets/hipstershop-istio-authorization-1.svg)
+
+---
+Note that we also allowed the `loadgenerator` service to query the application. This is a side effect and happened becasue we only defined the `to` keyword, without setting a `from`. In a production scenario, it is advised to always fully define the Authorization rules to enfore the `from`, `to` and `when` parts of the rule.
+To only allow requests from the `IngressGateway` to the `frontend` application, we can update the rule to:
+
+```yaml
+kubectl apply -n hipstershopv1v2 -f - <<EOF
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: ingress-policy-to-frontend
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+       principals: ["cluster.local/ns/hipstershopv1v2/sa/hipstershop-ingressgateway-service-account"]
+    to:
+    - operation:
+        methods:
+        - GET
+EOF
+```
+---
+
 If you browser the Hipstershop store now, you can access the frontend. Sadly, you are still getting an error:
 
 ```yaml
@@ -75,9 +105,6 @@ Something has failed. Below are some details for debugging.
 
 HTTP Status: 500 Internal Server Error
 ```
-
-By allowing the `GET` requests, we changed the workflow like:
-[![Architecture of microservices](/assets/hipstershop-istio-authorization-2.png)](/assets/hipstershop-istio-authorization-2.png)
 
 If we look at the logs of the `frontend` service, we can see we still have a DENY: `could not retrieve currencies: rpc error: code = PermissionDenied desc = RBAC: access denied`:
 
@@ -246,7 +273,7 @@ If you browse again, you'll see the error has changed: `RBAC: access denied coul
 
 The workflow is now:
 
-[![Architecture of microservices](/assets/hipstershop-istio-authorization-2.png)](/assets/hipstershop-istio-authorization-2.png)
+[![Architecture of microservices](/assets/hipstershop-istio-authorization-2.svg)](/assets/hipstershop-istio-authorization-2.svg)
 
 We could go on and add one policy for each services. Some companies will require this level of control.
 For this training, let's add a global rule for our internal services. First, remove the 3 policies we just created:
@@ -299,7 +326,7 @@ EOF
 
 The workflow is now:
 
-[![Architecture of microservices](/assets/hipstershop-istio-authorization-3.png)](/assets/hipstershop-istio-authorization-3.png)
+[![Architecture of microservices](/assets/hipstershop-istio-authorization-3.svg)](/assets/hipstershop-istio-authorization-3.svg)
 
 If you browse again, you will see... another error ! What's wrong with this application ? 
 Look at the logs of the `frontend` service: `POST /hipstershop.CartService/GetCart HTTP/2" 200 UH`. `UH` stands for Upstream Health. This log is telling us the `cartservice` is not healthy. Let's look at the pod's status:
