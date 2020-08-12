@@ -84,7 +84,7 @@ k logs deployment/frontend istio-proxy| grep /GetSupportedCurrencies
 ```
 
 We have an error code of `200`, with 0 bytes transmitted and 0 time spent on the upstream cluster. This is counter-intuitive, but GRPC calls usually embed the errors in the message and not in the status code.
-To get more insight from Istio-Proxy, we can increase the RBAC log-level to debug:
+To get more insight from Istio-Proxy, we can increase the RBAC log-level to debug. This is pretty easy by using the `istioctl` command:
 
 ```shell
 frontend_POD=`kubectl get pod -l app=frontend -o jsonpath="{.items[0].metadata.name}{'.'}{.items[0].metadata.namespace}"`
