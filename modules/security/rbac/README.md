@@ -221,7 +221,7 @@ Once applied the `cartservice` pod should be back up. If not, you can kill it to
 
 ## Takeaway
 
-Once mTLS is enforced, we can use Istio create RBAC policies to tontrol the traffic in the mesh. While this is powerfull, it may also lead to unattended traffic break. Plane, review and tests your rules before applying them in production.
+Once mTLS is enforced, we can use Istio create Authorization Policies to control the traffic in the mesh. While this is powerful, it may also lead to unintended traffic breaks. Plan, review and tests your rules before applying them in production!
 
 ---
 This is the end of the Istio Workshop for now.
