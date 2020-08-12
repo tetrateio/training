@@ -11,7 +11,7 @@ If you want to skip all of that, you can use the abbreviated guide below to crea
 ## Needed tools
 
 - [stern](https://github.com/wercker/stern/releases)
-kubectx/kubens
+- [kubectx/kubens](https://github.com/ahmetb/kubectx#installation)
 
 ## Abbreviated Guide
 
