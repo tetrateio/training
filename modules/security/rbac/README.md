@@ -2,7 +2,7 @@
 
 Istio provides every workload with a strong identity which is used to establish mTLS connections between services in the mesh. In Kubernetes, the workload's identity is the pod's `ServiceAccount`. While establishing mTLS connections, sidecars in the mesh will validate certificates according to [SPIFFE](https://github.com/spiffe/spiffe/blob/master/standards/X509-SVID.md), which means that after the connection is established we have the identity (_authenticated principal_) of the other party. Then, Istio allows you to write access control policies using those identities to describe which services can communicate.
 
-Note that it means that you have to enforce mTLS between your apps for the Authorization Policies to work.
+Note that it means that you have to enforce mTLS between your apps for Authorization Policies to work.
 
 ## Setup a deny-all policy
 
