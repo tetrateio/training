@@ -113,7 +113,7 @@ You can disable permissive mode and enforce mTLS across the entire mesh by setti
 
     This is called Authentication (AuthN) policy and ensures we all know each other before allowing communication. In other words, we use the certificates from Istio mutual TLS to identify services to each other in a verifiable way (i.e. we _authenticate_ them).
 
-    In the next chapter we are going to dive into Authorization (AuthZ), where we set the rules deciding `who` can talk `to` who, and how (`when`).
+    In the next chapter we are going to dive into Authorization (AuthZ), where we set the rules deciding `who` can talk `to` whom, and `when` they're allowed to.
 
 ---
 Next step: [RBAC](/modules/security/rbac)
