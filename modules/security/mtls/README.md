@@ -1,7 +1,7 @@
 Establish mTLS throughout the mesh
 ====
 
-By default, Istio's mesh is automatically configure as `permissive`, which means Istio will use mTLS between workloads with a Sidecar and will revert to plain protocol (plaintext HTTP for example) if not. This is a great way to onboard new clusters and workload.
+By default, Istio's _authentication policy_, which controls mTLS, is automatically configure as `permissive`. This means Istio will use mTLS between workloads that both have a Sidecar and will revert to plaintext otherwise (HTTP instead of HTTPS, for example). This is a great way to onboard new clusters and workloads.
 Still, at some point, you're going to need to limit the non mTLS traffic.
 
 
