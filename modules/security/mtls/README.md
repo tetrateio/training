@@ -111,7 +111,7 @@ You can disable permissive mode and enforce mTLS across the entire mesh by setti
     As you can see, we are now allowed to reach the `frontend` micro-service but we are still denied to reach others as our client can't enforce the required mTLS. 
     Note that this can't be considered a security mesure. We never denied traffic to go to the `adservice`. It's just that the `adservice` sidecar does not know us, and don't let us in.
 
-    This is called Authentication (AuthN) and just ensure we all know each other before allowing to communicate.
+    This is called Authentication (AuthN) policy and ensures we all know each other before allowing communication. In other words, we use the certificates from Istio mutual TLS to identify services to each other in a verifiable way (i.e. we _authenticate_ them).
 
     In the next chapter we are going to dive into Authorization (AuthZ), where we set the rules deciding `who` can talk `to` who, and how (`when`).
 
