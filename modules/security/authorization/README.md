@@ -329,11 +329,15 @@ The workflow is now:
 
 [![Architecture of microservices](/assets/hipstershop-istio-training-authorization-3.svg)](/assets/hipstershop-istio-training-authorization-3.svg)
 
-If you browse again, you will see... another error ! What's wrong with this application ? 
-Look at the logs of the `frontend` service: `POST /hipstershop.CartService/GetCart HTTP/2" 200 UH`. `UH` stands for Upstream Health. This log is telling us the `cartservice` is not healthy. Let's look at the pod's status:
+If you browse again, you will see...
+
+*another error !* What's wrong with this application ?
+
+Look at the logs of the `frontend` service: `POST /hipstershop.CartService/GetCart HTTP/2" 200 UH`.
+
+`UH` stands for Upstream Health. This log is telling us the `cartservice` is not healthy. Let's look at the pod's status:
 
 ```sh
-
 kubectl -n hipstershopv1v2 get pods
 
 NAME                                          READY   STATUS             RESTARTS   AGE
