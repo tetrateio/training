@@ -39,7 +39,7 @@ We are using the `sleep` pod, which is a simple pod with few tools, like curl.
 
 ## Applying strict policy
 
-You can enable full-mesh mTLS by setting a global `PeerAuthentication` in the Istio ROOT namespace, `istio-system` by default:
+You can disable permissive mode and enforce mTLS across the entire mesh by setting a global `PeerAuthentication` in the Istio ROOT namespace (`istio-system` by default):
 
 1. Apply strict mTLS mesh policy
 
