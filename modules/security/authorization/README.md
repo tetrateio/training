@@ -4,6 +4,10 @@ Istio provides every workload with a strong identity which is used to establish 
 
 Note that it means that you have to enforce mTLS between your apps for Authorization Policies to work.
 
+Here's the big-picture of the Hipstershop application workflow:
+
+[![Architecture of microservices](/assets/hipstershop-istio-hipstershop-all.png)](/assets/hipstershop-istio-hipstershop-all.png)
+
 ## Setup a deny-all policy
 First, let's start by locking down our application:
 ```yaml
@@ -19,6 +23,11 @@ EOF
 ```
 
 At this moment, no traffic can go through the Mesh. If you try to browser the Hipstershop, you will see an error `RBAC: access denied` and some `error 403` in the logs.
+In this case the `AuthorizationPolicy` was applied to the `hipstershopv1v2` namespace and only apply to this namespace. If you want to enforce RBAC globally, you must create this resource in the `ROOT` Istio Namespace, which by default is `istio-system`.
+
+After applying the above Policy the workflow is:
+
+[![Architecture of microservices](/assets/hipstershop-istio-authorization-1.png)](/assets/hipstershop-istio-authorization-1.png)
 
 ## Allow the Ingress Gateway to talk to the Frontend
 
@@ -66,6 +75,9 @@ Something has failed. Below are some details for debugging.
 
 HTTP Status: 500 Internal Server Error
 ```
+
+By allowing the `GET` requests, we changed the workflow like:
+[![Architecture of microservices](/assets/hipstershop-istio-authorization-2.png)](/assets/hipstershop-istio-authorization-2.png)
 
 If we look at the logs of the `frontend` service, we can see we still have a DENY: `could not retrieve currencies: rpc error: code = PermissionDenied desc = RBAC: access denied`:
 
@@ -232,6 +244,10 @@ EOF
 
 If you browse again, you'll see the error has changed: `RBAC: access denied could not retrieve products`. It's now the `productservice` that can't be reached.
 
+The workflow is now:
+
+[![Architecture of microservices](/assets/hipstershop-istio-authorization-2.png)](/assets/hipstershop-istio-authorization-2.png)
+
 We could go on and add one policy for each services. Some companies will require this level of control.
 For this training, let's add a global rule for our internal services. First, remove the 3 policies we just created:
 
@@ -280,6 +296,10 @@ spec:
         - GET
 EOF
 ```
+
+The workflow is now:
+
+[![Architecture of microservices](/assets/hipstershop-istio-authorization-3.png)](/assets/hipstershop-istio-authorization-3.png)
 
 If you browse again, you will see... another error ! What's wrong with this application ? 
 Look at the logs of the `frontend` service: `POST /hipstershop.CartService/GetCart HTTP/2" 200 UH`. `UH` stands for Upstream Health. This log is telling us the `cartservice` is not healthy. Let's look at the pod's status:
@@ -350,6 +370,8 @@ EOF
 ```
 
 Once applied the `cartservice` pod should be back up. If not, you can kill it to recycle it: `kubectl -n hipstershopv1v2 delete pod -l app=cartservice`. Few seconds later your should have a running pod, and the Hipstershop should be back online.
+
+Now we are back with the default worflow from the begining where only needed connctions are allowed.
 
 ## Cleanup
 
