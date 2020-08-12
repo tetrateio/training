@@ -10,7 +10,7 @@ If you want to skip all of that, you can use the abbreviated guide below to crea
 
 ## Needed tools
 
-stern
+- [stern](https://github.com/wercker/stern/releases)
 kubectx/kubens
 
 ## Abbreviated Guide
