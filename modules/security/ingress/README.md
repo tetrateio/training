@@ -139,7 +139,7 @@ Here we have an issue negociating the SSL handshake. This is because we're askin
 
     Now the error changed. We have an `unknown CA`. 
 
-    This is perfectly true as we are using a self-signed certificate and `curl` is trying to validate it by default. We can test again using the `-k` option to skip the verrification:
+    This is perfectly true as we are using a self-signed certificate and `curl` is trying to validate it by default. We can test again using the `-k` option to skip the verification:
 
     ```shell
     curl -kvs https://storefront.$INGRESSIP.sslip.io
