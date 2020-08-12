@@ -2,7 +2,7 @@ Kubernetes Cluster Access
 ===
 
 For this, we'll be using a Kubernetes cluster in GKE that we control in cloud shell. We'll provide credentials and a cluster name that you can use.
-Cluster must be K8s 1.15 or newer (1.16+ recommended)
+Your cluster must be K8s 1.15 or newer (1.16+ recommended)
 
 Log in to [Cloud Shell](https://ssh.cloud.google.com/cloudshell/editor) with the provided credentials.
 
