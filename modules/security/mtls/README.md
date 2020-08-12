@@ -116,4 +116,4 @@ You can disable permissive mode and enforce mTLS across the entire mesh by setti
     In the next chapter we are going to dive into Authorization (AuthZ), where we set the rules deciding `who` can talk `to` whom, and `when` they're allowed to.
 
 ---
-Next step: [RBAC](/modules/security/rbac)
+Next step: [Authorization](/modules/security/authorization)

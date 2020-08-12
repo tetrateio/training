@@ -7,7 +7,7 @@ In the following labs, you'll add secure ingress gateway and mutual TLS to your 
 
 1. [Terminate TLS at ingress](ingress)
 1. [Establish mTLS throughout the mesh](mtls)
-1. [Use Istio RBAC](rbac)
+1. [Use Istio Authorization](authorization)
 
 ---
 Next step: [Terminate TLS at ingress](ingress)
