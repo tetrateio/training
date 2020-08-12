@@ -5,7 +5,7 @@ Istio provides every workload with a strong identity which is used to establish 
 Note that it means that you have to enforce mTLS between your apps for Authorization Policies to work.
 
 ## Setup a deny-all policy
-
+First, let's start by locking down our application:
 ```yaml
 kubectl apply -n hipstershopv1v2 -f - <<EOF
 apiVersion: security.istio.io/v1beta1
