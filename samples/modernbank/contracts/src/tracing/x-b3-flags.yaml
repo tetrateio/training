@@ -1,3 +1,0 @@
-type: string
-name: x-b3-flags
-in: header

@@ -1,19 +1,18 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: ingress
+  name: storefront
 spec:
   selector:
-    istio: ingressgateway
+    istio: ingressgateway 
+    service.istio.io/canonical-name: hipstershop-ingressgateway
   servers:
   - port:
       number: 80
       name: http
       protocol: HTTP
     hosts:
-    - "*"
-    tls:
-      httpsRedirect: true
+      - "storefront.${INGRESSIP}.sslip.io"
   - port:
       number: 443
       name: https
@@ -23,4 +22,4 @@ spec:
       serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
       privateKey: /etc/istio/ingressgateway-certs/tls.key
     hosts:
-    - "*"
+    - "storefront.${INGRESSIP}.sslip.io"

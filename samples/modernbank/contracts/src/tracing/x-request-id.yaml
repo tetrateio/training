@@ -1,3 +1,0 @@
-type: string
-name: x-request-id
-in: header

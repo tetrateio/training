@@ -1,94 +1,119 @@
 Establish mTLS throughout the mesh
 ====
 
-Enable mTLS for service-to-service
-----
+By default, Istio's _authentication policy_, which controls mTLS, is automatically configure as `permissive`. This means Istio will use mTLS between workloads that both have a Sidecar and will revert to plaintext otherwise (HTTP instead of HTTPS, for example). This is a great way to onboard new clusters and workloads.
+Permissive mode is not really secure because any client can request to downgrade to clear text - it exists only to help transition your mesh into mTLS without breaking existing applications. At some point, you're going to need to limit non-mTLS traffic.
 
-1. Apply updated Kubernetes configuration files
 
-    ```
-    $ kubectl apply -f modules/security/mtls/config/destinationrule.yaml
-    ```
+## Installing client
 
-    This creates two DestinationRules, the first of which forces Istio to use mTLS everywhere:
-    ```
-    $ kubectl describe -n istio-system destinationrule.networking.istio.io/default
-
-    ...
-    Spec:
-      Host:  *.local
-      Traffic Policy:
-        Tls:
-           Mode:  ISTIO_MUTUAL
-    ```
-
-    And the second which excludes the Kubernetes API server from mTLS:
-    ```
-    $ kubectl describe -n istio-system destinationrule.networking.istio.io/api-server
-
-    ...
-    Spec:
-      Host:  kubernetes.default.svc.cluster.local
-      Traffic Policy:
-        Tls:
-          Mode:  DISABLE
-    ```
-
-Validating mTLS
-----
+To demontrate how traffic is managed we are going to install a client in a namespace without Istio. 
+We are using the `sleep` pod, which is a simple pod with few tools, like curl.
 
 1. Create a new Namespace that doesn't have Istio automatic sidecar injection.
 
-    ```
-    $ kubectl create ns noistio
+    ```sh
+    kubectl create namespace noistio
     ```
 
-2. Run the `sleep` Toolbox Pod in the noistio namespace.:.
+2. Run the `sleep` Toolbox Pod in the noistio namespace.
 
-    ```
-    $ kubectl -n noistio apply -f modules/security/mtls/config/sleep.yaml
+    ```sh
+    kubectl -n noistio apply -f modules/security/mtls/config/sleep.yaml
     ```
 
 3. Wait for this pod to start.
 
-    ```
-    $ kubectl get pods -n noistio -w
+    ```sh
+    kubectl get pods -n noistio -w
     ```
 
 4. Connect to Account Service from the Toolbox that doesn't have Istio mTLS.
 
-    ```
-    $ export USERNAME=<login name from demo site>
-    $ kubectl -n noistio exec -it $(kubectl get pod -n noistio -l app=sleep -o jsonpath='{.items..metadata.name}') -- curl  http://user.default/v1/users/${USERNAME}/accounts
+    ```sh
+    kubectl -n noistio exec -it $(kubectl get pod -n noistio -l app=sleep -o jsonpath='{.items..metadata.name}') -- curl  -s http://frontend.hipstershopv1v2:8080 -o /dev/null -w '%{http_code}'
     ```
 
-Apply strict policy
-----
+    You should get the full HTML page of the shop.
+
+
+## Applying strict policy
+
+You can disable permissive mode and enforce mTLS across the entire mesh by setting a global `PeerAuthentication` in the Istio ROOT namespace (`istio-system` by default):
 
 1. Apply strict mTLS mesh policy
 
-    ```
-    $ kubectl apply -f modules/security/mtls/config/strictpolicy.yaml
-    ```
-
-    We can verify the policy matches what we expect:
-    ```
-    $ kubectl describe meshpolicy.authentication.istio.io/default
-
-    ...
-    Spec:
-      Peers:
-        Mtls:
-          Mode:  STRICT
+    ```yaml
+    kubectl apply -f - <<EOF
+    apiVersion: "security.istio.io/v1beta1"
+    kind: "PeerAuthentication"
+    metadata:
+      name: "default"
+      namespace: "istio-system"
+    spec:
+      mtls:
+        mode: STRICT
+    EOF
     ```
 
-1. Run the last step in previous task to verify it no longer connects:
+2. Re-run the curl command from previous step in to verify you can no longer connect:
 
-    ```
-    $ kubectl -n noistio exec -it $(kubectl get pod -n noistio -l app=sleep -o jsonpath='{.items..metadata.name}') -- curl  http://user.default/v1/users/${USERNAME}/accounts
+    ```sh
+    kubectl -n noistio exec -it $(kubectl get pod -n noistio -l app=sleep -o jsonpath='{.items..metadata.name}') -- curl  -s http://frontend.hipstershopv1v2:8080 -o /dev/null -w '%{http_code}'
 
+    000
     curl: (56) Recv failure: Connection reset by peer
     command terminated with exit code 56
     ```
 
-    If everything worked correctly, we should see curl return an error code 56, indicating if failed to establish a TLS connection.
+    If the mTLS configuration applied correctly, we should see curl return an error code 56, indicating it failed to establish a TLS connection.
+
+
+3. Allow the sleep pod to reach some workloads
+
+    While you usually don't want any pod from external namespaces to reach your application's workloads (your Hipstershop micro-services), you may still want some of them to be reachable. 
+    Let's allow our sleep container to reach the frontend service:
+
+    ```yaml
+    kubectl apply -f - <<EOF
+    apiVersion: "security.istio.io/v1beta1"
+    kind: "PeerAuthentication"
+    metadata:
+      name: "frontend"
+      namespace: "hipstershopv1v2"
+    spec:
+      selector:
+        matchLabels:
+          app: frontend.hipstershopv1v2.svc.cluster.local
+      mtls:
+        mode: PERMISSIVE
+    EOF
+    ```
+
+    Let's play the same curl command:
+
+    ```sh
+    kubectl -n noistio exec -it $(kubectl get pod -n noistio -l app=sleep -o jsonpath='{.items..metadata.name}') -- curl  -s http://frontend.hipstershopv1v2:8080 -o /dev/null -w '%{http_code}'
+
+    200
+    ```
+
+    Now, check the `adservice`:
+
+    ```sh
+    kubectl -n noistio exec -it $(kubectl get pod -n noistio -l app=sleep -o jsonpath='{.items..metadata.name}') -- curl  -s http://adservice.hipstershopv1v2:9555 -o /dev/null -w '%{http_code}'
+
+    000
+    curl: (56) Recv failure: Connection reset by peer
+    command terminated with exit code 56
+    ```
+
+    As you can see, we are now allowed to reach the `frontend` micro-service but we are still denied to reach others as our client can't enforce the required mTLS. 
+    Note that this can't be considered a security mesure. We never denied traffic to go to the `adservice`. It's just that the `adservice` sidecar does not know us, and don't let us in.
+
+    This is called Authentication (AuthN) policy and ensures we all know each other before allowing communication. In other words, we use the certificates from Istio mutual TLS to identify services to each other in a verifiable way (i.e. we _authenticate_ them).
+
+    In the next chapter we are going to dive into Authorization (AuthZ), where we set the rules deciding `who` can talk `to` whom, and `when` they're allowed to.
+
+---
+Next step: [Authorization](/modules/security/authorization)
