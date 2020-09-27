@@ -12,7 +12,8 @@ spec:
     fault:
       abort:
         httpStatus: 500
-        percent: 50
+        percentage:
+          value: 50
     retries:
       attempts: 5
       perTryTimeout: 1s
