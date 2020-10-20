@@ -50,7 +50,7 @@ spec:
     app: user
 ---
 # Source: microservice/charts/mongodb/templates/deployment-standalone.yaml
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: user-mongodb
@@ -118,7 +118,7 @@ spec:
         emptyDir: {}
 ---
 # Source: microservice/templates/deployment.yaml
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: user-v1

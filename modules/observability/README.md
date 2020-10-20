@@ -32,7 +32,7 @@ This service is not exposed on our cluster, so we'll need to port-forward:
 
 ```shell
 kubectl -n istio-system port-forward $(kubectl -n istio-system get pod \
-    -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
+    -l app=grafana -o jsonpath='{.items[0].metadata.name}') 8083:3000 &
 ```
 
 > We start the port-forwarding command in the background as we'll want to port-forward a few different services in the workshop.

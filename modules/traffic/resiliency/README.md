@@ -34,7 +34,8 @@ spec:
     fault:
       abort:
         httpStatus: 500
-        percent: 50
+        percent:
+          value: 50
 ```
 
 To ensure users aren't impacted by these request failures we have a couple tools in our toolbox: retries and outlier detection.
@@ -73,7 +74,8 @@ spec:
     fault:
       abort:
         httpStatus: 500
-        percent: 50
+        percentage:
+          value: 50
    retries:
       attempts: 5
       perTryTimeout: 1s
