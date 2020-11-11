@@ -17,6 +17,10 @@ resource "google_project" "training" {
   project_id = format("%s-%03d", var.workshop_name, count.index)
   folder_id  = google_folder.training.name
   billing_account = var.billing_account
+
+  # GCP projects cannot be recreated with the same name so don't delete them accidentally!
+  # Sometimes Terraform decides to delete projects 
+  skip_delete = true
 }
 
 resource "google_project_service" "container" {
@@ -32,6 +36,11 @@ resource "google_service_account" "compute" {
   count = var.participant_count
 
   project = format("%s-%03d", var.workshop_name, count.index)
+
+  depends_on = [
+    google_folder.training,
+    google_project.training,
+  ]
 }
 
 resource "google_project_iam_member" "project" {

@@ -34,7 +34,7 @@ variable "participant_count" {
 # GKE
 variable "project_id" {
     type = string
-    default = "training-infra-owner"
+    default = "infra-provision"
     description = "The project ID to create the infra from (not to!). This will probably not change."
 }
 
