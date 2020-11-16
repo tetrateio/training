@@ -37,7 +37,7 @@ echo "${green}Istio CLI available at${green}${yellow} istioctl${reset}"
 
 # Add Istio to PATH
 export ISTIO_DIR=$PWD/istio-${ISTIO_VERSION}
-export PATH=${ISTIO_DIR}/bin:$PATH
+echo "export PATH=${ISTIO_DIR}/bin:\$PATH" >> ~/.bashrc
 
 # setup gcloud project and cluster, cluster name is the same as project name
 echo -e "\n${green}Setting google cloud project to ${GOOGLE_PROJECT} and cluster ${GOOGLE_PROJECT}${reset}"
@@ -57,9 +57,6 @@ ${green}Adding kubectl aliases
   kg='kubectl get'
   kgp='kubectl get pods'
   kd='kubectl describe'${reset}
-
-  ${green}To use aliases run ${yellow}source ~/.bashrc${reset}
-
 EOF
 echo "alias kat='cat <<EOF | kubectl apply -f -'" >> ~/.bashrc
 echo "alias k='kubectl'" >> ~/.bashrc
@@ -67,8 +64,6 @@ echo "alias kg='kubectl get'" >> ~/.bashrc
 echo "alias kgp='kubectl get pods'" >> ~/.bashrc
 echo "alias kd='kubectl describe'" >> ~/.bashrc
 echo "function kubectl() { echo "+ kubectl \$@">&2; command kubectl \$@; }" >> ~/.bashrc
-
-source ~/.bashrc
 
 # install k9s (not enabled due to the fact it tanks the cloud shell vm)
 # echo -e "\n\n${green}Installing k9s..."
