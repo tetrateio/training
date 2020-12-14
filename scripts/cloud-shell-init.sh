@@ -31,7 +31,7 @@ parseCmdLine(){
 parseCmdLine "$@"
 
 # download and install istio
-echo -e "\n${green}Installing Istio${yellow} ${ISTIO_VERSION}${reset}"
+echo -e "\n${green}Installing istioctl${yellow} ${ISTIO_VERSION}${reset}"
 curl --silent -L https://istio.io/downloadIstio | ISTIO_VERSION="${ISTIO_VERSION}" sh - > /dev/null 2>&1
 echo "${green}Istio CLI available at${green}${yellow} istioctl${reset}"
 
