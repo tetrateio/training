@@ -37,7 +37,7 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod \
 
 > We start the port-forwarding command in the background as we'll want to port-forward a few different services in the workshop.
 
-We can go check out Grafana, and the default dashboards that Istio ships with, at http://localhost:3000/. Once there navigate to `Istio Service Dashboard` and select the Transaction service from the dropdown.
+We can go check out Grafana, and the default dashboards that Istio ships with, at http://localhost:8083/. Once there navigate to `Istio Service Dashboard` and select the Transaction service from the dropdown.
 
 > If you're in Google Cloud Shell you access it via the web preview feature in the top right hand corner. You may need to change the port to 3000.
 
