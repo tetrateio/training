@@ -73,13 +73,12 @@ Apply strict policy
 
     We can verify the policy matches what we expect:
     ```
-    $ kubectl describe meshpolicy.authentication.istio.io/default
+    $ kubectl describe peerauthentication.security.istio.io/default
 
     ...
     Spec:
-      Peers:
-        Mtls:
-          Mode:  STRICT
+      Mtls:
+        Mode:  STRICT
     ```
 
 1. Run the last step in previous task to verify it no longer connects:
