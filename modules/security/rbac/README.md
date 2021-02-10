@@ -1,4 +1,4 @@
-Istio RBAC for Service to Service Communication
+Istio RBAC for Service to Service Communication (deprecated)
 ===
 
 Istio provides every workload with a strong identity - in Kubernetes, the pod's ServiceAccount - which is used to establish mTLS connections between services in the mesh. While establishing mTLS connections, sidecars in the mesh will validate certificates according to [SPIFFE's X.509 SVID spec](https://github.com/spiffe/spiffe/blob/master/standards/X509-SVID.md), which means that after the connection is established we have an authenticated identity of the other party. Istio allows you to write access control policies using those identities to describe which services can communicate.
