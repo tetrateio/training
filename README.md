@@ -1,3 +1,7 @@
+### Status
+
+This repository has been superseded by https://github.com/tetrateio/istio-labs
+
 # Istio Workshop
 
 This workshop will introduce you to Istio and Envoy, service mesh tools that have changed the landscape of cloud-native applications. You will learn how and why to use these tools to solve the challenges of observability, security, networking, and multi-cloud deployments.
